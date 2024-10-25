@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Valoración</title>
+</head>
+<body>
+<h1>Crear / editar una valoración</h1>
+
+<!-- Ver Sintaxis Thymeleaf:
+https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-expression-syntax
+-->
+<form method="POST" th:object="${rating}" th:action="@{/ratings}">
+    <div>
+        <label for="id">Id</label>
+        <input type="number" id="id" th:field="*{id}" />
+    </div>
+    <div>
+        <label for="name">Nombre</label>
+        <input type="text" id="name" th:field="*{name}" />
+    </div>
+
+
+    <button type="submit">Enviar</button>
+</form>
+
+</body>
+</html>

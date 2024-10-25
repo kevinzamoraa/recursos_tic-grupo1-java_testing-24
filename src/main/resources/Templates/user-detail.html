@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Usuario</title>
+</head>
+<body>
+<h1>Detalle user</h1>
+
+<div th:if="${user}">
+  <div>
+    <label for="user-id">ID:</label>
+    <span id="user-id" th:text="${user.id}"></span>
+  </div>
+
+  <div>
+    <label for="user-name">Nombre:</label>
+    <span id="user-name" th:text="${user.name}"></span>
+  </div>
+
+  <div>
+    <label for="user-email">Correo electrónico:</label>
+    <span id="user-email" th:text="${user.email}"></span>
+  </div>
+
+  <div>
+    <label for="user-password">Contraseña:</label>
+    <span id="user-password" th:text="${user.password}"></span>
+  </div>
+
+  <div>
+    <label for="user-role">Rol:</label>
+    <span id="user-role" th:text="${user.role}"></span>
+  </div>
+
+</div>
+<div th:unless="${user}">
+  <p>No existe el usuario</p>
+</div>
+
+
+</body>
+</html>
