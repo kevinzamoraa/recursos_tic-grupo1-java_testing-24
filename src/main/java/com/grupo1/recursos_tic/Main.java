@@ -11,11 +11,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.List;
 
 @SpringBootApplication
-public class RecursosTicGrupo1Application {
+public class Main {
 
 	public static void main(String[] args) {
 
-		var context = SpringApplication.run(RecursosTicGrupo1Application.class, args);
+		var context = SpringApplication.run(Main.class, args);
 
 		UserRepo userRepository = context.getBean(UserRepo.class);
 

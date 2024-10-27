@@ -57,7 +57,7 @@ public class UserController {
     }
 
     // http://localhost:8080/users/editar/1
-    @GetMapping("users/edit/{id}")
+    @GetMapping("users/update/{id}")
     public String getFormToEditUser(Model model, @PathVariable Long id) {
         userRepository.findById(id)
                 .ifPresent(user -> model.addAttribute("user", user));

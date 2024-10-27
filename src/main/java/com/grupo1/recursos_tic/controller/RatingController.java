@@ -58,7 +58,7 @@ public class RatingController {
     }
 
     // http://localhost:8080/ratings/editar/1
-    @GetMapping("ratings/edit/{id}")
+    @GetMapping("ratings/update/{id}")
     public String getFormToEditRating(Model model, @PathVariable Long id) {
         ratingRepository.findById(id)
                 .ifPresent(rating -> model.addAttribute("rating", rating));
