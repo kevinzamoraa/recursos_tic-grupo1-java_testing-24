@@ -4,5 +4,5 @@ import com.grupo1.recursos_tic.model.ResourceList;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ResourceListRepository extends JpaRepository<ResourceList, Long> {
+public interface ResourceListRepo extends JpaRepository<ResourceList, Long> {
 }
