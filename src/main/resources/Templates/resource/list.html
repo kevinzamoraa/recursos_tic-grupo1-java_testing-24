@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Listado</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body>
+
+<header>
+    <h1>Recursos</h1>
+</header>
+
+<nav>
+    <button onclick="location.href='/resources/create'">
+        Crear un recurso nuevo
+    </button> &nbsp;&nbsp;
+    <button th:if="${resources.size() > 0}" onclick="location.href='/resources/delete'">
+        Eliminar todos los recursos
+    </button>
+</nav>
+
+<main>
+    <p th:if="${resources == null || resources.size() == 0}">No existen recursos</p>
+    <table th:unless="${resources == null || resources.size() == 0}" id="resourcesList">
+        <thead>
+        <tr>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="resource : ${resources}">
+            <td th:text="${resource.tytle}"></td>
+            <td th:text="${resource.type}"></td>
+            <td>
+                <a th:href="'/resources/' + ${resource.id}">
+                    👁️&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;
+                <a th:href="'/resources/update/' + ${resource.id}">
+                    ✏️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                <a th:href="'/resources/delete/' + ${resource.id}">
+                    🗑️&nbsp;&nbsp;Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${resources != null && resources.size() > 0}"
+       th:text="'Total de recursos: ' + ${resources.size()}"></p>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body>
+
+    <header>
+        <h1>Error</h1>
+    </header>
+
+    <main>
+        <p>
+            <code th:text="${message != 'None' ? message : 'No se encontraron errores.'}"></code>
+        </p>
+
+        <button onclick="history.back()">🔙&nbsp;&nbsp;Volver</button>
+    </main>
+
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

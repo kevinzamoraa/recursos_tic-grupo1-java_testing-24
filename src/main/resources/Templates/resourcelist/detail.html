@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body>
+
+<header>
+    <h1>Detalle de la lista</h1>
+</header>
+
+<nav>
+    <button onclick="location.href='/resourcelists'">
+        Listar todas las listas
+    </button>
+
+<!--TODO Hacer botón para mostrar los recursos de la lista-->
+
+</nav>
+
+<main>
+    <p th:if="${resourcelist == null}">La lista no existe</p>
+    <table th:if="${resourcelist}" id="resourcelistDetail">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descrición</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${resourcelist.id}"></td>
+            <td th:text="${resourcelist.name}"></td>
+            <td th:text="${resourcelist.description}"></td>
+            <td>
+                <a th:href="'/resourcelists/update/' + ${resourcelists.id}">
+                    👁️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                <a th:href="'/resourcelists/delete/' + ${resourcelists.id}">
+                    🗑️&nbsp;&nbsp;Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

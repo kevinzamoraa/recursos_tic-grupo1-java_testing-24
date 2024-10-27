@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body>
+
+<header>
+    <h1>Detalle del recurso</h1>
+</header>
+
+<nav>
+    <button onclick="location.href='/resources'">
+        Listar todos los recursos
+    </button>
+</nav>
+
+<main>
+    <p th:if="${resource == null}">El recurso no existe</p>
+    <table th:if="${resource}" id="resourceDetail">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${resource.id}"></td>
+            <td>
+                <a th:href="${resource.url}" th:text="${resource.title}"></a>
+            </td>
+            <td th:text="${resource.type}"></td>
+            <td th:text="${resource.description}"></td>
+            <td>
+                <a th:href="'/resources/update/' + ${resource.id}">
+                    👁️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                <a th:href="'/resources/delete/' + ${resource.id}">
+                    🗑️&nbsp;&nbsp;Eliminar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

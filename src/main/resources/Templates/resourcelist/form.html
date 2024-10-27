@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulario</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body>
+
+<header>
+    <h1 th:if="${resourcelist.id}">Editar lista <span th:text="${resourcelist.id}"></span></h1>
+    <h1 th:unless="${resourcelist.id}">Crear una nueva lista</h1>
+</header>
+
+<main>
+    <p th:if="${resourcelist == null}">La lista no existe</p>
+    <form th:if="${resourcelist}"  id="resourcelistForm" th:action="@{/resourcelists}" th:object="${resourcelist}" method="post">
+        <fieldset>
+            <legend>Datos de la lista</legend>
+            <input type="hidden" id="id" th:field="*{id}" />
+
+<!--TODO añadir el usuario en el controlador-->
+
+            <div>
+                <label for="name">Nombre</label>
+                <input type="text" id="name" th:field="*{name}" />
+            </div>
+            <div>
+                <label for="description">Descripción (TODO hacer un área de texto)</label>
+                <input type="text" id="description" th:field="*{description}" />
+            </div>
+        </fieldset>
+        <button type="button" onclick="location.href='/resourcelists'">
+            ❌&nbsp;&nbsp;Cancelar</button> &nbsp;&nbsp;
+        <button type="submit">💾&nbsp;&nbsp;Guardar</button>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

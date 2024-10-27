@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulario</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body>
+
+<header>
+    <h1 th:if="${resource.id}">Editar recurso <span th:text="${resource.id}"></span></h1>
+    <h1 th:unless="${resource.id}">Crear un nuevo recurso</h1>
+</header>
+
+<main>
+    <p th:if="${resource == null}">El recurso no existe</p>
+    <form th:if="${resource}"  id="resourceForm" th:action="@{/resources}" th:object="${resource}" method="post">
+        <fieldset>
+            <legend>Datos del recurso</legend>
+            <input type="hidden" id="id" th:field="*{id}" />
+            <div>
+                <label for="title">Título</label>
+                <input type="text" id="title" th:field="*{title}" />
+            </div>
+            <div>
+                <label for="url">Url</label>
+                <input type="text" id="url" th:field="*{url}" />
+            </div>
+            <div>
+                <label for="description">Descripción (TODO hacer un área de texto)</label>
+                <input type="text" id="description" th:field="*{description}" />
+            </div>
+            <div>
+                <label for="type">Tipo (TODO Hacer selector)</label>
+                <input type="text" id="type" th:field="*{type}" />
+            </div>
+            <div>
+                <label for="tags">Etiquetas (TODO Hacer selector múltiple)</label>
+                <input type="text" id="tags" th:field="*{tags}" />
+            </div>
+            <div>
+                <label for="active">Activo (TODO Hacer checkbook)</label>
+                <input type="text" id="active" th:field="*{active}" />
+            </div>
+        </fieldset>
+        <button type="button" onclick="location.href='/resources'">
+            ❌&nbsp;&nbsp;Cancelar</button> &nbsp;&nbsp;
+        <button type="submit">💾&nbsp;&nbsp;Guardar</button>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>
