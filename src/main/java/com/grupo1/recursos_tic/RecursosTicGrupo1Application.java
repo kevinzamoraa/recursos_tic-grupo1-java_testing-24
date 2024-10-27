@@ -2,6 +2,7 @@ package com.grupo1.recursos_tic;
 
 import com.grupo1.recursos_tic.model.Rating;
 import com.grupo1.recursos_tic.model.User;
+import com.grupo1.recursos_tic.model.userRole;
 import com.grupo1.recursos_tic.repository.RatingRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import org.springframework.boot.SpringApplication;
@@ -22,10 +23,12 @@ public class RecursosTicGrupo1Application {
 		if (numeroUsuarios > 0)
 			return;
 
-		var user1 = User.builder().name("Javi").email("a@a.es").password("AbCd4321").role(User.roleOptions.author).build();
-		var user2 = User.builder().name("Marina").email("b@b.es").password("DcBa1234").role(User.roleOptions.reader).build();
+		var user1 = User.builder().name("Javi").email("a@a.es").password("AbCd4321").role(userRole.AUTHOR).build();
+		var user2 = User.builder().name("Marina").email("b@b.es").password("DcBa1234").role(userRole.READER).build();
+		var admin = User.builder().name("Admin").email("admin@admin.es").password("admin1234").role(userRole.ADMIN).build();
 		userRepository.save(user1);
 		userRepository.save(user2);
+		userRepository.save(admin);
 
 		var ratingRepository = context.getBean(RatingRepo.class);
 		if (ratingRepository.count() == 0) {

@@ -17,10 +17,17 @@ https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-express
         <input type="number" id="id" th:field="*{id}" />
     </div>
     <div>
-        <label for="name">Nombre</label>
-        <input type="text" id="name" th:field="*{name}" />
+        <label for="user-id">ID del usuario</label>
+        <input type="text" id="user-id" th:field="*{user.id}" />
     </div>
-
+    <div>
+        <label for="comment">Comentario</label>
+        <input type="text" id="comment" th:field="*{rating.comment}" />
+    </div>
+    <div>
+        <label for="score">Puntuación</label>
+        <input type="text" id="score" th:field="*{rating.score}" />
+    </div>
 
     <button type="submit">Enviar</button>
 </form>

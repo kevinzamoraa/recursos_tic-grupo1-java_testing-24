@@ -19,10 +19,7 @@ public class User {
     private String email;
     private String imageUrl;
     private String password;
-    private roleOptions role;
-    public enum roleOptions {
-        author,
-        reader
-    }
+    private userRole role;
+
 
 }

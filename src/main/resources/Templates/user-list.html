@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User List</title>
 </head>
 <body>
+
+<h1>Listado de usuarios</h1>
+<a href="/users/new">Crear nuevo usuario</a>
+<table id="userList" th:if="${users.size() > 0}">
+    <tr>
+        <th>ID</th>
+        <th>NOMBRE</th>
+        <th>CORREO E.</th>
+        <th>CONTRASEÑA</th>
+        <th>ROL</th>
+        <th>ACCIONES</th>
+    </tr>
+    <tr th:each="user: ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.password}"></td>
+        <td th:text="${user.role}"></td>
+        <td>
+            <a th:href="@{/users/{id}(id=${user.id})}">Ver</a>
+            <a th:href="@{/users/update/{id}(id=${user.id})}">Editar</a>
+            <a th:href="@{/users/delete/{id}(id=${user.id})}">Borrar</a>
+        </td>
+    </tr>
+
+</table>
+<p th:if="${users.size() == 0}">
+    No hay usuarios.
+</p>
 
 </body>
 </html>
