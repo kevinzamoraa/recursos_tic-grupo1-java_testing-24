@@ -10,28 +10,28 @@
 
 <div th:if="${rating}">
     <div>
-        <label for="product-id">ID:</label>
-        <span id="product-id" th:text="${rating.id}"></span>
+        <label for="rating-id">ID:</label>
+        <span id="rating-id" th:text="${rating.id}"></span>
     </div>
 
     <div>
-        <label for="product-name">Nombre:</label>
-        <span id="product-name" th:text="${rating.user}"></span>
+        <label for="rating-user-id">Nombre:</label>
+        <span id="rating-user-id" th:text="${rating.user.id}"></span>
+    </div>
+
+<!--    <div>-->
+<!--        <label for="rating-resources">Precio:</label>-->
+<!--        <span id="rating-resources" th:text="${rating.resources}"></span>-->
+<!--    </div>-->
+
+    <div>
+        <label for="rating-comment">Cantidad:</label>
+        <span id="rating-comment" th:text="${rating.comment}"></span>
     </div>
 
     <div>
-        <label for="product-price">Precio:</label>
-        <span id="product-price" th:text="${rating.resources}"></span>
-    </div>
-
-    <div>
-        <label for="product-quantity">Cantidad:</label>
-        <span id="product-quantity" th:text="${rating.comment}"></span>
-    </div>
-
-    <div>
-        <label for="product-active">Activo:</label>
-        <span id="product-active" th:text="${rating.score}"></span>
+        <label for="rating-score">Activo:</label>
+        <span id="rating-score" th:text="${rating.score}"></span>
     </div>
 
 </div>

@@ -2,29 +2,25 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Product List</title>
+    <title>Rating List</title>
 </head>
 <body>
 
-<h1>Listado fabricantes/Marcas</h1>
-<a href="/ratings/create">Crear nuevo fabricante</a>
+<h1>Listado de comentarios</h1>
+<a href="/ratings/create">Crear nuevo comentario</a>
 <table id="ratingList" th:if="${ratings.size() > 0}">
     <tr>
         <th>ID</th>
-        <th>NOMBRE</th>
-        <th>DESCRIPCIÓN</th>
-        <th>LOGO</th>
-        <th>AÑO</th>
+        <th>ID USUARIO</th>
+        <th>COMENTARIO</th>
+        <th>VALORACIÓN</th>
         <th>ACCIONES</th>
     </tr>
     <tr th:each="rating: ${ratings}">
         <td th:text="${rating.id}"></td>
-        <td th:text="${rating.userId}"></td>
-        <td th:text="${rating.description}"></td>
-        <td>
-            <img th:src="${rating.imageUrl}" alt="Logo" style="max-width: 60px;">
-        </td>
-        <td th:text="${rating.year}"></td>
+        <td th:text="${rating.user.getId}"></td>
+        <td th:text="${rating.comment}"></td>
+        <td th:text="${rating.score}"></td>
         <td>
             <a th:href="@{/ratings/{id}(id=${rating.id})}">Ver</a>
             <a th:href="@{/ratings/update/{id}(id=${rating.id})}">Editar</a>

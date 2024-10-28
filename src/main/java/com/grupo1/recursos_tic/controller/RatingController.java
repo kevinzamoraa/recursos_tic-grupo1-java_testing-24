@@ -3,7 +3,6 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.Rating;
 import com.grupo1.recursos_tic.repository.RatingRepo;
 
-import com.grupo1.recursos_tic.repository.RatingRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -43,25 +42,24 @@ public class RatingController {
                     model.addAttribute("rating", rating);
                     return "rating-detail";
                 })
-//                .orElse("error")
                 .orElseGet(() -> {
                     model.addAttribute("message", "Rating no encontrado");
                     return "error";
                 });
     }
 
-    // http://localhost:8080/ratings/crear
+    // TODO: Fix nested entity's link
+    // http://localhost:8080/ratings/create
     @GetMapping("ratings/create")
     public String getFormToCreateNewRating(Model model) {
         model.addAttribute("rating", new Rating());
         return "rating-form";
     }
 
-    // http://localhost:8080/ratings/editar/1
+    // http://localhost:8080/ratings/update/1
     @GetMapping("ratings/update/{id}")
     public String getFormToEditRating(Model model, @PathVariable Long id) {
-        ratingRepository.findById(id)
-                .ifPresent(rating -> model.addAttribute("rating", rating));
+        ratingRepository.findById(id).ifPresent(rating -> model.addAttribute("rating", rating));
         return "rating-form";
     }
 
@@ -72,10 +70,8 @@ public class RatingController {
             exists = ratingRepository.existsById(rating.getId());
         }
         if (! exists) {
-            // Crear un nuevo rating
             ratingRepository.save(rating);
         } else {
-            // Actualizar un usuario existente
             ratingRepository.findById(rating.getId()).ifPresent(ratingDB -> {
                 BeanUtils.copyProperties(rating, ratingDB);
                 ratingRepository.save(ratingDB);

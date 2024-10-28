@@ -49,14 +49,14 @@ public class UserController {
                 });
     }
 
-    // http://localhost:8080/users/crear
+    // http://localhost:8080/users/create
     @GetMapping("users/create")
     public String getFormToCreateNewUser(Model model) {
         model.addAttribute("user", new User());
         return "user-form";
     }
 
-    // http://localhost:8080/users/editar/1
+    // http://localhost:8080/users/update/1
     @GetMapping("users/update/{id}")
     public String getFormToEditUser(Model model, @PathVariable Long id) {
         userRepository.findById(id)
@@ -85,8 +85,8 @@ public class UserController {
     }
 
     // METODO BORRAR
-    // http://localhost:8080/users/borrar/1
-    // http://localhost:8080/users/borrar/2
+    // http://localhost:8080/users/delete/1
+    // http://localhost:8080/users/delete/2
     @GetMapping("users/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         try {
