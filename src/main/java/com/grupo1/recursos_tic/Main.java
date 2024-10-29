@@ -34,8 +34,10 @@ public class Main {
 
 		var ratingRepository = context.getBean(RatingRepo.class);
 		if (ratingRepository.count() == 0) {
-			var rating1 = Rating.builder().user(user1).comment("Comentario de prueba 1").score(3).build();
-			var rating2 = Rating.builder().user(user2).comment("Comentario de prueba 2").score(3).build();
+			var rating1 = Rating.builder().userId(user1.getId())
+					.comment("Comentario de prueba 1").score(3).build();
+			var rating2 = Rating.builder().userId(user2.getId())
+					.comment("Comentario de prueba 2").score(3).build();
 			ratingRepository.saveAll(
 					List.of(rating1, rating2)
 			);

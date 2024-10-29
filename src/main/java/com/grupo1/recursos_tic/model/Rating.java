@@ -15,8 +15,8 @@ public class Rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private User user;
+    // @ManyToOne
+    private Long userId;
     // @ManyToOne
     // private Resource resources;
     private String comment;

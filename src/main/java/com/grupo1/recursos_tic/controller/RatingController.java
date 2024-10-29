@@ -3,6 +3,7 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.Rating;
 import com.grupo1.recursos_tic.repository.RatingRepo;
 
+import com.grupo1.recursos_tic.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class RatingController {
 
     private RatingRepo ratingRepository;
+    private UserRepo userRepository;
 
     // http://localhost:8080/ratings
     @GetMapping("ratings")
@@ -32,7 +34,11 @@ public class RatingController {
     @GetMapping("ratings/{id}")
     public String findById(@PathVariable Long id, Model model) {
         Optional<Rating> ratingOptional = ratingRepository.findById(id);
-        ratingOptional.ifPresent(rating -> model.addAttribute("rating", rating));
+        ratingOptional.ifPresent(rating -> {
+            model.addAttribute("rating", rating);
+            model.addAttribute("userName",
+                    userRepository.findById(rating.getUserId()).get().getName());
+        });
         return "rating-detail";
     }
     @GetMapping("ratings2/{id}")
@@ -48,7 +54,6 @@ public class RatingController {
                 });
     }
 
-    // TODO: Fix nested entity's link
     // http://localhost:8080/ratings/create
     @GetMapping("ratings/create")
     public String getFormToCreateNewRating(Model model) {

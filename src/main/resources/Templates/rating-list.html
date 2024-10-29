@@ -18,7 +18,7 @@
     </tr>
     <tr th:each="rating: ${ratings}">
         <td th:text="${rating.id}"></td>
-        <td th:text="${rating.user.getId}"></td>
+        <td th:text="${rating.getId}"></td>
         <td th:text="${rating.comment}"></td>
         <td th:text="${rating.score}"></td>
         <td>
