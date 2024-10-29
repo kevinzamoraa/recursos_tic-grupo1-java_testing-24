@@ -23,6 +23,7 @@
         <tr>
             <th>Id</th>
             <th>Título</th>
+            <th>Autor</th>
             <th>Tipo</th>
             <th>Descripción</th>
             <th>Acciones</th>
@@ -34,6 +35,7 @@
             <td>
                 <a th:href="${resource.url}" th:text="${resource.title}"></a>
             </td>
+            <td th:text="${resource.author}"></td>
             <td th:text="${resource.type}"></td>
             <td th:text="${resource.description}"></td>
             <td>

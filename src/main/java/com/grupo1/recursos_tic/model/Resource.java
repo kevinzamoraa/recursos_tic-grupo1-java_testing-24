@@ -25,7 +25,7 @@ public class Resource {
 
     private String description;
 
-    // author ¿(id) -> tipo Usuario (rol autor) ManyToOne || nombre?
+    private String author;
 
     private ResourceType type;
 
