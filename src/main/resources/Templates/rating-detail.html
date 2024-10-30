@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de valoración/comentario</title>
+</head>
+<body>
+<h1>Detalle valoración</h1>
+
+<div th:if="${rating}">
+    <div>
+        <label for="rating-id">ID:</label>
+        <span id="rating-id" th:text="${rating.id}"></span>
+    </div>
+
+    <div>
+        <label for="rating-user-id">Nombre:</label>
+        <span id="rating-user-id" th:text="${userName}"></span>
+    </div>
+
+<!--    <div>-->
+<!--        <label for="rating-resources">Precio:</label>-->
+<!--        <span id="rating-resources" th:text="${rating.resources}"></span>-->
+<!--    </div>-->
+
+    <div>
+        <label for="rating-comment">Comentario:</label>
+        <span id="rating-comment" th:text="${rating.comment}"></span>
+    </div>
+
+    <div>
+        <label for="rating-score">Valoración:</label>
+        <span id="rating-score" th:text="${rating.score}"></span>
+    </div>
+
+</div>
+<div th:unless="${rating}">
+    <p>No existe ninguna valoración</p>
+</div>
+
+
+</body>
+</html>

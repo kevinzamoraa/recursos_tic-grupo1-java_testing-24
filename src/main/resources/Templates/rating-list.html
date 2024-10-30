@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rating List</title>
+</head>
+<body>
+
+<h1>Listado de comentarios</h1>
+<a href="/ratings/create">Crear nuevo comentario</a>
+<table id="ratingList" th:if="${ratings.size() > 0}">
+    <tr>
+        <th>ID</th>
+        <th>ID USUARIO</th>
+        <th>COMENTARIO</th>
+        <th>VALORACIÓN</th>
+        <th>ACCIONES</th>
+    </tr>
+    <tr th:each="rating: ${ratings}">
+        <td th:text="${rating.id}"></td>
+        <td th:text="${rating.getId}"></td>
+        <td th:text="${rating.comment}"></td>
+        <td th:text="${rating.score}"></td>
+        <td>
+            <a th:href="@{/ratings/{id}(id=${rating.id})}">Ver</a>
+            <a th:href="@{/ratings/update/{id}(id=${rating.id})}">Editar</a>
+            <a th:href="@{/ratings/delete/{id}(id=${rating.id})}">Borrar</a>
+        </td>
+    </tr>
+
+</table>
+<p th:if="${ratings.size() == 0}">
+    No hay valoraciones.
+</p>
+
+</body>
+</html>
