@@ -6,12 +6,14 @@ import com.grupo1.recursos_tic.repository.RatingRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -64,7 +66,8 @@ public class RatingController {
     // http://localhost:8080/ratings/update/1
     @GetMapping("ratings/update/{id}")
     public String getFormToEditRating(Model model, @PathVariable Long id) {
-        ratingRepository.findById(id).ifPresent(rating -> model.addAttribute("rating", rating));
+        userRepository.findById(id)
+                .ifPresent(rating -> model.addAttribute("rating", rating));
         return "rating-form";
     }
 

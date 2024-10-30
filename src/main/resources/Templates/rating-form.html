@@ -14,20 +14,20 @@ https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-express
 <form method="POST" th:object="${rating}" th:action="@{/ratings}">
     <div>
         <label for="id">Id</label>
-        <input type="number" id="id" th:field="*{rating.id}" />
+        <input type="number" id="id" th:field="*{id}" />
     </div>
 <!--    <div>-->
-<!--        <label for="user">ID del usuario</label>-->
-<!--        <input type="number" id="user" th:field="*{rating.userId}" />-->
+<!--        <label for="userName">Autor</label>-->
+<!--        <input type="text" id="userName" th:field="*{userName}" />-->
 <!--    </div>-->
-    <div>
-        <label for="comment">Comentario</label>
-        <input type="text" id="comment" th:field="*{rating.comment}" />
-    </div>
-    <div>
-        <label for="score">Puntuación</label>
-        <input type="number" id="score" th:field="*{rating.score}" />
-    </div>
+<!--    <div>-->
+<!--        <label for="comment">Comentario</label>-->
+<!--        <input type="text" id="comment" th:field="*{comment}" />-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <label for="score">Puntuación</label>-->
+<!--        <input type="number" id="score" th:field="*{score}" />-->
+<!--    </div>-->
 
     <button type="submit">Enviar</button>
 </form>
