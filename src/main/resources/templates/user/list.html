@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>User List</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
 
@@ -13,6 +13,7 @@
         <th>ID</th>
         <th>NOMBRE</th>
         <th>CORREO E.</th>
+        <th>USUARIO</th>
         <th>CONTRASEÑA</th>
         <th>ROL</th>
         <th>ACCIONES</th>
@@ -21,6 +22,7 @@
         <td th:text="${user.id}"></td>
         <td th:text="${user.name}"></td>
         <td th:text="${user.email}"></td>
+        <td th:text="${user.username}"></td>
         <td th:text="${user.password}"></td>
         <td th:text="${user.role}"></td>
         <td>
@@ -34,6 +36,8 @@
 <p th:if="${users.size() == 0}">
     No hay usuarios.
 </p>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
 
 </body>
 </html>

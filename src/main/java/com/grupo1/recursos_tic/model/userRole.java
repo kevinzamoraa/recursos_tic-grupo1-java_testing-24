@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum userRole {
 
-    AUTHOR("autor"),
-    READER("reader"),
-    ADMIN("admin");
+    AUTHOR("Autor"),
+    READER("Lector"),
+    ADMIN("Administrador");
 
     private final String userRole;
 

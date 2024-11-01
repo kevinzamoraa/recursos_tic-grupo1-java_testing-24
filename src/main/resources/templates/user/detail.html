@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-  <meta charset="UTF-8">
   <title>Detalle de Usuario</title>
+  <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
 <h1>Detalle user</h1>
@@ -25,6 +24,11 @@
   </div>
 
   <div>
+    <label for="user-username">Usuario:</label>
+    <span id="user-username" th:text="${user.username}"></span>
+  </div>
+
+  <div>
     <label for="user-password">Contraseña:</label>
     <span id="user-password" th:text="${user.password}"></span>
   </div>
@@ -39,6 +43,7 @@
   <p>No existe el usuario</p>
 </div>
 
+<footer th:replace="~{fragment/footer :: footer}"></footer>
 
 </body>
 </html>

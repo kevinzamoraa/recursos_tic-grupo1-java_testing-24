@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
     <title>Detalle de valoración/comentario</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
 <h1>Detalle valoración</h1>
@@ -15,13 +14,13 @@
     </div>
 
     <div>
-        <label for="rating-user-id">Nombre:</label>
-        <span id="rating-user-id" th:text="${userName}"></span>
+        <label for="rating-user">Usuario:</label>
+        <span id="rating-user" th:text="${rating.user.name}"></span>
     </div>
 
 <!--    <div>-->
-<!--        <label for="rating-resources">Precio:</label>-->
-<!--        <span id="rating-resources" th:text="${rating.resources}"></span>-->
+<!--        <label for="rating-resource">Recurso:</label>-->
+<!--        <span id="rating-resource" th:text="${rating.resource.title}"></span>-->
 <!--    </div>-->
 
     <div>
@@ -39,6 +38,7 @@
     <p>No existe ninguna valoración</p>
 </div>
 
+<footer th:replace="~{fragment/footer :: footer}"></footer>
 
 </body>
 </html>

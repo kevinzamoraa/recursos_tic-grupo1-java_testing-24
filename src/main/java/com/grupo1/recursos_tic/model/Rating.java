@@ -4,22 +4,30 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @ToString
-@Builder
 public class Rating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // @ManyToOne
-    private Long userId;
-    // @ManyToOne
-    // private Resource resources;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resource_id", nullable = false)
+    @ToString.Exclude
+    private Resource resource;
+
     private String comment;
+
     private int score;
 
 }

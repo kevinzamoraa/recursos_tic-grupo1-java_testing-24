@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
   <title>Formulario Valoración</title>
+  <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
 <h1>Crear / editar valoración</h1>
@@ -22,11 +22,15 @@ https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-express
   </div>
   <div>
     <label for="email">Correo Electrónico</label>
-    <input type="email" id="email" min="0" max="500" step="0.01" th:field="*{email}"/>
+    <input type="email" id="email" th:field="*{email}"/>
+  </div>
+  <div>
+    <label for="username">Usuario</label>
+    <input type="text" id="username" th:field="*{username}"/>
   </div>
   <div>
     <label for="password">Contraseña</label>
-    <input type="password" id="password" min="0" max="20" step="0" th:field="*{password}"/>
+    <input type="password" id="password" th:field="*{password}"/>
   </div>
 
 <!--  <div>-->
@@ -41,6 +45,8 @@ https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-express
 
   <button type="submit">Enviar</button>
 </form>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
 
 </body>
 </html>

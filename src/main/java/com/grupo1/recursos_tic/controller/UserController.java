@@ -20,21 +20,23 @@ public class UserController {
 
     private UserRepo userRepository;
 
-    // http://localhost:8080/users
+    // http://localhost:8082/users
     @GetMapping("users")
     public String findAll(Model model) {
-        model.addAttribute("titulo", "Lista de users");
         model.addAttribute("users", userRepository.findAll());
-        return "user-list";
+        return "user/list";
     }
 
-    // http://localhost:8080/users/1
+    // http://localhost:8082/users/1
     @GetMapping("users/{id}")
     public String findById(@PathVariable Long id, Model model) {
         Optional<User> userOptional = userRepository.findById(id);
         userOptional.ifPresent(user -> model.addAttribute("user", user));
-        return "user-detail";
+        // TODO Gestionar el caso en el que no se encuentra el user o usar el método 2
+        return "user/detail";
     }
+
+    // TODO Revisar la incorporación de este método
     @GetMapping("users2/{id}")
     public String findById2(@PathVariable Long id, Model model) {
         return userRepository.findById(id)
@@ -44,24 +46,25 @@ public class UserController {
                 })
 //                .orElse("error")
                 .orElseGet(() -> {
+                // TODO Lanzar una excepción
                     model.addAttribute("message", "User no encontrado");
                     return "error";
                 });
     }
 
-    // http://localhost:8080/users/create
+    // http://localhost:8082/users/create
     @GetMapping("users/create")
     public String getFormToCreateNewUser(Model model) {
         model.addAttribute("user", new User());
-        return "user-form";
+        return "user/form";
     }
 
-    // http://localhost:8080/users/update/1
+    // http://localhost:8082/users/update/1
     @GetMapping("users/update/{id}")
     public String getFormToEditUser(Model model, @PathVariable Long id) {
         userRepository.findById(id)
                 .ifPresent(user -> model.addAttribute("user", user));
-        return "user-form";
+        return "user/form";
     }
 
     @PostMapping("users")
@@ -85,8 +88,7 @@ public class UserController {
     }
 
     // METODO BORRAR
-    // http://localhost:8080/users/delete/1
-    // http://localhost:8080/users/delete/2
+    // http://localhost:8082/users/delete/1
     @GetMapping("users/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         try {

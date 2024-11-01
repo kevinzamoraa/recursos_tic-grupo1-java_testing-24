@@ -32,7 +32,4 @@ public class Resource {
     @ElementCollection
     private Set<Tag> tags = new HashSet<>();
 
-    @Column(columnDefinition = "boolean default true")
-    private Boolean active;
-
 }

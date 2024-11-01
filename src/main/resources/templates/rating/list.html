@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Rating List</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
 
@@ -18,7 +18,7 @@
     </tr>
     <tr th:each="rating: ${ratings}">
         <td th:text="${rating.id}"></td>
-        <td th:text="${rating.getId}"></td>
+        <td th:text="${rating.user.name}"></td>
         <td th:text="${rating.comment}"></td>
         <td th:text="${rating.score}"></td>
         <td>
@@ -32,6 +32,8 @@
 <p th:if="${ratings.size() == 0}">
     No hay valoraciones.
 </p>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
 
 </body>
 </html>
