@@ -15,7 +15,6 @@
         <th>CORREO E.</th>
         <th>USUARIO</th>
         <th>CONTRASEÑA</th>
-        <th>ROL</th>
         <th>ACCIONES</th>
     </tr>
     <tr th:each="user: ${users}">
@@ -24,7 +23,6 @@
         <td th:text="${user.email}"></td>
         <td th:text="${user.username}"></td>
         <td th:text="${user.password}"></td>
-        <td th:text="${user.role}"></td>
         <td>
             <a th:href="@{/users/{id}(id=${user.id})}">Ver</a>
             <a th:href="@{/users/update/{id}(id=${user.id})}">Editar</a>

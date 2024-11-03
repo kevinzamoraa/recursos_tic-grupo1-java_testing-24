@@ -3,7 +3,9 @@ package com.grupo1.recursos_tic.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,5 +33,8 @@ public class Resource {
 
     @ElementCollection
     private Set<Tag> tags = new HashSet<>();
+
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
 
 }

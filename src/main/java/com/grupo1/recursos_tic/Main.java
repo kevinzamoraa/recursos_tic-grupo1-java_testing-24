@@ -20,13 +20,13 @@ public class Main {
 
 		UserRepo userRepository = context.getBean(UserRepo.class);
 		var user1 = User.builder().name("Javi").email("a@a.es")
-				.username("javi").password("AbCd4321").role(userRole.AUTHOR).build();
+				.username("javi").password("AbCd4321").build();
 		var user2 = User.builder().name("Marina").email("b@b.es")
-				.username("marina").password("DcBa1234").role(userRole.READER).build();
+				.username("marina").password("DcBa1234").build();
 		var user3 = User.builder().name("Kevin").email("c@c.es")
-				.username("kevin").password("DcBa1234").role(userRole.READER).build();
+				.username("kevin").password("DcBa1234").build();
 		var admin = User.builder().name("Admin").email("admin@admin.es").username("admin")
-				.password("admin1234").role(userRole.ADMIN).build();
+				.password("admin1234").build();
 		userRepository.saveAll(List.of(user1, user2, user3, admin));
 
 		ResourceRepo resourceRepository = context.getBean(ResourceRepo.class);
