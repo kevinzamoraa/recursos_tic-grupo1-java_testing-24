@@ -26,13 +26,15 @@
         <tr>
             <th>Nombre</th>
             <th>Descripción</th>
+            <th>Propietario</th>
             <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="resourcelist : ${resourcelists}">
-            <td th:text="${resourcelists.name}"></td>
-            <td th:text="${resourcelists.description}"></td>
+            <td th:text="${resourcelist.name}"></td>
+            <td th:text="${resourcelist.description}"></td>
+            <td th:text="${resourcelist.owner.name}"></td>
             <td>
                 <a th:href="'/resourcelists/' + ${resourcelist.id}">
                     👁️&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;

@@ -18,8 +18,10 @@
             <legend>Datos de la lista</legend>
             <input type="hidden" id="id" th:field="*{id}" />
 
-<!--TODO añadir el usuario en el controlador-->
-
+<!--            <div>-->
+<!--                <label for="owner">Propietario</label>-->
+<!--                <input type="text" id="owner" th:field="*{owner}" />-->
+<!--            </div>-->
             <div>
                 <label for="name">Nombre</label>
                 <input type="text" id="name" th:field="*{name}" />
@@ -32,6 +34,7 @@
         <button type="button" onclick="location.href='/resourcelists'">
             ❌&nbsp;&nbsp;Cancelar</button> &nbsp;&nbsp;
         <button type="submit">💾&nbsp;&nbsp;Guardar</button>
+    </form>
 </main>
 
 <footer th:replace="~{fragment/footer :: footer}"></footer>

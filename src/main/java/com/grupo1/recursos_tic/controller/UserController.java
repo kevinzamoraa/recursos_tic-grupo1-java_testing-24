@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Optional;
 
-@AllArgsConstructor
 @Controller
+@AllArgsConstructor
 public class UserController {
 
     private UserRepo userRepository;

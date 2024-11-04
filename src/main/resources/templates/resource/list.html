@@ -31,7 +31,7 @@
         </thead>
         <tbody>
         <tr th:each="resource : ${resources}">
-            <td th:text="${resource.tytle}"></td>
+            <td th:text="${resource.title}"></td>
             <td th:text="${resource.type}"></td>
             <td>
                 <a th:href="'/resources/' + ${resource.id}">

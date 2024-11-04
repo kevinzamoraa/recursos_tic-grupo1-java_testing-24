@@ -27,6 +27,8 @@
             <th>Id</th>
             <th>Nombre</th>
             <th>Descrición</th>
+            <th>Propietario</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -34,10 +36,11 @@
             <td th:text="${resourcelist.id}"></td>
             <td th:text="${resourcelist.name}"></td>
             <td th:text="${resourcelist.description}"></td>
+            <td th:text="${resourcelist.owner.name}"></td>
             <td>
-                <a th:href="'/resourcelists/update/' + ${resourcelists.id}">
+                <a th:href="'/resourcelists/update/' + ${resourcelist.id}">
                     👁️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
-                <a th:href="'/resourcelists/delete/' + ${resourcelists.id}">
+                <a th:href="'/resourcelists/delete/' + ${resourcelist.id}">
                     🗑️&nbsp;&nbsp;Eliminar</a>
             </td>
         </tr>

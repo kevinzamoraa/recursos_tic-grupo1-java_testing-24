@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Optional;
 
-@AllArgsConstructor
 @Controller
+@AllArgsConstructor
 public class RatingController {
 
     private RatingRepo ratingRepository;
 
+    // TODO UserRepo y ResourceRepo usados temporalmente
     private UserRepo userRepository;
     private ResourceRepo resourceRepository;
 
@@ -94,7 +95,7 @@ public class RatingController {
     }
 
     // METODO BORRAR
-    // http://localhost:8082/ratings/borrar/1
+    // http://localhost:8082/ratings/delete/1
     @GetMapping("ratings/delete/{id}")
     public String deleteRating(@PathVariable Long id) {
         try {
