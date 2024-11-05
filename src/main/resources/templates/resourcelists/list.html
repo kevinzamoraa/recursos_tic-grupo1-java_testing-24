@@ -15,7 +15,7 @@
             <button class="btn btn-primary me-2" onclick="location.href='/resourcelists/create'">
                 <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un listado nuevo
             </button>
-            <button class="btn btn-primary" th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
+            <button class="btn btn-danger" th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
                 <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todos los listados
             </button>
         </nav>
@@ -37,11 +37,11 @@
                     <td th:text="${resourcelist.description}"></td>
                     <td th:text="${resourcelist.owner.name}"></td>
                     <td>
-                        <a th:href="'/resourcelists/' + ${resourcelist.id}">
-                            <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;
-                        <a th:href="'/resourcelists/update/' + ${resourcelist.id}">
-                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
-                        <a th:href="'/resourcelists/delete/' + ${resourcelist.id}">
+                        <a th:href="'/resourcelists/' + ${resourcelist.id}" class="btn btn-sm btn-info me-1">
+                            <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                        <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
+                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                        <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
                             <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
                     </td>
                 </tr>
