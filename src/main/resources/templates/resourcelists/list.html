@@ -5,53 +5,55 @@
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
+    <div class="container mt-4">
 
-<header>
-    <h1>Listas</h1>
-</header>
+        <header>
+            <h1>Listas</h1>
+        </header>
 
-<nav>
-    <button onclick="location.href='/resourcelists/create'">
-        Crear un listado nuevo
-    </button> &nbsp;&nbsp;
-    <button th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
-        Eliminar todos los listados
-    </button>
-</nav>
+        <nav>
+            <button class="btn btn-primary me-2" onclick="location.href='/resourcelists/create'">
+                <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un listado nuevo
+            </button>
+            <button class="btn btn-primary" th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
+                <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todos los listados
+            </button>
+        </nav>
 
-<main>
-    <p th:if="${resourcelists == null || resourcelists.size() == 0}">No existen listados</p>
-    <table th:unless="${resourcelists == null || resourcelists.size() == 0}" id="resourceLists">
-        <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Propietario</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="resourcelist : ${resourcelists}">
-            <td th:text="${resourcelist.name}"></td>
-            <td th:text="${resourcelist.description}"></td>
-            <td th:text="${resourcelist.owner.name}"></td>
-            <td>
-                <a th:href="'/resourcelists/' + ${resourcelist.id}">
-                    👁️&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;
-                <a th:href="'/resourcelists/update/' + ${resourcelist.id}">
-                    ✏️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
-                <a th:href="'/resourcelists/delete/' + ${resourcelist.id}">
-                    🗑️&nbsp;&nbsp;Eliminar</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <main>
+            <p th:if="${resourcelists == null || resourcelists.size() == 0}">No existen listados</p>
+            <table th:unless="${resourcelists == null || resourcelists.size() == 0}" id="resourceLists" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Propietario</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="resourcelist : ${resourcelists}">
+                    <td th:text="${resourcelist.name}"></td>
+                    <td th:text="${resourcelist.description}"></td>
+                    <td th:text="${resourcelist.owner.name}"></td>
+                    <td>
+                        <a th:href="'/resourcelists/' + ${resourcelist.id}">
+                            <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;
+                        <a th:href="'/resourcelists/update/' + ${resourcelist.id}">
+                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                        <a th:href="'/resourcelists/delete/' + ${resourcelist.id}">
+                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-    <p th:if="${resourcelists != null && resourcelists.size() > 0}"
-       th:text="'Total de listas: ' + ${resourcelists.size()}"></p>
-</main>
+            <p th:if="${resourcelists != null && resourcelists.size() > 0}"
+               th:text="'Total de listas: ' + ${resourcelists.size()}"></p>
+        </main>
 
-<footer th:replace="~{fragment/footer :: footer}"></footer>
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
 
+    </div>
 </body>
 </html>

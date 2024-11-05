@@ -5,51 +5,53 @@
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
+    <div class="container mt-4">
 
-<header>
-    <h1>Recursos</h1>
-</header>
+        <header>
+            <h1>Recursos</h1>
+        </header>
 
-<nav>
-    <button onclick="location.href='/resources/create'">
-        Crear un recurso nuevo
-    </button> &nbsp;&nbsp;
-    <button th:if="${resources.size() > 0}" onclick="location.href='/resources/delete'">
-        Eliminar todos los recursos
-    </button>
-</nav>
+        <nav>
+            <button class="btn btn-primary me-2" onclick="location.href='/resources/create'">
+                <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un recurso nuevo
+            </button>
+            <button class="btn btn-primary" th:if="${resources.size() > 0}" onclick="location.href='/resources/delete'">
+                <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todos los recursos
+            </button>
+        </nav>
 
-<main>
-    <p th:if="${resources == null || resources.size() == 0}">No existen recursos</p>
-    <table th:unless="${resources == null || resources.size() == 0}" id="resourcesList">
-        <thead>
-        <tr>
-            <th>Título</th>
-            <th>Tipo</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="resource : ${resources}">
-            <td th:text="${resource.title}"></td>
-            <td th:text="${resource.type}"></td>
-            <td>
-                <a th:href="'/resources/' + ${resource.id}">
-                    👁️&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;
-                <a th:href="'/resources/update/' + ${resource.id}">
-                    ✏️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
-                <a th:href="'/resources/delete/' + ${resource.id}">
-                    🗑️&nbsp;&nbsp;Eliminar</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <main>
+            <p th:if="${resources == null || resources.size() == 0}">No existen recursos</p>
+            <table th:unless="${resources == null || resources.size() == 0}" id="resourcesList" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="resource : ${resources}">
+                    <td th:text="${resource.title}"></td>
+                    <td th:text="${resource.type}"></td>
+                    <td>
+                        <a th:href="'/resources/' + ${resource.id}">
+                            <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a> &nbsp;&nbsp;
+                        <a th:href="'/resources/update/' + ${resource.id}">
+                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                        <a th:href="'/resources/delete/' + ${resource.id}">
+                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-    <p th:if="${resources != null && resources.size() > 0}"
-       th:text="'Total de recursos: ' + ${resources.size()}"></p>
-</main>
+            <p th:if="${resources != null && resources.size() > 0}"
+               th:text="'Total de recursos: ' + ${resources.size()}"></p>
+        </main>
 
-<footer th:replace="~{fragment/footer :: footer}"></footer>
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
 
+    </div>
 </body>
 </html>

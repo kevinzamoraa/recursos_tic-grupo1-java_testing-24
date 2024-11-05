@@ -5,39 +5,43 @@
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
+    <div class="container mt-4">
 
-<header>
-    <h1 th:if="${resourcelist.id}">Editar lista <span th:text="${resourcelist.id}"></span></h1>
-    <h1 th:unless="${resourcelist.id}">Crear una nueva lista</h1>
-</header>
+        <header>
+            <h1 th:if="${resourcelist.id}">Editar lista <span th:text="${resourcelist.id}"></span></h1>
+            <h1 th:unless="${resourcelist.id}">Crear una nueva lista</h1>
+        </header>
 
-<main>
-    <p th:if="${resourcelist == null}">La lista no existe</p>
-    <form th:if="${resourcelist}"  id="resourcelistForm" th:action="@{/resourcelists}" th:object="${resourcelist}" method="post">
-        <fieldset>
-            <legend>Datos de la lista</legend>
-            <input type="hidden" id="id" th:field="*{id}" />
+        <main>
+            <p th:if="${resourcelist == null}">La lista no existe</p>
+            <form th:if="${resourcelist}"  id="resourcelistForm" th:action="@{/resourcelists}" th:object="${resourcelist}" method="post">
+                <fieldset>
+                    <legend>Datos de la lista</legend>
+                    <input type="hidden" id="id" th:field="*{id}" />
 
-<!--            <div>-->
-<!--                <label for="owner">Propietario</label>-->
-<!--                <input type="text" id="owner" th:field="*{owner}" />-->
-<!--            </div>-->
-            <div>
-                <label for="name">Nombre</label>
-                <input type="text" id="name" th:field="*{name}" />
-            </div>
-            <div>
-                <label for="description">Descripción (TODO hacer un área de texto)</label>
-                <input type="text" id="description" th:field="*{description}" />
-            </div>
-        </fieldset>
-        <button type="button" onclick="location.href='/resourcelists'">
-            ❌&nbsp;&nbsp;Cancelar</button> &nbsp;&nbsp;
-        <button type="submit">💾&nbsp;&nbsp;Guardar</button>
-    </form>
-</main>
+        <!--            <div>-->
+        <!--                <label for="owner">Propietario</label>-->
+        <!--                <input type="text" id="owner" th:field="*{owner}" />-->
+        <!--            </div>-->
+                    <div>
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" />
+                    </div>
+                    <div>
+                        <label for="description" class="form-label">Descripción (TODO hacer un área de texto)</label>
+                        <input type="text" class="form-control" id="description" th:field="*{description}" />
+                    </div>
+                </fieldset>
+                <div>
+                    <button type="button" class="btn btn-secondary me-2" onclick="location.href='/resourcelists'">
+                        <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Guardar</button>
+                </div>
+            </form>
+        </main>
 
-<footer th:replace="~{fragment/footer :: footer}"></footer>
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
 
+    </div>
 </body>
 </html>

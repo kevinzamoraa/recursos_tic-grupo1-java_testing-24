@@ -5,20 +5,22 @@
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
+    <div class="container mt-4">
 
-    <header>
-        <h1>Error</h1>
-    </header>
+        <header>
+            <h1>Error</h1>
+        </header>
 
-    <main>
-        <p>
-            <code th:text="${message != 'None' ? message : 'No se encontraron errores.'}"></code>
-        </p>
+        <main>
+            <p>
+                <code th:text="${message != 'None' ? message : 'No se encontraron errores.'}"></code>
+            </p>
 
-        <button onclick="history.back()">🔙&nbsp;&nbsp;Volver</button>
-    </main>
+            <button onclick="history.back()">🔙&nbsp;&nbsp;Volver</button>
+        </main>
 
-    <footer th:replace="~{fragment/footer :: footer}"></footer>
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
 
+    </div>
 </body>
 </html>

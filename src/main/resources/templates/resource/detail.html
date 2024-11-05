@@ -5,51 +5,53 @@
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
 <body>
+    <div class="container mt-4">
 
-<header>
-    <h1>Detalle del recurso</h1>
-</header>
+        <header>
+            <h1>Detalle del recurso</h1>
+        </header>
 
-<nav>
-    <button onclick="location.href='/resources'">
-        Listar todos los recursos
-    </button>
-</nav>
+        <nav>
+            <button class="btn btn-primary" onclick="location.href='/resources'">
+                <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todos los recursos
+            </button>
+        </nav>
 
-<main>
-    <p th:if="${resource == null}">El recurso no existe</p>
-    <table th:if="${resource}" id="resourceDetail">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Tipo</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="${resource.id}"></td>
-            <td>
-                <a th:href="${resource.url}" th:text="${resource.title}"></a>
-            </td>
-            <td th:text="${resource.author}"></td>
-            <td th:text="${resource.type}"></td>
-            <td th:text="${resource.description}"></td>
-            <td>
-                <a th:href="'/resources/update/' + ${resource.id}">
-                    👁️&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
-                <a th:href="'/resources/delete/' + ${resource.id}">
-                    🗑️&nbsp;&nbsp;Eliminar</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</main>
+        <main>
+            <p th:if="${resource == null}">El recurso no existe</p>
+            <table th:if="${resource}" id="resourceDetail" class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Tipo</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${resource.id}"></td>
+                    <td>
+                        <a th:href="${resource.url}" th:text="${resource.title}"></a>
+                    </td>
+                    <td th:text="${resource.author}"></td>
+                    <td th:text="${resource.type}"></td>
+                    <td th:text="${resource.description}"></td>
+                    <td>
+                        <a th:href="'/resources/update/' + ${resource.id}">
+                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
+                        <a th:href="'/resources/delete/' + ${resource.id}">
+                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </main>
 
-<footer th:replace="~{fragment/footer :: footer}"></footer>
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
 
+    </div>
 </body>
 </html>
