@@ -2,40 +2,57 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>User List</title>
-    <th:replace th:replace="~{fragment/meta :: meta}" />
+    <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
 <body>
+<th:block th:replace="~{fragment/navbar :: navbar}"/>
+<div class="container mt-4">
 
-<h1>Listado de usuarios</h1>
-<a href="/users/create">Crear nuevo usuario</a>
-<table id="userList" th:if="${users.size() > 0}">
-    <tr>
-        <th>ID</th>
-        <th>NOMBRE</th>
-        <th>CORREO E.</th>
-        <th>USUARIO</th>
-        <th>CONTRASEÑA</th>
-        <th>ACCIONES</th>
-    </tr>
-    <tr th:each="user: ${users}">
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.email}"></td>
-        <td th:text="${user.username}"></td>
-        <td th:text="${user.password}"></td>
-        <td>
-            <a th:href="@{/users/{id}(id=${user.id})}">Ver</a>
-            <a th:href="@{/users/update/{id}(id=${user.id})}">Editar</a>
-            <a th:href="@{/users/delete/{id}(id=${user.id})}">Borrar</a>
-        </td>
-    </tr>
+    <header>
+        <h1>Listado de usuarios</h1>
+    </header>
 
-</table>
-<p th:if="${users.size() == 0}">
-    No hay usuarios.
-</p>
+    <nav id="actions">
+        <button class="btn btn-primary me-2" onclick="location.href='/users/create'">
+            <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un usuario nuevo
+        </button>
+        <button class="btn btn-danger" th:if="${users.size() > 0}" onclick="location.href='/users/delete'">
+            <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todos los usuarios
+        </button>
+    </nav>
 
-<footer th:replace="~{fragment/footer :: footer}"></footer>
+    <main>
+        <table id="userList" th:if="${users.size() > 0}">
+            <tr>
+                <th>ID</th>
+                <th>NOMBRE</th>
+                <th>CORREO E.</th>
+                <th>USUARIO</th>
+                <th>CONTRASEÑA</th>
+                <th>ACCIONES</th>
+            </tr>
+            <tr th:each="user: ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.password}"></td>
+                <td>
+                    <a th:href="'/users/' + ${user.id}" class="btn btn-sm btn-info me-1">
+                        <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                    <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                        <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                    <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
+                        <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                </td>
+            </tr>
 
+        </table>
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
+    </main>
+    <p th:if="${users.size() == 0}">
+        No hay usuarios.
+    </p>
+</div>
 </body>
 </html>

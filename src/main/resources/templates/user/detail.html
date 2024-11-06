@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Detalle de Usuario</title>
-  <th:replace th:replace="~{fragment/meta :: meta}" />
+    <title>Detalle de Usuario</title>
+    <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
 <body>
-<h1>Detalle user</h1>
+<th:block th:replace="~{fragment/navbar :: navbar}"/>
+<div class="container mt-4">
 
-<div th:if="${user}">
-  <div>
-    <label for="user-id">ID:</label>
-    <span id="user-id" th:text="${user.id}"></span>
-  </div>
+    <header>
+        <h1>Detalle user</h1>
+    </header>
 
-  <div>
-    <label for="user-name">Nombre:</label>
-    <span id="user-name" th:text="${user.name}"></span>
-  </div>
+    <nav id="actions">
+        <button class="btn btn-primary" onclick="location.href='/resources'">
+            <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todos los usuarios
+        </button>
+    </nav>
 
-  <div>
-    <label for="user-email">Correo electrónico:</label>
-    <span id="user-email" th:text="${user.email}"></span>
-  </div>
-
-  <div>
-    <label for="user-username">Usuario:</label>
-    <span id="user-username" th:text="${user.username}"></span>
-  </div>
-
-  <div>
-    <label for="user-password">Contraseña:</label>
-    <span id="user-password" th:text="${user.password}"></span>
-  </div>
-
+    <main>
+        <p th:if="${user == null}">El usuario no existe</p>
+        <table th:if="${user}" id="userDetail" class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Correo electrónico</th>
+                <th>Nombre de usuario</th>
+                <th>Contraseña</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.password}"></td>
+                <td>
+                    <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                        <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                    <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
+                        <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
+    </main>
 </div>
-<div th:unless="${user}">
-  <p>No existe el usuario</p>
-</div>
-
-<footer th:replace="~{fragment/footer :: footer}"></footer>
-
 </body>
 </html>
