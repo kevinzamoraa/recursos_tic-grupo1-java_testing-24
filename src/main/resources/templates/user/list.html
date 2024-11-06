@@ -22,32 +22,39 @@
     </nav>
 
     <main>
-        <table id="userList" th:if="${users.size() > 0}">
-            <tr>
-                <th>ID</th>
-                <th>NOMBRE</th>
-                <th>CORREO E.</th>
-                <th>USUARIO</th>
-                <th>CONTRASEÑA</th>
-                <th>ACCIONES</th>
-            </tr>
-            <tr th:each="user: ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.username}"></td>
-                <td th:text="${user.password}"></td>
-                <td>
-                    <a th:href="'/users/' + ${user.id}" class="btn btn-sm btn-info me-1">
-                        <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
-                    <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
-                        <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                    <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
-                        <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
-                </td>
-            </tr>
-
+        <table id="userList" th:if="${users.size() > 0}" class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>NOMBRE</th>
+                    <th>CORREO E.</th>
+                    <th>USUARIO</th>
+                    <th>CONTRASEÑA</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user: ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.password}"></td>
+                    <td>
+                        <a th:href="'/users/' + ${user.id}" class="btn btn-sm btn-info me-1">
+                            <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                        <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                        <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
+
+        <p th:if="${users != null && users.size() > 0}"
+           th:text="'Total de usuarios: ' + ${users.size()}"></p>
+
         <footer th:replace="~{fragment/footer :: footer}"></footer>
     </main>
     <p th:if="${users.size() == 0}">
