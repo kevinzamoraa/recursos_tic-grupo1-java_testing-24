@@ -2,38 +2,65 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Rating List</title>
-    <th:replace th:replace="~{fragment/meta :: meta}" />
+    <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
 <body>
+<th:block th:replace="~{fragment/navbar :: navbar}"/>
+<div class="container mt-4">
 
-<h1>Listado de comentarios</h1>
-<a href="/ratings/create">Crear nuevo comentario</a>
-<table id="ratingList" th:if="${ratings.size() > 0}">
-    <tr>
-        <th>ID</th>
-        <th>ID USUARIO</th>
-        <th>COMENTARIO</th>
-        <th>VALORACIÓN</th>
-        <th>ACCIONES</th>
-    </tr>
-    <tr th:each="rating: ${ratings}">
-        <td th:text="${rating.id}"></td>
-        <td th:text="${rating.user.name}"></td>
-        <td th:text="${rating.comment}"></td>
-        <td th:text="${rating.score}"></td>
-        <td>
-            <a th:href="@{/ratings/{id}(id=${rating.id})}">Ver</a>
-            <a th:href="@{/ratings/update/{id}(id=${rating.id})}">Editar</a>
-            <a th:href="@{/ratings/delete/{id}(id=${rating.id})}">Borrar</a>
-        </td>
-    </tr>
+    <header>
+        <h1>Listado de valoraciones</h1>
+    </header>
 
-</table>
-<p th:if="${ratings.size() == 0}">
-    No hay valoraciones.
-</p>
+    <nav id="actions">
+        <button class="btn btn-primary me-2" onclick="location.href='/ratings/create'">
+            <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear una valoración nueva
+        </button>
+        <button class="btn btn-danger" th:if="${ratings.size() > 0}" onclick="location.href='/ratings/delete'">
+            <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas las valoraciones
+        </button>
+    </nav>
 
-<footer th:replace="~{fragment/footer :: footer}"></footer>
+    <main>
+        <p th:if="${ratings == null || ratings.size() == 0}">No existen valoraciones</p>
+        <table id="ratingList" th:if="${ratings.size() > 0}" class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ID USUARIO</th>
+                    <th>COMENTARIO</th>
+                    <th>VALORACIÓN</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="rating: ${ratings}">
+                    <td th:text="${rating.id}"></td>
+                    <td th:text="${rating.user.name}"></td>
+                    <td th:text="${rating.comment}"></td>
+                    <td th:text="${rating.score}"></td>
+                    <td>
+                        <a th:href="'/ratings/' + ${rating.id}" class="btn btn-sm btn-info me-1">
+                            <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                        <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
+                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                        <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p th:if="${ratings != null && ratings.size() > 0}"
+           th:text="'Total de valoraciones: ' + ${ratings.size()}"></p>
+
+        <footer th:replace="~{fragment/footer :: footer}"></footer>
+
+    </main>
+    <p th:if="${ratings.size() == 0}">
+        No hay valoraciones.
+    </p>
+
 
 </body>
 </html>
