@@ -7,6 +7,7 @@ import com.grupo1.recursos_tic.repository.ResourceRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,16 +15,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
 public class RatingController {
 
+    @Autowired
     private RatingRepo ratingRepository;
 
     // TODO UserRepo y ResourceRepo usados temporalmente
+    @Autowired
     private UserRepo userRepository;
+    @Autowired
     private ResourceRepo resourceRepository;
 
     // http://localhost:8082/ratings
@@ -55,6 +60,10 @@ public class RatingController {
                     return "error";
                 });
     }
+
+    // public List<Rating> findAllByUserId(@PathVariable Long userId, Model model) {
+
+    // }
 
     // http://localhost:8082/ratings/create
     @GetMapping("ratings/create")
