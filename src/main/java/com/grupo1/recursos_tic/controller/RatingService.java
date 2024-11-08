@@ -20,7 +20,7 @@ public class RatingService {
     @Transactional
     public void deleteRatingsByUser(List<Rating> ratingsToDelete) {
         try {
-            List<Rating> managedRatings = ratingsToDelete.stream()
+            /*List<Rating> managedRatings = ratingsToDelete.stream()
                     .filter(r -> r.getUserId() != null)
                     .map(RatingRepo::findAllByUserId)
                     .filter(Optional::isPresent)
@@ -34,7 +34,7 @@ public class RatingService {
                 System.out.println("Se han eliminado " + managedRatings.size() + " ratings.");
             } else {
                 System.out.println("No se encontraron ratings asociados al usuario especificado.");
-            }
+            } */
         } catch (Exception e) {
             throw new RuntimeException("Error al eliminar ratings", e);
         }

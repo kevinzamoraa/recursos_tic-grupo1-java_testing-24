@@ -25,7 +25,7 @@ public class UserService {
             User user = optionalUser.get();
                 // System.out.println(user.toString());
             // Eliminar ratings asociados al usuario
-            List<Rating> ratingsToDelete = findAllByUserId(user.getId());
+            List<Rating> ratingsToDelete = findAllByUserId(user);
                 // System.out.println(ratingsToDelete.toString());
             ratingsToDelete.forEach(ratingRepository::delete);
 
@@ -35,7 +35,7 @@ public class UserService {
     }
 
    public List<Rating> findAllByUserId(User user) {
-        return ratingRepository.findAllByUserId(user);
+        return ratingRepository.findAllByUserId(user.getId());
    }
 
 }
