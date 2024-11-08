@@ -1,8 +1,9 @@
 package com.grupo1.recursos_tic.controller;
 
-import com.grupo1.recursos_tic.model.ResourceList;
-import com.grupo1.recursos_tic.repository.ResourceListsRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
+import com.grupo1.recursos_tic.model.ResourceList;
+import com.grupo1.recursos_tic.service.ResourceListsService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.NoSuchElementException;
 
-import static com.grupo1.recursos_tic.util.Validation.invalidIntPosNumber;
+import static com.grupo1.recursos_tic.util.Validation.*;
 
 @Controller
 @AllArgsConstructor
 public class ResourceListsController {
 
-    private ResourceListsRepo resourceListsRepository;
+    private ResourceListsService resourceListsService;
 
     // TODO añadido temporalmente
     private UserRepo userRepository;
@@ -33,7 +34,7 @@ public class ResourceListsController {
 
     @GetMapping("resourcelists")
     public String findAll(Model model) {
-        model.addAttribute("resourcelists", resourceListsRepository.findAll());
+        model.addAttribute("resourcelists", resourceListsService.findAll());
         return "resourcelists/list";
     }
 
@@ -42,7 +43,7 @@ public class ResourceListsController {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
 
-        return resourceListsRepository.findById(id).map(resourceList -> {
+        return resourceListsService.findById(id).map(resourceList -> {
             model.addAttribute("resourcelist", resourceList);
             return "resourcelists/detail";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
@@ -59,7 +60,7 @@ public class ResourceListsController {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
 
-        return resourceListsRepository.findById(id).map(resourceList -> {
+        return resourceListsService.findById(id).map(resourceList -> {
             model.addAttribute("resourcelist", resourceList);
             return "resourcelists/form";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
@@ -72,14 +73,16 @@ public class ResourceListsController {
         if (error != null) throw new NoSuchElementException(error);
 
         if (resourcelist.getId() == null) { // crear
+
             // TODO añadido owner temporalmente
             resourcelist.setOwner(userRepository.findById(1L).get());
-            resourceListsRepository.save(resourcelist);
+
+            resourceListsService.save(resourcelist);
             return "redirect:/resourcelists/" + resourcelist.getId();
         } else { // editar
-            return resourceListsRepository.findById(resourcelist.getId()).map(optResourceList -> {
+            return resourceListsService.findById(resourcelist.getId()).map(optResourceList -> {
                 BeanUtils.copyProperties(resourcelist, optResourceList);
-                resourceListsRepository.save(optResourceList);
+                resourceListsService.save(optResourceList);
                 return "redirect:/resourcelists/" + optResourceList.getId();
             }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
         }
@@ -89,28 +92,22 @@ public class ResourceListsController {
     public String deleteById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
-        return resourceListsRepository.findById(id).map(resourceList -> {
-            resourceListsRepository.deleteById(resourceList.getId());
+        return resourceListsService.findById(id).map(resourceList -> {
+            resourceListsService.deleteById(resourceList.getId());
             return "redirect:/resourcelists";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
     }
 
     @GetMapping("resourcelists/delete")
     public String deleteAll(Model model) {
-        resourceListsRepository.deleteAll();
-        if (resourceListsRepository.count() != 0)
+        resourceListsService.deleteAll();
+        if (resourceListsService.count() != 0)
             throw new NoSuchElementException(delMsg);
         return "redirect:/resourcelists";
     }
 
-    // TODO Revisar la incorporación de este método
     public static String formValidation(ResourceList resourceLists) {
-//        if (stringIsEmpty(resourceLists.getNombre())) return "Falta el nombre";
-//        if (stringIsEmpty(resourceLists.getApellido())) return "Faltan los apellidos";
-//        if (stringIsEmpty(resourceLists.getEmail())) return "Falta el email";
-//        if (invalidIntPosNumber((long) resourceLists.getEdad()))
-//            return "Falta la edad o no es un número entero positivo";
-//        if (resourceLists.getEdad() <= 0) return "La edad debe ser mayor que cero";
+        if (stringIsEmpty(resourceLists.getName())) return "Falta el nombre";
         return null;
     }
 

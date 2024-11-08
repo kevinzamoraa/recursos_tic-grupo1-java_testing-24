@@ -1,7 +1,14 @@
+.form-label.required::after {
+  content: "*";
+  color: red;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
 #actions, table {
     margin-top: 1em;
 }
 
-.form-control {
+.form-control, .form-select {
     margin-bottom: 1em;
 }

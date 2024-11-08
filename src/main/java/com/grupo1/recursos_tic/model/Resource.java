@@ -34,7 +34,4 @@ public class Resource {
     @ElementCollection
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rating> ratings = new ArrayList<>();
-
 }

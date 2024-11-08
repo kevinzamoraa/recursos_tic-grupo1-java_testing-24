@@ -17,7 +17,9 @@
                 <code th:text="${message != 'None' ? message : 'No se encontraron errores.'}"></code>
             </p>
 
-            <button onclick="history.back()">🔙&nbsp;&nbsp;Volver</button>
+            <button class="btn btn-primary" onclick="history.back()">
+                <i class="fa-solid fa-rotate-left"></i>&nbsp;&nbsp;Volver
+            </button>
         </main>
 
         <footer th:replace="~{fragment/footer :: footer}"></footer>
