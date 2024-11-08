@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -60,10 +59,6 @@ public class RatingController {
                     return "error";
                 });
     }
-
-    // public List<Rating> findAllByUserId(@PathVariable Long userId, Model model) {
-
-    // }
 
     // http://localhost:8082/ratings/create
     @GetMapping("ratings/create")
