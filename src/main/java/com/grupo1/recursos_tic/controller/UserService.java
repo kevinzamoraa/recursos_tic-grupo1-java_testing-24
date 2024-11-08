@@ -23,19 +23,19 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            // System.out.println(user.toString());
+                // System.out.println(user.toString());
             // Eliminar ratings asociados al usuario
             List<Rating> ratingsToDelete = findAllByUserId(user.getId());
-            // System.out.println(ratingsToDelete.toString());
-            /* ratingsToDelete.forEach(ratingRepository::delete);
+                // System.out.println(ratingsToDelete.toString());
+            ratingsToDelete.forEach(ratingRepository::delete);
 
             // Eliminar el usuario
-            userRepository.delete(user); */
+            userRepository.delete(user);
         }
     }
 
-   public List<Rating> findAllByUserId(Long userId) {
-        return ratingRepository.findAllByUserId(userId);
+   public List<Rating> findAllByUserId(User user) {
+        return ratingRepository.findAllByUserId(user);
    }
 
 }
