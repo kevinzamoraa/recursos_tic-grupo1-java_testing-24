@@ -21,28 +21,28 @@
                     <div class="form-group">
                         <input type="hidden" id="id" th:field="*{id}" />
                         <div>
-                            <label for="title" class="form-label">Título</label>
-                            <input type="text" class="form-control" id="title" th:field="*{title}" />
+                            <label for="title" class="form-label required">Título</label>
+                            <input type="text" class="form-control" id="title" th:field="*{title}" required />
                         </div>
                         <div>
-                            <label for="url" class="form-label">Url</label>
-                            <input type="text" class="form-control" id="url" th:field="*{url}" />
+                            <label for="url" class="form-label required">Url</label>
+                            <input type="text" class="form-control" id="url" th:field="*{url}" required />
                         </div>
                         <div>
                             <label for="author" class="form-label">Autor</label>
                             <input type="text" class="form-control" id="author" th:field="*{author}" />
                         </div>
                         <div>
-                            <label for="description" class="form-label">Descripción (TODO hacer un área de texto)</label>
-                            <input type="text" class="form-control" id="description" th:field="*{description}" />
+                            <label for="description" class="form-label">Descripción</label>
+                            <textarea rows="5" class="form-control" id="description" th:field="*{description}"
+                                      placeholder="Incluye una descripción" ></textarea>
                         </div>
                         <div>
-                            <label for="type" class="form-label">Tipo (TODO Hacer selector)</label>
-                            <input type="text" class="form-control" id="type" th:field="*{type}" />
-                        </div>
-                        <div>
-                            <label for="tags" class="form-label">Etiquetas (TODO Hacer selector múltiple)</label>
-                            <input type="text" class="form-control" id="tags" th:field="*{tags}" />
+                            <label for="type" class="form-label required">Tipo</label>
+                            <select name="type" class="form-select" id="type" th:field="*{type}" required>
+                                <option th:each="type : ${T(com.grupo1.recursos_tic.model.ResourceType).values()}"
+                                        th:value="${type.name()}" th:text="${type.toString()}"></option>
+                            </select>
                         </div>
                     </div>
                 </fieldset>

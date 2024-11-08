@@ -29,7 +29,6 @@
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Descrición</th>
-                    <th>Propietario</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
@@ -38,11 +37,10 @@
                     <td th:text="${resourcelist.id}"></td>
                     <td th:text="${resourcelist.name}"></td>
                     <td th:text="${resourcelist.description}"></td>
-                    <td th:text="${resourcelist.owner.name}"></td>
                     <td>
                         <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
                             <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
-                        <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-warning-danger">
+                        <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
                             <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
                     </td>
                 </tr>

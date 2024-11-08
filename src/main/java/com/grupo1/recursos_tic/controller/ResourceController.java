@@ -1,7 +1,7 @@
 package com.grupo1.recursos_tic.controller;
 
 import com.grupo1.recursos_tic.model.Resource;
-import com.grupo1.recursos_tic.repository.ResourceRepo;
+import com.grupo1.recursos_tic.service.ResourceService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -20,7 +20,7 @@ import static com.grupo1.recursos_tic.util.Validation.*;
 @AllArgsConstructor
 public class ResourceController {
 
-    private ResourceRepo resourceRepository;
+    private ResourceService resourceService;
 
     private final String idMsg = "Falta el id o no es un entero positivo";
     private final String notIdMsg = "El recurso no existe";
@@ -30,7 +30,7 @@ public class ResourceController {
 
     @GetMapping("resources")
     public String findAll(Model model) {
-        model.addAttribute("resources", resourceRepository.findAll());
+        model.addAttribute("resources", resourceService.findAll());
         return "resource/list";
     }
 
@@ -39,7 +39,7 @@ public class ResourceController {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
 
-        return resourceRepository.findById(id).map(resource -> {
+        return resourceService.findById(id).map(resource -> {
             model.addAttribute("resource", resource);
             return "resource/detail";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
@@ -56,7 +56,7 @@ public class ResourceController {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
 
-        return resourceRepository.findById(id).map(resource -> {
+        return resourceService.findById(id).map(resource -> {
             model.addAttribute("resource", resource);
             return "resource/form";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
@@ -69,12 +69,12 @@ public class ResourceController {
         if (error != null) throw new NoSuchElementException(error);
 
         if (resource.getId() == null) { // crear
-            resourceRepository.save(resource);
+            resourceService.save(resource);
             return "redirect:/resources/" + resource.getId();
         } else { // editar
-            return resourceRepository.findById(resource.getId()).map(optResource -> {
+            return resourceService.findById(resource.getId()).map(optResource -> {
                 BeanUtils.copyProperties(resource, optResource);
-                resourceRepository.save(optResource);
+                resourceService.save(optResource);
                 return "redirect:/resources/" + optResource.getId();
             }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
         }
@@ -84,28 +84,25 @@ public class ResourceController {
     public String deleteById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
-        return resourceRepository.findById(id).map(resource -> {
-            resourceRepository.deleteById(resource.getId());
+        return resourceService.findById(id).map(resource -> {
+            resourceService.deleteById(resource.getId());
             return "redirect:/resources";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
     }
 
     @GetMapping("resources/delete")
     public String deleteAll(Model model) {
-        resourceRepository.deleteAll();
-        if (resourceRepository.count() != 0)
+        resourceService.deleteAll();
+        if (resourceService.count() != 0)
             throw new NoSuchElementException(delMsg);
         return "redirect:/resources";
     }
 
-    // TODO Revisar la incorporación de este método
     public static String formValidation(Resource resource) {
-//        if (stringIsEmpty(resource.getNombre())) return "Falta el nombre";
-//        if (stringIsEmpty(resource.getApellido())) return "Faltan los apellidos";
-//        if (stringIsEmpty(resource.getEmail())) return "Falta el email";
-//        if (invalidIntPosNumber((long) resource.getEdad()))
-//            return "Falta la edad o no es un número entero positivo";
-//        if (resource.getEdad() <= 0) return "La edad debe ser mayor que cero";
+        if (stringIsEmpty(resource.getTitle())) return "Falta el título";
+        if (stringIsEmpty(resource.getUrl())) return "Faltan la URL";
+        if (invalidIntPosNumber((long) resource.getType().ordinal()))
+            return "Falta el tipo de recurso";
         return null;
     }
 
