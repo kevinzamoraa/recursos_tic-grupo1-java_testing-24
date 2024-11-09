@@ -23,14 +23,23 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-                // System.out.println(user.toString());
-            // Eliminar ratings asociados al usuario
-            List<Rating> ratingsToDelete = findAllByUserId(user);
-                // System.out.println(ratingsToDelete.toString());
-            ratingsToDelete.forEach(ratingRepository::delete);
-
-            // Eliminar el usuario
-            userRepository.delete(user);
+            try {
+                    // System.out.println(user.toString());
+                // Eliminar ratings asociados al usuario
+                // List<Rating> ratingsToDelete = findAllByUserId(user);
+                    // System.out.println(ratingsToDelete.toString());
+                int deletedCount = ratingRepository.deleteRatingByUserId(user.getId());
+                    System.out.println("Se han eliminado " + deletedCount + " ratings.");
+                // ratingsToDelete.forEach(ratingRepository::delete);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al eliminar ratings", e);
+            }
+            try {
+                // Eliminar el usuario
+                userRepository.delete(user);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al eliminar el usuario", e);
+            }
         }
     }
 

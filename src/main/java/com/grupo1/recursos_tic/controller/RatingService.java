@@ -1,6 +1,7 @@
 package com.grupo1.recursos_tic.controller;
 
 import com.grupo1.recursos_tic.model.Rating;
+import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.repository.RatingRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,18 @@ public class RatingService {
     private RatingRepo ratingRepository;
 
     @Transactional
-    public void deleteRatingsByUser(List<Rating> ratingsToDelete) {
+    public void deleteRatingsByUser(User user) {
         try {
-            /*List<Rating> managedRatings = ratingsToDelete.stream()
+            // ratingRepository.findAllByUserId(userId);
+            int deletedCount = ratingRepository.deleteRatingByUserId(user.getId());
+            System.out.println("Se han eliminado " + deletedCount + " ratings.");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar ratings", e);
+        }
+    }
+    /* public void deleteRatingsByUser(List<Rating> ratingsToDelete) {
+        try {
+            List<Rating> managedRatings = ratingsToDelete.stream()
                     .filter(r -> r.getUserId() != null)
                     .map(RatingRepo::findAllByUserId)
                     .filter(Optional::isPresent)
@@ -34,10 +44,10 @@ public class RatingService {
                 System.out.println("Se han eliminado " + managedRatings.size() + " ratings.");
             } else {
                 System.out.println("No se encontraron ratings asociados al usuario especificado.");
-            } */
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error al eliminar ratings", e);
         }
-    }
+    }*/
 
 }
