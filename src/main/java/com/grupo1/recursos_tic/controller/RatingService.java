@@ -28,26 +28,5 @@ public class RatingService {
             throw new RuntimeException("Error al eliminar ratings", e);
         }
     }
-    /* public void deleteRatingsByUser(List<Rating> ratingsToDelete) {
-        try {
-            List<Rating> managedRatings = ratingsToDelete.stream()
-                    .filter(r -> r.getUserId() != null)
-                    .map(RatingRepo::findAllByUserId)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .filter(r -> r.getUserId() != null && r.getUserId().getId() == ratingsToDelete.get(0).getUser().getId())
-                    .collect(Collectors.toList());
-
-
-            if (!managedRatings.isEmpty()) {
-                ratingRepository.deleteAll(managedRatings);
-                System.out.println("Se han eliminado " + managedRatings.size() + " ratings.");
-            } else {
-                System.out.println("No se encontraron ratings asociados al usuario especificado.");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar ratings", e);
-        }
-    }*/
 
 }
