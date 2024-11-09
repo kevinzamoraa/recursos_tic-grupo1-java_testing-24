@@ -1,4 +1,4 @@
-package com.grupo1.recursos_tic.controller;
+package com.grupo1.recursos_tic.service;
 
 import com.grupo1.recursos_tic.model.Rating;
 import com.grupo1.recursos_tic.model.User;
@@ -26,24 +26,24 @@ public class UserService {
     public void deleteUserWithRatings(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+            //User user = optionalUser.get();
             try {
                 // Eliminar 'ratings' asociados al usuario
-                int deletedCount = ratingRepository.deleteRatingByUserId(user.getId());
-                    System.out.println("Se han eliminado " + deletedCount + " ratings.");
+                int deletedCount = ratingRepository.deleteRatingByUserId(userId);
+                System.out.println("Se han eliminado " + deletedCount + " ratings.");
             } catch (Exception e) {
                 throw new RuntimeException("Error al eliminar ratings", e);
             }
             try {
                 // Eliminar 'resourceList' asociadas al usuario
-                resourceListRepository.deleteResourceListByUserId(user.getId());
+                resourceListRepository.deleteResourceListByUserId(userId);
                 System.out.println("Se han eliminado los recursos creados por el usuario a borrar.");
             } catch (Exception e) {
                 throw new RuntimeException("Error al eliminar el usuario", e);
             }
             try {
                 // Eliminar el usuario
-                userRepository.deleteById(user.getId());
+                userRepository.deleteById(userId);
                 System.out.println("Se ha eliminado un usuario.");
             } catch (Exception e) {
                 throw new RuntimeException("Error al eliminar el usuario", e);

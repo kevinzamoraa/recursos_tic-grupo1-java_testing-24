@@ -31,7 +31,7 @@ public class User {
 
     // private userRole role; // TODO Revisar el uso de este campo
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rating> ratings = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Rating> ratings = new ArrayList<>();
 
 }

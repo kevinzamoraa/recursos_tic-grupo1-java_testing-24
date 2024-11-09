@@ -3,6 +3,7 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.repository.UserRepo;
 
+import com.grupo1.recursos_tic.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,5 +105,7 @@ public class UserController {
             return "error";
         }
     }
+
+    // TODO Hacer un método "users/delete" que borre todos los usuarios
 
 }
