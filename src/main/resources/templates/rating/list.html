@@ -22,7 +22,7 @@
     </nav>
 
     <main>
-        <p th:if="${ratings == null || ratings.size() == 0}">No existen valoraciones</p>
+        <p th:if="${ratings == null || ratings.size() == 0}">No hay valoraciones</p>
         <table id="ratingList" th:if="${ratings.size() > 0}" class="table">
             <thead>
                 <tr>
@@ -57,10 +57,5 @@
         <footer th:replace="~{fragment/footer :: footer}"></footer>
 
     </main>
-    <p th:if="${ratings.size() == 0}">
-        No hay valoraciones.
-    </p>
-
-
 </body>
 </html>

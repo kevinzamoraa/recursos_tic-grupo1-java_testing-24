@@ -16,12 +16,13 @@
         <button class="btn btn-primary me-2" onclick="location.href='/users/create'">
             <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un usuario nuevo
         </button>
-        <button class="btn btn-danger" th:if="${users.size() > 0}" onclick="location.href='/users/delete'">
+        <button class="btn btn-danger" th:if="${users.size() > 0}" onclick="location.href='users/delete/all'">
             <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todos los usuarios
         </button>
     </nav>
 
     <main>
+        <p th:if="${users == null || users.size() == 0}">No hay usuarios</p>
         <table id="userList" th:if="${users.size() > 0}" class="table">
             <thead>
                 <tr>
@@ -57,9 +58,6 @@
 
         <footer th:replace="~{fragment/footer :: footer}"></footer>
     </main>
-    <p th:if="${users.size() == 0}">
-        No hay usuarios.
-    </p>
 </div>
 </body>
 </html>
