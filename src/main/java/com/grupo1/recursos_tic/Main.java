@@ -7,6 +7,7 @@ import com.grupo1.recursos_tic.repository.ResourceRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Set;
@@ -19,14 +20,16 @@ public class Main {
 		var context = SpringApplication.run(Main.class, args);
 
 		UserRepo userRepository = context.getBean(UserRepo.class);
-		var user1 = User.builder().name("Javi").email("a@a.es")
-				.username("javi").password("AbCd4321").build();
-		var user2 = User.builder().name("Marina").email("b@b.es")
-				.username("marina").password("DcBa1234").build();
-		var user3 = User.builder().name("Kevin").email("c@c.es")
-				.username("kevin").password("DcBa1234").build();
-		var admin = User.builder().name("Admin").email("admin@admin.es")
-				.username("admin").password("admin1234").build();
+		var passwordEncoder = context.getBean(PasswordEncoder.class);
+
+		var user1 = User.builder().name("Javi").email("a@a.es").username("javi")
+				.password(passwordEncoder.encode("AbCd4321")).build();
+		var user2 = User.builder().name("Marina").email("b@b.es").username("marina")
+				.password(passwordEncoder.encode("DcBa1234")).build();
+		var user3 = User.builder().name("Kevin").email("c@c.es").username("kevin")
+				.password(passwordEncoder.encode("DcBa1234")).build();
+		var admin = User.builder().name("Admin").email("admin@admin.es").username("admin")
+				.password(passwordEncoder.encode("admin1234")).build();
 		userRepository.saveAll(List.of(user1, user2, user3, admin));
 
 		ResourceRepo resourceRepository = context.getBean(ResourceRepo.class);
