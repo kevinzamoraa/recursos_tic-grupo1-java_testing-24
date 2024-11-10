@@ -17,9 +17,7 @@
         <form method="POST" th:object="${user}" th:action="@{/users}">
             <fieldset>
                 <legend>Datos del recurso</legend>
-                <div>
-                    <input type=hidden id="id" th:field="*{id}"/>
-                </div>
+                <input type=hidden id="id" th:field="*{id}"/>
                 <div>
                     <label for="name">Nombre</label>
                     <input type="text" class="form-control" id="name" th:field="*{name}"/>
