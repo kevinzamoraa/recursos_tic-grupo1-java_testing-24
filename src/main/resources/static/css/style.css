@@ -30,11 +30,11 @@
 
 .spinner {
   margin: 0 auto;
-  border: 5px solid moccasin;
+  border: 5px solid lightblue;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: DarkOrange;
+  border-left-color: blue;
 
   animation: spin 1s ease infinite;
 }
