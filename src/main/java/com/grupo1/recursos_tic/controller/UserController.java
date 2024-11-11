@@ -107,5 +107,16 @@ public class UserController {
     }
 
     // TODO Hacer un método "users/delete" que borre todos los usuarios
+    // http://localhost:8082/users/delete/all
+    @GetMapping("users/delete/all")
+    public String deleteAllUsers() {
+        try {
+            userService.deleteAllUsers();
+            return "redirect:/users";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
 
 }
