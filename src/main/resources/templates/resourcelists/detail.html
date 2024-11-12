@@ -47,6 +47,15 @@
             <section sec:authorize="isAuthenticated()">
                 <h2 th:if="${resourcelist}">Recursos</h2>
 
+                <nav class="my-3">
+                    <button class="btn btn-primary me-2 disabled" onclick="location.href='/resources/create'">
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso
+                    </button>
+                    <button class="btn btn-primary disabled" onclick="location.href='/resources/create'">
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un recurso
+                    </button>
+                </nav>
+
                 <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos</p>
                 <table th:if="${resources.size() > 0L}" id="resourcesList" class="table">
                     <thead>
