@@ -3,6 +3,7 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 
+import com.grupo1.recursos_tic.service.ResourceService;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,7 @@ import static com.grupo1.recursos_tic.util.Utility.userAuth;
 public class ResourceListsController {
 
     private ResourceListsService resourceListsService;
+    private ResourceService resourceService;
 
     private final String idMsg = "Falta el id o no es un entero positivo";
     private final String notIdMsg = "La lista de recursos no existe";
@@ -58,6 +60,8 @@ public class ResourceListsController {
             throw new NoSuchElementException(dataMsg);
 
         model.addAttribute("resourcelist", resourceList);
+        model.addAttribute("resources", resourceList.getResources());
+
         return "resourcelists/detail";
     }
 

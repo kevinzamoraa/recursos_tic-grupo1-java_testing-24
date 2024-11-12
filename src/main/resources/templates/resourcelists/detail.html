@@ -46,6 +46,41 @@
                 </tr>
                 </tbody>
             </table>
+
+            <section sec:authorize="isAuthenticated()">
+                <h2 th:if="${resourcelist}">Recursos</h2>
+
+                <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos</p>
+                <table th:if="${resources.size() > 0L}" id="resourcesList" class="table">
+                    <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="resource : ${resources}">
+                        <td>
+                            <a th:href="${resource.url}" th:text="${resource.title}"></a>
+                        </td>
+                        <td th:text="${resource.author}"></td>
+                        <td th:text="${resource.type}"></td>
+                        <td th:text="${resource.description}"></td>
+                        <td sec:authorize="isAuthenticated()">
+                            <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
+                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                            <a th:href="'/resources/delete/' + ${resource.id}" class="btn btn-sm btn-danger">
+                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </section>
         </main>
 
         <footer th:replace="~{fragment/footer :: footer}"></footer>

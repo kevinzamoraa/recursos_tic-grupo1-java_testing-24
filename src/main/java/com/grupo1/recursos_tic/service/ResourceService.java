@@ -19,6 +19,10 @@ public class ResourceService {
         return resourceRepository.findAll();
     }
 
+    public boolean existsById(Long Id) {
+        return resourceRepository.existsById(Id);
+    }
+
     public long count() {
         return resourceRepository.count();
     }
