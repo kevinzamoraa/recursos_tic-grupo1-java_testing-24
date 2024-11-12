@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.NoSuchElementException;
 
-import static com.grupo1.recursos_tic.util.Validation.*;
+import static com.grupo1.recursos_tic.util.Utility.*;
 
 @Controller
 @AllArgsConstructor

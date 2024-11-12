@@ -15,8 +15,16 @@ public class ResourceListsService {
 
     private ResourceListsRepo resourceListsRepository;
 
-    public List<ResourceList> findAll() {
-        return resourceListsRepository.findAll();
+    public List<ResourceList> findAll(Long Id) {
+        return resourceListsRepository.findAllByOwner_Id(Id);
+    }
+
+    public boolean existsById(Long Id) {
+        return resourceListsRepository.existsById(Id);
+    }
+
+    public Long count(Long Id) {
+        return resourceListsRepository.countByOwner_Id(Id);
     }
 
     public long count() {
@@ -39,8 +47,8 @@ public class ResourceListsService {
         resourceListsRepository.deleteById(id);
     }
 
-    public void deleteAll() {
-        resourceListsRepository.deleteAll();
+    public void deleteAll(Long Id) {
+        resourceListsRepository.deleteAllByOwner_Id(Id);
     }
 
 }

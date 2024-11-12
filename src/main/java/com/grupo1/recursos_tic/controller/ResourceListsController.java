@@ -1,10 +1,11 @@
 package com.grupo1.recursos_tic.controller;
 
-import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
-import static com.grupo1.recursos_tic.util.Validation.*;
+import static com.grupo1.recursos_tic.util.Utility.*;
+import static com.grupo1.recursos_tic.util.Utility.userAuth;
 
 @Controller
 @AllArgsConstructor
@@ -23,18 +26,22 @@ public class ResourceListsController {
 
     private ResourceListsService resourceListsService;
 
-    // TODO añadido temporalmente
-    private UserRepo userRepository;
-
     private final String idMsg = "Falta el id o no es un entero positivo";
     private final String notIdMsg = "La lista de recursos no existe";
     private final String dataMsg = "Los datos recibidos no son válidos";
     private final String delMsg = "Error al borrar todas las listas de recursos";
 
+//    @Setter
+//    private Long userId;
+//
+//    @PostConstruct
+//    public void init() {
+//        if (isAuth()) setUserId(userAuth().get().getId());
+//    }
 
     @GetMapping("resourcelists")
     public String findAll(Model model) {
-        model.addAttribute("resourcelists", resourceListsService.findAll());
+        model.addAttribute("resourcelists", resourceListsService.findAll(userAuth().get().getId()));
         return "resourcelists/list";
     }
 
@@ -43,15 +50,22 @@ public class ResourceListsController {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
 
-        return resourceListsService.findById(id).map(resourceList -> {
-            model.addAttribute("resourcelist", resourceList);
-            return "resourcelists/detail";
-        }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
+        if (!resourceListsService.existsById(id))
+            throw new NoSuchElementException(notIdMsg);
+
+        ResourceList resourceList = resourceListsService.findById(id).get();
+        if (!Objects.equals(resourceList.getOwner().getId(), userAuth().get().getId()))
+            throw new NoSuchElementException(dataMsg);
+
+        model.addAttribute("resourcelist", resourceList);
+        return "resourcelists/detail";
     }
 
     @GetMapping("resourcelists/create")
     public String getFormToCreate(Model model) {
-        model.addAttribute("resourcelist", new ResourceList());
+        ResourceList resourcelist = new ResourceList();
+        resourcelist.setOwner(userAuth().get());
+        model.addAttribute("resourcelist", resourcelist);
         return "resourcelists/form";
     }
 
@@ -60,10 +74,15 @@ public class ResourceListsController {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
 
-        return resourceListsService.findById(id).map(resourceList -> {
-            model.addAttribute("resourcelist", resourceList);
-            return "resourcelists/form";
-        }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
+        if (!resourceListsService.existsById(id))
+            throw new NoSuchElementException(notIdMsg);
+
+        ResourceList resourceList = resourceListsService.findById(id).get();
+        if (!Objects.equals(resourceList.getOwner().getId(), userAuth().get().getId()))
+            throw new NoSuchElementException(dataMsg);
+
+        model.addAttribute("resourcelist", resourceList);
+        return "resourcelists/form";
     }
 
     @PostMapping("resourcelists")
@@ -73,10 +92,6 @@ public class ResourceListsController {
         if (error != null) throw new NoSuchElementException(error);
 
         if (resourcelist.getId() == null) { // crear
-
-            // TODO añadido owner temporalmente
-            resourcelist.setOwner(userRepository.findById(1L).get());
-
             resourceListsService.save(resourcelist);
             return "redirect:/resourcelists/" + resourcelist.getId();
         } else { // editar
@@ -92,15 +107,21 @@ public class ResourceListsController {
     public String deleteById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
-        return resourceListsService.findById(id).map(resourceList -> {
-            resourceListsService.deleteById(resourceList.getId());
-            return "redirect:/resourcelists";
-        }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
+
+        if (!resourceListsService.existsById(id))
+            throw new NoSuchElementException(notIdMsg);
+
+        ResourceList resourceList = resourceListsService.findById(id).get();
+        if (!Objects.equals(resourceList.getOwner().getId(), userAuth().get().getId()))
+            throw new NoSuchElementException(dataMsg);
+
+        resourceListsService.deleteById(resourceList.getId());
+        return "redirect:/resourcelists";
     }
 
     @GetMapping("resourcelists/delete")
     public String deleteAll(Model model) {
-        resourceListsService.deleteAll();
+        resourceListsService.deleteAll(userAuth().get().getId());
         if (resourceListsService.count() != 0)
             throw new NoSuchElementException(delMsg);
         return "redirect:/resourcelists";
