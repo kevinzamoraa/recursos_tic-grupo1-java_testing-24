@@ -34,7 +34,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    // private userRole role; // TODO Revisar el uso de este campo
+    private userRole role;
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Rating> ratings = new ArrayList<>();

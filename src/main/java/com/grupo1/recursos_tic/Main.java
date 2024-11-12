@@ -25,13 +25,13 @@ public class Main {
 		var passwordEncoder = context.getBean(PasswordEncoder.class);
 
 		var admin = User.builder().name("Administrador").email("admin@admin.es").username("admin")
-				.password(passwordEncoder.encode("admin1234")).build();
+				.role(userRole.ADMIN).password(passwordEncoder.encode("admin1234")).build();
 		var user1 = User.builder().name("Javier").email("a@a.es").username("javier")
-				.password(passwordEncoder.encode("AbCd4321")).build();
+				.role(userRole.AUTHOR).password(passwordEncoder.encode("AbCd4321")).build();
 		var user2 = User.builder().name("Kevin").email("b@b.es").username("kevin")
-				.password(passwordEncoder.encode("DcBa1234")).build();
+				.role(userRole.READER).password(passwordEncoder.encode("DcBa1234")).build();
 		var user3 = User.builder().name("Marina").email("c@c.es").username("marina")
-				.password(passwordEncoder.encode("DcBa1234")).build();
+				.role(userRole.READER).password(passwordEncoder.encode("DcBa1234")).build();
 
 		userRepository.saveAll(List.of(admin, user1, user2, user3));
 
