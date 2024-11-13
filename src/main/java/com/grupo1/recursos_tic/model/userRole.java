@@ -1,19 +1,24 @@
 package com.grupo1.recursos_tic.model;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * Roles de usuario
  */
-@RequiredArgsConstructor
+
+@Getter
 public enum userRole {
 
     AUTHOR("Autor"),
     READER("Lector"),
     ADMIN("Administrador");
 
-    private final String userRole;
+    private final String displayValue;
 
-    @Override
-    public String toString() { return userRole; }
+    private userRole(String displayValue) {
+        this.displayValue = displayValue;
+    }
+
 }
