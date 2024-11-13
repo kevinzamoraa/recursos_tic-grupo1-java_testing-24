@@ -16,7 +16,7 @@
     <main>
         <form method="POST" th:object="${user}" th:action="@{/users}">
             <fieldset>
-                <legend>Datos del recurso</legend>
+                <legend>Datos del usuario</legend>
                 <input type=hidden id="id" th:field="*{id}"/>
                 <div>
                     <label for="name">Nombre</label>
@@ -39,22 +39,21 @@
                     document.getElementById('password').value = password;
                 </script>
 
-                <!--  <div>-->
-                <!--    <label for="role">Selecciona un rol</label>-->
-                <!--    <select id="role" th:field="*{role}">-->
-                <!--      <option th:selected="${user.role == null}" value="        "></option>-->
-                <!--      <option th:text="Autor" th:value="${userRole.AUTHOR}" ></option>-->
-                <!--      <option th:text="Lector" th:value="${userRole.READER}" ></option>-->
-                <!--      <option th:text="Admin" th:value="${userRole.ADMIN}" ></option>-->
+                <div>
+                    <label for="role">Rol: </label>
+                    <select name="role" id="role" class="btn btn-primary mb-4">
+                        <option th:each="roleOpt : ${T(com.grupo1.recursos_tic.model.userRole).values()}"
+                                th:value="${roleOpt}" th:text="${roleOpt.displayValue}"></option>
                     </select>
-                </div>-->
+                </div>
 
-            </fieldset>
-            <div>
-                <button type="button" class="btn btn-secondary me-2" onclick="location.href='/users'">
-                    <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Cancelar</button>
-                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Guardar</button>
-            </div>
+                <div>
+                    <button type="button" class="btn btn-secondary me-2" onclick="location.href='/users'">
+                        <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Guardar
+                    </button>
+                </div>
         </form>
         <footer th:replace="~{fragment/footer :: footer}"></footer>
     </main>
