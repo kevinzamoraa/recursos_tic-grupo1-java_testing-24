@@ -14,6 +14,10 @@ public enum UserRole {
 
     private final String userRole;
 
+    public boolean isAdmin() {
+        return this == ADMIN;
+    }
+
     @Override
     public String toString() { return userRole; }
 }
