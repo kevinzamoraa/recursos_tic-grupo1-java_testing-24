@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
  * Roles de usuario
  */
 @RequiredArgsConstructor
-public enum userRole {
+public enum UserRole {
 
     AUTHOR("Autor"),
     READER("Lector"),

@@ -17,7 +17,7 @@
             <button class="btn btn-primary me-2" onclick="location.href='/resources/create'">
                 <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un recurso nuevo
             </button>
-            <button class="btn btn-danger" th:if="${resources.size() > 0}" onclick="location.href='/resources/delete'">
+            <button class="btn btn-danger" th:if="${resources.size() > 0 && #authentication.principal.role == role.ADMIN}" onclick="location.href='/resources/delete'">
                 <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todos los recursos
             </button>
         </nav>
