@@ -1,24 +1,35 @@
 package com.grupo1.recursos_tic.model;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
  * Roles de usuario
  */
 
 @Getter
-public enum userRole {
+public enum UserRole {
 
     AUTHOR("Autor"),
     READER("Lector"),
     ADMIN("Administrador");
 
-    private final String displayValue;
+    private final String name;
 
-    private userRole(String displayValue) {
-        this.displayValue = displayValue;
+    UserRole(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public static UserRole fromName(String name) {
+        for (UserRole role : values()) {
+            if (role.name.equals(name)) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("No matching role found for name: " + name);
     }
 
 }

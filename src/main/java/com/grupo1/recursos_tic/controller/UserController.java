@@ -7,6 +7,7 @@ import com.grupo1.recursos_tic.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,14 @@ public class UserController {
     private UserService userService;
 
     // http://localhost:8082/users
-    @GetMapping("users")
+    /*@GetMapping("users")
     public String findAll(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "user/list";
+    }*/
+    @Secured("ADMIN_USER")
+    @GetMapping("users")
+    public String showUsersPage(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }

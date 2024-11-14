@@ -1,4 +1,5 @@
-<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark"
+     xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
   <div class="container">
     <a class="navbar-brand" href="/">
       <img src="/img/rtic.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
@@ -20,10 +21,13 @@
           </a>
         </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
-          <a class="nav-link" href="/users">
-            <i class="fa-solid fa-users"></i>&nbsp;&nbsp;Usuarios
-          </a>
-        </li>
+        <!-- <div th:href="@{/users/{id}(id=${#authentication.getPrincipal().getId()})}"> -->
+            <a class="nav-link" th:if="#{principal.role == userRole.ADMIN}" href="/users">
+              <i class="fa-solid fa-users"></i>&nbsp;&nbsp;Usuarios
+            </a>
+        <!-- </div> -->
+
+      </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" href="/ratings">
             <i class="fa-solid fa-comment"></i>&nbsp;&nbsp;Valoraciones
