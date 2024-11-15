@@ -165,7 +165,7 @@ public class ResourceApiController {
      * @param ids Lista de identificadores de recursos
      * @return Void
      */
-    @DeleteMapping("resources")
+    @DeleteMapping("resources/list")
     @Operation(summary = "Borrar una lista de recursos",
             description = "Esta operación borra una lista recursos existentes por su id")
     public ResponseEntity<Void> deleteAll(@RequestBody List<Long> ids) {

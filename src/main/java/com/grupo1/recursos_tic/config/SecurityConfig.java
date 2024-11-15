@@ -53,6 +53,9 @@ public class  SecurityConfig {
                     .requestMatchers(HttpMethod.GET,"/resources/delete").authenticated()
                     .requestMatchers(HttpMethod.GET,"/resources/**").permitAll()
 
+                    // TODO revisar permisos
+                    .requestMatchers(HttpMethod.GET,"/api/resources/**").permitAll()
+
                     .anyRequest().authenticated()
             )
 
