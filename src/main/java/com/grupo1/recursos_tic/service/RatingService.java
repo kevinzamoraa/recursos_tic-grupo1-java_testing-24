@@ -20,6 +20,10 @@ public class RatingService {
         return ratingRepository.findAllByResource_Id(id);
     }
 
+    public long count() {
+        return ratingRepository.count();
+    }
+
     @Transactional
     public void deleteRatingsByUser(User user) {
         try {

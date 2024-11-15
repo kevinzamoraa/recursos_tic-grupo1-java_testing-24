@@ -53,24 +53,6 @@ public class  SecurityConfig {
                     .requestMatchers(HttpMethod.GET,"/resources/delete").authenticated()
                     .requestMatchers(HttpMethod.GET,"/resources/**").permitAll()
 
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/**").authenticated()
-
-                    .requestMatchers(HttpMethod.GET,"/users/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/**").authenticated()
-
-                    .requestMatchers(HttpMethod.GET,"/ratings/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/**").authenticated()
-
                     .anyRequest().authenticated()
             )
 

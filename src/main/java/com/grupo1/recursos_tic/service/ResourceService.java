@@ -40,12 +40,17 @@ public class ResourceService {
     }
 
     public void deleteById(long id) {
-        // TODO disasociar u otro
+        // TODO disasociar
         resourceRepository.deleteById(id);
     }
 
+    public void deleteAllByIdInBatch(List<Long> ids) {
+        // TODO disasociar
+        resourceRepository.deleteAllByIdInBatch(ids);
+    }
+
     public void deleteAll() {
-        // TODO disasociar u otro
+        // TODO disasociar
         resourceRepository.deleteAll();
     }
 
