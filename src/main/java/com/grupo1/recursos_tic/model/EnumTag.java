@@ -3,7 +3,7 @@ package com.grupo1.recursos_tic.model;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum OldTag {
+public enum EnumTag {
 
     HARDWARE("Hardware"),
     SOFTWARE("Software"),

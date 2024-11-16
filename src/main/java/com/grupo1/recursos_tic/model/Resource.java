@@ -32,7 +32,7 @@ public class Resource {
     private ResourceType type;
 
     @ElementCollection
-    private Set<Tag> tags = new HashSet<>();
+    private Set<EnumTag> tags = new HashSet<>();
 
     @ManyToMany(mappedBy = "resources")
     @ToString.Exclude

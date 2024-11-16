@@ -27,15 +27,17 @@
             <table th:unless="${resources == null || resources.size() == 0}" id="resourcesList" class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Título</th>
                     <th>Tipo</th>
+                    <th>Título</th>
+                    <th>Descripción</th>
                     <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="resource : ${resources}">
-                    <td th:text="${resource.title}"></td>
                     <td th:text="${resource.type}"></td>
+                    <td th:text="${resource.title}"></td>
+                    <td th:text="${resource.description}"></td>
                     <td>
                         <a th:href="'/resources/' + ${resource.id}"
                            class="btn btn-sm btn-info me-1"><i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>

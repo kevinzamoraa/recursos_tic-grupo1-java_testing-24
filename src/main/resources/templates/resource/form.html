@@ -44,6 +44,13 @@
                                         th:value="${type.name()}" th:text="${type.toString()}"></option>
                             </select>
                         </div>
+                        <div>
+                            <label for="tags" class="form-label required">Etiquetas</label>
+                            <select name="tags" class="form-select" id="tags" th:field="*{tags}" multiple>
+                                <option th:each="tag : ${T(com.grupo1.recursos_tic.model.EnumTag).values()}"
+                                        th:value="${tag.name()}" th:text="${tag.toString()}"></option>
+                            </select>
+                        </div>
                     </div>
                 </fieldset>
                 <div>

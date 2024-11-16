@@ -125,8 +125,9 @@ public class ResourceListsController {
 
     @GetMapping("resourcelists/delete")
     public String deleteAll(Model model) {
-        resourceListsService.deleteAll(userAuth().get().getId());
-        if (resourceListsService.count() != 0)
+        Long id = userAuth().get().getId();
+        resourceListsService.deleteAll(id);
+        if (resourceListsService.count(id) != 0)
             throw new NoSuchElementException(delMsg);
         return "redirect:/resourcelists";
     }

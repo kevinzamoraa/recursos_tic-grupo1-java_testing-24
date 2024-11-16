@@ -39,10 +39,10 @@ public class Main {
 		// Resources
 		ResourceRepo resourceRepository = context.getBean(ResourceRepo.class);
 
-		var resource1 = Resource.builder().title("Libro 1").type(ResourceType.BOOK)
-				.author("Autor1").description("Descripción del libro 1").url("#").build();
-		var resource2 = Resource.builder().title("Libro 2").type(ResourceType.VIDEO)
-				.author("Autor2").description("Descripción del libro 2").url("#").build();
+		var resource1 = Resource.builder().title("Título R1").type(ResourceType.BOOK).description("Descripción recurso 1")
+				.tags(Set.of(EnumTag.SOFTWARE, EnumTag.ACCESSIBILITY)).author("Autor1").url("#").build();
+		var resource2 = Resource.builder().title("Título R2").type(ResourceType.VIDEO).description("Descripción recurso 2")
+				.tags(Set.of(EnumTag.HARDWARE, EnumTag.HISTORY, EnumTag.RESEARCH)).author("Autor2").url("#").build();
 
 		resourceRepository.saveAll(List.of(resource1, resource2));
 
@@ -69,7 +69,7 @@ public class Main {
 		var rating1 = Rating.builder().user(user1).resource(resource2)
 				.comment("Comentario de prueba 1").score(3).build();
 		var rating2 = Rating.builder().user(user2).resource(resource1)
-				.comment("Comentario de prueba 2").score(3).build();
+				.comment("Comentario de prueba 2").score(4).build();
 
 		ratingRepository.saveAll(List.of(rating1, rating2));
 	}
