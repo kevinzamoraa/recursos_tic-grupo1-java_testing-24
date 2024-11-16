@@ -100,7 +100,7 @@ public class ResourceController {
             throw new NoSuchElementException(notIdMsg);
 
         return resourceService.findById(id).map(resource -> {
-            resourceService.deleteById(resource.getId());
+            resourceService.removeResourceWithDependencies(resource.getId());
             return "redirect:/resources";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
     }

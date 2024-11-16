@@ -23,5 +23,7 @@ public interface RatingRepo extends JpaRepository<Rating, Long> {
     int deleteRatingByUserId(@Param("userId") Long userId);
 
     List<Rating> findAllByResource_Id(Long userId);
+
+    void deleteAllByResource_Id(Long userId);
 }
 

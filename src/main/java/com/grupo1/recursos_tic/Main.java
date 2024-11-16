@@ -53,8 +53,14 @@ public class Main {
 		var resourceList1 = ResourceList.builder().owner(user1).name("Lista 1")
 				.description("Descripción de la lista 1")
 				.resources(Set.of(resource1, resource2)).build();
+		var resourceList2 = ResourceList.builder().owner(admin).name("Lista 2")
+				.description("Descripción de la lista 2")
+				.resources(Set.of(resource1)).build();
+		var resourceList3 = ResourceList.builder().owner(user1).name("Lista 3")
+				.description("Descripción de la lista 3")
+				.resources(Set.of(resource1, resource2)).build();
 
-		resourceListsRepository.save(resourceList1);
+		resourceListsRepository.saveAll(List.of(resourceList1, resourceList2, resourceList3));
 
 
 		// Ratings

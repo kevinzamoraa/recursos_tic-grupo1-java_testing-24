@@ -1,6 +1,8 @@
 package com.grupo1.recursos_tic.service;
 
+import com.grupo1.recursos_tic.model.Rating;
 import com.grupo1.recursos_tic.model.Resource;
+import com.grupo1.recursos_tic.repository.RatingRepo;
 import com.grupo1.recursos_tic.repository.ResourceRepo;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class ResourceService {
 
     private ResourceRepo resourceRepository;
+    private RatingService ratingService;
+    private ResourceListsService resourceListsService;
 
     public List<Resource> findAll() {
         return resourceRepository.findAll();
@@ -40,8 +44,19 @@ public class ResourceService {
     }
 
     public void deleteById(long id) {
-        // TODO disasociar
         resourceRepository.deleteById(id);
+    }
+
+    public void removeResourceWithDependencies(long id) {
+        ratingService.deleteAllByResource_Id(id);
+        removeResourceFromAllResourceLists(id);
+        resourceRepository.deleteById(id);
+    }
+
+    public void removeResourceFromAllResourceLists(Long id) {
+        Resource resource = findById(id).get();
+        resource.removeFromAllLists();
+        save(resource);
     }
 
     public void deleteAllByIdInBatch(List<Long> ids) {

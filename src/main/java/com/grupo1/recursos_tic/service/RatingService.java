@@ -25,6 +25,11 @@ public class RatingService {
     }
 
     @Transactional
+    public void deleteAllByResource_Id(Long id) {
+        ratingRepository.deleteAllByResource_Id(id);
+    }
+
+    @Transactional
     public void deleteRatingsByUser(User user) {
         try {
             // ratingRepository.findAllByUserId(userId);
