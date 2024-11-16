@@ -48,13 +48,13 @@ public class  SecurityConfig {
                     //.requestMatchers(HttpMethod.POST,"/cookie", "/logout").permitAll()
 
                     .requestMatchers(HttpMethod.GET,"/resources/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/**").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/resources/update/{id}").authenticated()
+                    .requestMatchers(HttpMethod.DELETE,"/resources/delete/{id}").authenticated()
+                    .requestMatchers(HttpMethod.DELETE,"/resources/delete").authenticated()
+                    .requestMatchers("/resources/**").permitAll()
 
                     // TODO revisar permisos
-                    .requestMatchers(HttpMethod.GET,"/api/resources/**").permitAll()
+                    .requestMatchers("/api/**").permitAll()
 
                     .anyRequest().authenticated()
             )

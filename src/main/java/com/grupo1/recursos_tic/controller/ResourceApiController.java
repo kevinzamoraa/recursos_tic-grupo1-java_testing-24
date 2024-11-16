@@ -48,7 +48,6 @@ public class ResourceApiController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-
     /**
      * Obtiene las valoraciones de un recurso
      * @param id Identificador del recurso
@@ -61,7 +60,7 @@ public class ResourceApiController {
         if (!resourceService.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         List<Rating> ratings = ratingService.findAllByResource_Id(id);
-        if (ratings.isEmpty()) ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        if (ratings.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.ok(ratings);
     }
 
