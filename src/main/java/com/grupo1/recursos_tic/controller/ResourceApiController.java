@@ -25,7 +25,7 @@ public class ResourceApiController {
      * Obtiene la lista de recursos
      * @return List<Resource>
      */
-    @GetMapping("resources")
+    @GetMapping("/resources")
     @Operation(summary = "Obtener la lista de recursos",
             description = "Esta operación devuelve la lista de recursos disponibles")
     public ResponseEntity<List<Resource>> findAll() {
@@ -37,7 +37,7 @@ public class ResourceApiController {
      * @param id Identificador del recurso
      * @return Resource
      */
-    @GetMapping("resources/{id}")
+    @GetMapping("/resources/{id}")
     @Operation(summary = "Obtener detalles de un recurso",
             description = "Esta operación devuelve información detallada sobre un recurso")
     public ResponseEntity<Resource> findById(@PathVariable Long id) {
@@ -53,7 +53,7 @@ public class ResourceApiController {
      * @param id Identificador del recurso
      * @return List<Rating>
      */
-    @GetMapping("resources/{id}/ratings")
+    @GetMapping("/resources/{id}/ratings")
     @Operation(summary = "Obtener valoraciones de un recurso",
             description = "Esta operación devuelve las valoraciones asociadas a un recurso")
     public ResponseEntity<List<Rating>> getRatings(@PathVariable Long id) {
@@ -69,19 +69,26 @@ public class ResourceApiController {
      * @param resource Recurso a crear
      * @return Resource
      */
-    @PostMapping("resources")
+    @PostMapping("/resources")
     @Operation(summary = "Crear un recurso nuevo",
             description = "Esta operación guarda un recurso nuevo y lo devuelve")
     public ResponseEntity<Resource> create(@RequestBody Resource resource) {
-        if (resource.getId() != null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        Resource newResource;
-        try {
-            newResource = resourceService.save(resource);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if (resource.getId() != null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No se puede crear un recurso con ID predefinido"
+            );
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(newResource);
+
+        try {
+            Resource newResource = resourceService.save(resource);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newResource);
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Error al crear el recurso: " + e.getMessage()
+            );
+        }
     }
 
     /**
@@ -89,7 +96,7 @@ public class ResourceApiController {
      * @param resource Recurso existente
      * @return Resource
      */
-    @PutMapping("resources")
+    @PutMapping("/resources")
     @Operation(summary = "Actualizar un recurso existente",
             description = "Esta operación actualiza un recurso existente y lo devuelve")
     public ResponseEntity<Resource> update(@RequestBody Resource resource) {
@@ -110,7 +117,7 @@ public class ResourceApiController {
      * @param resource Recurso existente
      * @return Resource
      */
-    @PatchMapping(value = "resources/{id}",
+    @PatchMapping(value = "/resources/{id}",
             consumes = {"application/json", "application/merge-patch+json"})
     @Operation(summary = "Actualizar un recurso existente parcialmente",
             description = "Esta operación actualiza un recurso existente parcialmente y lo devuelve")
@@ -147,7 +154,7 @@ public class ResourceApiController {
      * @param id Identificador del recurso
      * @return Void
      */
-    @DeleteMapping("resources/{id}")
+    @DeleteMapping("/resources/{id}")
     @Operation(summary = "Borrar un recurso existente",
             description = "Esta operación borra un recurso existente")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
@@ -164,7 +171,7 @@ public class ResourceApiController {
      * @param ids Lista de identificadores de recursos
      * @return Void
      */
-    @DeleteMapping("resources/list")
+    @DeleteMapping("/resources/list")
     @Operation(summary = "Borrar una lista de recursos",
             description = "Esta operación borra una lista recursos existentes por su id")
     public ResponseEntity<Void> deleteAll(@RequestBody List<Long> ids) {
@@ -180,7 +187,7 @@ public class ResourceApiController {
      * Borra todos los recursos
      * @return Void
      */
-    @DeleteMapping("resources")
+    @DeleteMapping("/resources")
     @Operation(summary = "Borrar todos los recursos",
             description = "Esta operación borra todos los recursos existentes")
     public ResponseEntity<Void> deleteAll() {

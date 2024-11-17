@@ -15,11 +15,12 @@
 
         <main>
             <p th:if="${resource == null}">El recurso no existe</p>
-            <form th:if="${resource}"  id="resourceForm" th:action="@{/resources}" th:object="${resource}" method="post">
+            <form th:if="${resource}" id="resourceForm" th:action="@{/resources}" th:object="${resource}" method="post">
                 <fieldset>
                     <legend>Datos del recurso</legend>
                     <div class="form-group">
                         <input type="hidden" id="id" th:field="*{id}" />
+                        <input type="hidden" name="listId" th:value="${listId}"/>
                         <div>
                             <label for="title" class="form-label required">Título</label>
                             <input type="text" class="form-control" id="title" th:field="*{title}" required />

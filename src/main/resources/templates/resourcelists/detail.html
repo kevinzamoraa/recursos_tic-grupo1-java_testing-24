@@ -48,12 +48,12 @@
                 <h2 th:if="${resourcelist}">Recursos</h2>
 
                 <nav class="my-3">
-                    <button class="btn btn-primary me-2 disabled" onclick="location.href='/resources/create'">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso
-                    </button>
-                    <button class="btn btn-primary disabled" onclick="location.href='/resources/create'">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un recurso
-                    </button>
+                    <a href="/resources/create" class="btn btn-primary me-2 disabled">
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso existente
+                    </a>
+                    <a th:href="'/resources/create/' + ${resourcelist.id}" class="btn btn-primary">
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso nuevo
+                    </a>
                 </nav>
 
                 <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos</p>
@@ -77,7 +77,9 @@
                         <td th:text="${resource.type}"></td>
                         <td th:text="${resource.description}"></td>
                         <td sec:authorize="isAuthenticated()">
-                            <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/resources/' + ${resource.id}" class="btn btn-sm btn-info me-1">
+                                <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                            <a th:href="'/resources/update/' + ${resource.id}"class="btn btn-sm btn-warning me-1">
                                 <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
                             <a th:href="'/resources/delete/' + ${resource.id}" class="btn btn-sm btn-danger">
                                 <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>

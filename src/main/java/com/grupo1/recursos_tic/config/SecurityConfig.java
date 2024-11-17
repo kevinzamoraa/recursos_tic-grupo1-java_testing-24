@@ -38,8 +38,11 @@ public class  SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception {
 
         http
-            //.csrf(Customizer.withDefaults())
-            .csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository()))
+            .csrf(csrf -> csrf
+                    .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+                    .ignoringRequestMatchers("/api/**")
+            )
+              //.csrf(csrf -> csrf.disable())  // O .csrf(AbstractHttpConfigurer::disable)
 
             .authorizeHttpRequests(authRequest -> authRequest
                     .requestMatchers(HttpMethod.GET,"/", "/legal", "/privacy", "/login", "/help", "/error",

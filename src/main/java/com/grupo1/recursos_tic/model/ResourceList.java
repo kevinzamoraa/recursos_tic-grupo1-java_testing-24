@@ -32,6 +32,11 @@ public class ResourceList {
     @ToString.Exclude
     private Set<Resource> resources = new HashSet<>();
 
+    public void addResource(Resource resource) {
+        if (resource == null) return;
+        resources.add(resource);
+    }
+
     public void removeResource(Resource resource) {
         resources.remove(resource);
         resource.getLists().remove(this);
