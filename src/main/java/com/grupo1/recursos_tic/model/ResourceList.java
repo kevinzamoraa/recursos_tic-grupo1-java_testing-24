@@ -33,13 +33,13 @@ public class ResourceList {
     private Set<Resource> resources = new HashSet<>();
 
     public void addResource(Resource resource) {
-        if (resource == null) return;
-        resources.add(resource);
+        if (this.resources != null) this.resources.add(resource);
+        if (resource != null && resource.getLists() != null)
+            resource.getLists().add(this);
     }
 
     public void removeResource(Resource resource) {
         if (this.resources != null) this.resources.remove(resource);
-        // Referencia inversa
         if (resource != null && resource.getLists() != null)
             resource.getLists().remove(this);
     }

@@ -14,10 +14,10 @@
         </header>
 
         <nav id="actions">
-            <button class="btn btn-primary me-2" onclick="location.href='/resourcelists/create'">
+            <button class="btn btn-primary btn-sm me-2" onclick="location.href='/resourcelists/create'">
                 <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear una lista nueva
             </button>
-            <button class="btn btn-danger" th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
+            <button class="btn btn-danger btn-sm" th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
                 <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas las listas
             </button>
         </nav>
