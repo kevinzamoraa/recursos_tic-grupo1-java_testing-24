@@ -79,10 +79,12 @@
                         <td sec:authorize="isAuthenticated()">
                             <a th:href="'/resources/' + ${resource.id}" class="btn btn-sm btn-info me-1">
                                 <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
-                            <a th:href="'/resources/update/' + ${resource.id}"class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/resources/update/' + ${resource.id} + '/' + ${resourcelist.id}"
+                               class="btn btn-sm btn-warning me-1">
                                 <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                            <a th:href="'/resources/delete/' + ${resource.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                            <a th:href="'/resourcelists/remove/' + ${resourcelist.id} + '/' + ${resource.id}"
+                               class="btn btn-sm btn-danger">
+                                <i class="fa-solid fa-x"></i>&nbsp;&nbsp;Quitar</a>
                         </td>
                     </tr>
                     </tbody>

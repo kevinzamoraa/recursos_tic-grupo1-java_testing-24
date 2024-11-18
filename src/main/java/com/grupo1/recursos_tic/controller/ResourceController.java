@@ -61,16 +61,16 @@ public class ResourceController {
         return "resource/form";
     }
 
-    @GetMapping("resources/create/{id}")
-    public String getFormToCreateNew(Model model, @PathVariable Long id) {
-        if (invalidIntPosNumber(id) || id == 0)
+    @GetMapping("resources/create/{listId}")
+    public String getFormToCreateNew(Model model, @PathVariable Long listId) {
+        if (invalidIntPosNumber(listId) || listId == 0)
             throw new NoSuchElementException(idMsg);
 
-        if (!resourceListsService.existsById(id))
+        if (!resourceListsService.existsById(listId))
             throw new NoSuchElementException(notIdMsg);
 
         model.addAttribute("resource", new Resource());
-        model.addAttribute("listId", id);
+        model.addAttribute("listId", listId);
         return "resource/form";
     }
 
@@ -84,6 +84,21 @@ public class ResourceController {
 
         return resourceService.findById(id).map(resource -> {
             model.addAttribute("resource", resource);
+            return "resource/form";
+        }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
+    }
+
+    @GetMapping("resources/update/{id}/{listId}")
+    public String getFormToUpdateAndList(Model model, @PathVariable Long id, @PathVariable Long listId) {
+        if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
+            throw new NoSuchElementException(idMsg);
+
+        if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
+            throw new NoSuchElementException(notIdMsg);
+
+        return resourceService.findById(id).map(resource -> {
+            model.addAttribute("resource", resource);
+            model.addAttribute("listId", listId);
             return "resource/form";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
     }
@@ -109,6 +124,8 @@ public class ResourceController {
             return resourceService.findById(resource.getId()).map(optResource -> {
                 BeanUtils.copyProperties(resource, optResource);
                 resourceService.save(optResource);
+                if (listId != null && listId != 0L)
+                    return "redirect:/resourcelists/" + listId;
                 return "redirect:/resources/" + optResource.getId();
             }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
         }

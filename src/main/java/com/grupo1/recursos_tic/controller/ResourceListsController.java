@@ -5,18 +5,16 @@ import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 
 import com.grupo1.recursos_tic.service.ResourceService;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Set;
 
 import static com.grupo1.recursos_tic.util.Utility.*;
 import static com.grupo1.recursos_tic.util.Utility.userAuth;
@@ -96,6 +94,21 @@ public class ResourceListsController {
         model.addAttribute("resources", resources);
         model.addAttribute("listId", id);
         return "resourcelists/catalog";
+    }
+
+    @GetMapping("resourcelists/remove/{listId}/{id}")
+    public String removeResource(Model model, @PathVariable Long listId, @PathVariable Long id) {
+        if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
+            throw new NoSuchElementException(idMsg);
+
+        if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
+            throw new NoSuchElementException(notIdMsg);
+
+        // TODO No funciona. Quitar el recurso de la lista
+        resourceListsService.findById(listId).get()
+                .removeResource(resourceService.findById(id).get());
+
+        return "redirect:/resourcelists/" + listId;
     }
 
 
