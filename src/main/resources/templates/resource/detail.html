@@ -59,10 +59,10 @@
 <!--            TODO mostrar sólo las listas del usuario-->
 
             <section sec:authorize="isAuthenticated()"
-                     th:if="${resource.lists != null && resource.lists.size() > 0L}">
+                     th:if="${lists != null && lists.size() > 0L}">
                 <h2>Listas del recurso</h2>
                 <ul class="list-inline">
-                    <li th:each="list : ${resource.lists}" class="list-inline-item">
+                    <li th:each="list : ${lists}" class="list-inline-item">
                         <a th:href="'/resourcelists/' + ${list.id}" th:text="${list.name}"
                            class="btn btn-outline-primary btn-sm"></a>
                     </li>

@@ -13,21 +13,22 @@ import java.util.List;
 
 public interface ResourceListsRepo extends JpaRepository<ResourceList, Long> {
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM ResourceList rl WHERE rl.owner.id = :id")
-    void deleteResourceListByUserId(@Param("id") Long id);
-
-
     //@Query("SELECT COUNT(*) FROM ResourceList rl WHERE rl.owner.id = ?1")
     Long countByOwner_Id(Long id);
 
     //@Query("SELECT rl FROM ResourceList rl WHERE rl.owner.id = ?1")
     List<ResourceList> findAllByOwner_Id(Long id);
 
+    List<ResourceList> findByOwner_IdAndResources_Id(Long ownerId, Long resourceId);
+
     @Transactional
-    //@Modifying
-    //@Query("DELETE FROM ResourceList rl WHERE rl.owner.id = ?1")
+    @Modifying
+    @Query("DELETE FROM ResourceList rl WHERE rl.owner.id = :id")
+    void deleteResourceListByUserId(@Param("id") Long id);
+
+    @Transactional
+        //@Modifying
+        //@Query("DELETE FROM ResourceList rl WHERE rl.owner.id = ?1")
     void deleteAllByOwner_Id(Long id);
 
 }

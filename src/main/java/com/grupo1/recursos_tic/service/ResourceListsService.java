@@ -37,6 +37,10 @@ public class ResourceListsService {
         return resourceListsRepository.findById(id);
     }
 
+    public List<ResourceList> findByOwnerIdAndResourcesId(Long userId, Long resourceId) {
+        return resourceListsRepository.findByOwner_IdAndResources_Id(userId, resourceId);
+    }
+
     public ResourceList save(ResourceList resourcelist) {
         return resourceListsRepository.save(resourcelist);
     }
