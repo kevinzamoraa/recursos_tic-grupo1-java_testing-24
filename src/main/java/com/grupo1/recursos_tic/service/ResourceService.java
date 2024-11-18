@@ -27,12 +27,12 @@ public class ResourceService {
         return resourceRepository.existsById(Id);
     }
 
-    public long count() {
-        return resourceRepository.count();
-    }
-
     public Optional<Resource> findById(long id) {
         return resourceRepository.findById(id);
+    }
+
+    public long count() {
+        return resourceRepository.count();
     }
 
     public Resource save(Resource resource) {

@@ -13,8 +13,8 @@
         </header>
 
         <main>
-            <p th:if="${resources == null || resources.size() == 0}">La lista no tiene recursos</p>
-            <form th:unless="${resources == null || resources.size() == 0}"
+            <p th:if="${allResources == null || allResources.size() == 0}">La lista no tiene recursos</p>
+            <form th:unless="${allResources == null || allResources.size() == 0}"
                   id="resourceListForm" th:action="@{/resourcelists/add}" method="post">
                 <fieldset>
                     <legend>Catálogo de recursos</legend>
@@ -23,7 +23,7 @@
                         <div>
                             <label for="catalog" class="form-label required">Recursos</label>
                             <select name="catalog" id="catalog" class="form-select" multiple>
-                                <option th:each="resource : ${resources}"
+                                <option th:each="resource : ${allResources}"
                                         th:value="${resource.id}" th:text="${resource.title}"></option>
                             </select>
                         </div>
@@ -36,7 +36,7 @@
                 </div>
             </form>
 
-            <button th:if="${resources == null || resources.size() == 0}"
+            <button th:if="${allResources == null || allResources.size() == 0}"
                     class="btn btn-primary" onclick="history.back()">
                 <i class="fa-solid fa-rotate-left"></i>&nbsp;&nbsp;Volver
             </button>

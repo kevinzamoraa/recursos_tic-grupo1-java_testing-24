@@ -31,7 +31,6 @@
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
                     <th>Nombre de usuario</th>
-                    <th>Contraseña</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -41,7 +40,6 @@
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.username}"></td>
-                    <td th:text="${user.password}"></td>
                     <td>
                         <a th:href="'/users/' + ${user.id}" class="btn btn-sm btn-info me-1">
                             <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>

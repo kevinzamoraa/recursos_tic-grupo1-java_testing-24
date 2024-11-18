@@ -33,7 +33,7 @@ public class ResourceListsController {
 
     @GetMapping("resourcelists")
     public String findAll(Model model) {
-        model.addAttribute("resourcelists", resourceListsService.findAll(userAuth().get().getId()));
+        model.addAttribute("resourcelists", resourceListsService.findAllById(userAuth().get().getId()));
         return "resourcelists/list";
     }
 
@@ -87,13 +87,24 @@ public class ResourceListsController {
         if (!resourceListsService.existsById(id))
             throw new NoSuchElementException(notIdMsg);
 
-        // TODO Obtener la lista completa y marcar los recursos que corresponden a la lista
-        ResourceList resourceList = resourceListsService.findById(id).get();
-        Set<Resource> resources = resourceList.getResources();
+        List<Resource> allResources = resourceService.findAll();
+        Set<Resource> resources = resourceListsService.findById(id).get().getResources();
 
+        model.addAttribute("allResources", allResources);
         model.addAttribute("resources", resources);
         model.addAttribute("listId", id);
         return "resourcelists/catalog";
+    }
+
+    @PostMapping("/resourcelists/add")
+    public String addList(Model model, @ModelAttribute List<Resource> catalog,
+                          @RequestParam(required = false) Long listId) {
+
+        System.out.println("Recursos seleccionados: " + catalog);
+
+        //
+
+        return "redirect:/resourcelists/" + listId;
     }
 
     @GetMapping("resourcelists/remove/{listId}/{id}")
@@ -129,17 +140,6 @@ public class ResourceListsController {
                 return "redirect:/resourcelists/" + optResourceList.getId();
             }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
         }
-    }
-
-    @PostMapping("/resourcelists/add")
-    public String addList(Model model, @ModelAttribute List<Resource> catalog,
-                          @RequestParam(required = false) Long listId) {
-
-        System.out.println("Recursos seleccionados: " + catalog);
-
-        //
-
-        return "redirect:/resourcelists/" + listId;
     }
 
     @GetMapping("resourcelists/delete/{id}")

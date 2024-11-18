@@ -35,7 +35,7 @@
                     <td th:text="${rating.id}"></td>
                     <td th:text="${rating.user.name}"></td>
                     <td th:text="${rating.resource.title}"></td>
-                    <td th:text="${rating.score}"></td>
+                    <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}">
                     <!--    <div>-->
                     <!--        <label for="rating-comment">Comentario:</label>-->
                     <!--        <span id="rating-comment" th:text="${rating.comment}"></span>-->
