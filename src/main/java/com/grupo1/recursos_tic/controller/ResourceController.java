@@ -49,7 +49,7 @@ public class ResourceController {
 
         return resourceService.findById(id).map(resource -> {
             model.addAttribute("resource", resource);
-            model.addAttribute("lists", resourceListsService.findByOwnerIdAndResourcesId(userAuth().get().getId(), id));
+            if (isAuth()) model.addAttribute("lists", resourceListsService.findByOwnerIdAndResourcesId(userAuth().get().getId(), id));
             model.addAttribute("ratings", ratingService.findAllByResource_Id(id));
             return "resource/detail";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));

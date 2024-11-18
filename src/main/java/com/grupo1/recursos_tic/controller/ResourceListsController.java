@@ -33,14 +33,6 @@ public class ResourceListsController {
     private final String dataMsg = "Los datos recibidos no son válidos";
     private final String delMsg = "Error al borrar todas las listas de recursos";
 
-//    @Setter
-//    private Long userId;
-//
-//    @PostConstruct
-//    public void init() {
-//        if (isAuth()) setUserId(userAuth().get().getId());
-//    }
-
     @GetMapping("resourcelists")
     public String findAll(Model model) {
         model.addAttribute("resourcelists", resourceListsService.findAll(userAuth().get().getId()));
