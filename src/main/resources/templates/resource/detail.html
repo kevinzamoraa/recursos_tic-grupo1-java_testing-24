@@ -56,8 +56,6 @@
                 </tbody>
             </table>
 
-<!--            TODO mostrar sólo las listas del usuario-->
-
             <section sec:authorize="isAuthenticated()"
                      th:if="${lists != null && lists.size() > 0L}">
                 <h2>Listas del recurso</h2>
