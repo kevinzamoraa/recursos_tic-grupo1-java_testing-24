@@ -104,9 +104,10 @@ public class ResourceListsController {
         if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
             throw new NoSuchElementException(notIdMsg);
 
-        // TODO No funciona. Quitar el recurso de la lista
-        resourceListsService.findById(listId).get()
-                .removeResource(resourceService.findById(id).get());
+        ResourceList list = resourceListsService.findById(listId).orElseThrow();
+        Resource resource = resourceService.findById(id).orElseThrow();
+        list.removeResource(resource);
+        resourceListsService.save(list);
 
         return "redirect:/resourcelists/" + listId;
     }

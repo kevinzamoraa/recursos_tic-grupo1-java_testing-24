@@ -38,8 +38,10 @@ public class ResourceList {
     }
 
     public void removeResource(Resource resource) {
-        resources.remove(resource);
-        resource.getLists().remove(this);
+        if (this.resources != null) this.resources.remove(resource);
+        // Referencia inversa
+        if (resource != null && resource.getLists() != null)
+            resource.getLists().remove(this);
     }
 
 }
