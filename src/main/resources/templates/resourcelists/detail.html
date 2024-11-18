@@ -48,11 +48,11 @@
                 <h2 th:if="${resourcelist}">Recursos</h2>
 
                 <nav class="my-3">
-                    <a href="/resources/create" class="btn btn-primary me-2 disabled">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso existente
+                    <a th:href="'/resourcelists/add/' + ${resourcelist.id}" class="btn btn-primary me-2">
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir recursos
                     </a>
                     <a th:href="'/resources/create/' + ${resourcelist.id}" class="btn btn-primary">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso nuevo
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Recurso nuevo
                     </a>
                 </nav>
 

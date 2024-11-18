@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -95,9 +96,6 @@ public class ResourceController {
 
         if (resource.getId() == null) { // crear
             Resource savedResource = resourceService.save(resource);
-
-            System.out.println("************************************" + listId);
-
             if (listId != null && listId != 0L){
                 ResourceList resourceList = resourceListsService.findById(listId)
                         .orElseThrow(() -> new EntityNotFoundException("Lista no encontrada"));

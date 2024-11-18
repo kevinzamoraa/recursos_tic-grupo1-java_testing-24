@@ -1,5 +1,6 @@
 package com.grupo1.recursos_tic.controller;
 
+import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 
@@ -10,13 +11,12 @@ import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.grupo1.recursos_tic.util.Utility.*;
 import static com.grupo1.recursos_tic.util.Utility.userAuth;
@@ -89,6 +89,24 @@ public class ResourceListsController {
         return "resourcelists/form";
     }
 
+    @GetMapping("resourcelists/add/{id}")
+    public String addResources(Model model, @PathVariable Long id) {
+        if (invalidIntPosNumber(id) || id == 0)
+            throw new NoSuchElementException(idMsg);
+
+        if (!resourceListsService.existsById(id))
+            throw new NoSuchElementException(notIdMsg);
+
+        // TODO Obtener la lista completa y marcar los recursos que corresponden a la lista
+        ResourceList resourceList = resourceListsService.findById(id).get();
+        Set<Resource> resources = resourceList.getResources();
+
+        model.addAttribute("resources", resources);
+        model.addAttribute("listId", id);
+        return "resourcelists/catalog";
+    }
+
+
     @PostMapping("resourcelists")
     public String save(Model model, @ModelAttribute ResourceList resourcelist) {
         if (resourcelist == null) throw new NoSuchElementException(dataMsg);
@@ -105,6 +123,17 @@ public class ResourceListsController {
                 return "redirect:/resourcelists/" + optResourceList.getId();
             }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
         }
+    }
+
+    @PostMapping("/resourcelists/add")
+    public String addList(Model model, @ModelAttribute List<Resource> catalog,
+                          @RequestParam(required = false) Long listId) {
+
+        System.out.println("Recursos seleccionados: " + catalog);
+
+        //
+
+        return "redirect:/resourcelists/" + listId;
     }
 
     @GetMapping("resourcelists/delete/{id}")
