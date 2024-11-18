@@ -35,14 +35,14 @@ public class list {
     void title() {
         String title = driver.getTitle();
         System.out.println(title);
-        assertEquals("Listado de recursos", title);
+        assertEquals("Recursos", title);
     }
 
     @Test
     @DisplayName("Comprobar la etiqueta <h1>")
     void h1() {
         WebElement h1 = driver.findElement(By.tagName("h1"));
-        assertEquals("Listado de recursos", h1.getText());
+        assertEquals("Recursos", h1.getText());
     }
 
 }
