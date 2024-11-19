@@ -24,7 +24,8 @@
                             <label for="catalog" class="form-label required">Recursos</label>
                             <select name="catalog" id="catalog" class="form-select" multiple>
                                 <option th:each="resource : ${allResources}"
-                                        th:value="${resource.id}" th:text="${resource.title}"></option>
+                                        th:value="${resource.id}" th:text="${resource.title}"
+                                        th:selected="${resources.contains(resource)}"></option>
                             </select>
                         </div>
                     </div>

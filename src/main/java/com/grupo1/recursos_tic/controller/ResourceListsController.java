@@ -79,6 +79,12 @@ public class ResourceListsController {
         return "resourcelists/form";
     }
 
+    /**
+     * Procesa la petición de la vista de la lista de recursos
+     * @param model Modelo
+     * @param id Identificador de la lista de recursos
+     * @return Vista de la lista de petición
+     */
     @GetMapping("resourcelists/add/{id}")
     public String addResources(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
@@ -88,7 +94,8 @@ public class ResourceListsController {
             throw new NoSuchElementException(notIdMsg);
 
         List<Resource> allResources = resourceService.findAll();
-        Set<Resource> resources = resourceListsService.findById(id).get().getResources();
+        Set<Resource> resources = resourceListsService.findById_Eager(id).get().getResources();
+        //Set<Resource> resources = resourceListsService.findById(id).get().getResources();
 
         model.addAttribute("allResources", allResources);
         model.addAttribute("resources", resources);
@@ -96,8 +103,14 @@ public class ResourceListsController {
         return "resourcelists/catalog";
     }
 
+    /**
+     * Agrega recursos a una lista de recursos
+     * @param catalog Lista de recursos seleccionada
+     * @param listId Identificador de la lista de recursos
+     * @return Vista de la lista de recursos
+     */
     @PostMapping("/resourcelists/add")
-    public String addList(Model model, @ModelAttribute List<Resource> catalog,
+    public String addList(@ModelAttribute List<Resource> catalog,
                           @RequestParam(required = false) Long listId) {
 
         System.out.println("Recursos seleccionados: " + catalog);
@@ -125,7 +138,7 @@ public class ResourceListsController {
 
 
     @PostMapping("resourcelists")
-    public String save(Model model, @ModelAttribute ResourceList resourcelist) {
+    public String save(@ModelAttribute ResourceList resourcelist) {
         if (resourcelist == null) throw new NoSuchElementException(dataMsg);
         String error = formValidation(resourcelist);
         if (error != null) throw new NoSuchElementException(error);

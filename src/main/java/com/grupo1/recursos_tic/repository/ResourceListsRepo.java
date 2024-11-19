@@ -10,8 +10,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ResourceListsRepo extends JpaRepository<ResourceList, Long> {
+
+
+    @Query("""
+    select r from ResourceList r
+    join fetch r.resources
+    where r.id = ?1
+    """)
+    Optional<ResourceList> findById_Eager(Long id);
 
     //@Query("SELECT COUNT(*) FROM ResourceList rl WHERE rl.owner.id = ?1")
     Long countByOwner_Id(Long id);

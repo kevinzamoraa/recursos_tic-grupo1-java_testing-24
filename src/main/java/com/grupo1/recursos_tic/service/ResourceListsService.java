@@ -1,6 +1,5 @@
 package com.grupo1.recursos_tic.service;
 
-import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.repository.ResourceListsRepo;
 
@@ -18,6 +17,10 @@ public class ResourceListsService {
 
     public List<ResourceList> findAll() {
         return resourceListsRepository.findAll();
+    }
+
+    public Optional<ResourceList> findById_Eager(Long id) {
+        return resourceListsRepository.findById_Eager(id);
     }
 
     public List<ResourceList> findAllById(Long Id) {
