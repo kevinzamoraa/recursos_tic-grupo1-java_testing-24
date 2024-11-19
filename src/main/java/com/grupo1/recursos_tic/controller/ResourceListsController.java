@@ -94,9 +94,11 @@ public class ResourceListsController {
             throw new NoSuchElementException(notIdMsg);
 
         List<Resource> allResources = resourceService.findAll();
-        Set<Resource> resources = resourceListsService.findById_Eager(id).get().getResources();
+        ResourceList resourceToUpdate = resourceListsService.findById_Eager(id).get();
+        Set<Resource> resources = resourceToUpdate.getResources();
         //Set<Resource> resources = resourceListsService.findById(id).get().getResources();
 
+        model.addAttribute("resourceListObject", resourceToUpdate);
         model.addAttribute("allResources", allResources);
         model.addAttribute("resources", resources);
         model.addAttribute("listId", id);
@@ -110,11 +112,13 @@ public class ResourceListsController {
      * @return Vista de la lista de recursos
      */
     @PostMapping("/resourcelists/add")
-    public String addList(@ModelAttribute List<Resource> catalog,
+    public String addList(@ModelAttribute ResourceList resourceListObject,
                           @RequestParam(required = false) Long listId) {
 
-        System.out.println("Recursos seleccionados: " + catalog);
+//        System.out.println("Recursos seleccionados: " + catalog);
 
+        System.out.println(resourceListObject.getResources());
+        resourceListsService.save(resourceListObject);
         //
 
         return "redirect:/resourcelists/" + listId;
