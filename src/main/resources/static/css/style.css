@@ -1,3 +1,7 @@
+body {
+    background: url("/img/bg.webp") center/cover no-repeat fixed;
+}
+
 /* Form */
 
 .form-label.required::after {
@@ -12,6 +16,11 @@
 }
 
 /* Table */
+
+.table, .table.table-striped {
+    border-left-color: Blue !important;
+    border-left-width: 3px !important;
+}
 
 #actions, table {
     margin-top: 1em;

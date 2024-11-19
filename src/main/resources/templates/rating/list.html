@@ -24,29 +24,31 @@
 
         <main>
             <p th:if="${ratings == null || ratings.size() == 0}" class="mt-3">No hay valoraciones</p>
-            <table id="ratingList" th:if="${ratings.size() > 0}" class="table">
+            <table id="ratingList" th:if="${ratings.size() > 0}" class="table table-striped border shadow">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Nombre Usuario</th>
-                        <th>Título Recurso</th>
-                        <th>Puntuación</th>
-                        <th>Acciones</th>
+                        <th>Usuario</th>
+                        <th>Recurso</th>
+                        <th>Título</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="rating: ${ratings}">
                         <td th:text="${rating.id}"></td>
                         <td th:text="${rating.user.name}"></td>
-                        <td th:text="${rating.comment}"></td>
-                        <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}">
+                        <td th:text="${rating.resource.title}"></td>
+                        <td th:text="${rating.title}"></td>
                         <td>
-                            <a th:href="'/ratings/' + ${rating.id}" class="btn btn-sm btn-info me-1">
-                                <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
-                            <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                            <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                            <div class="float-end">
+                                <a th:href="'/ratings/' + ${rating.id}" class="btn btn-sm btn-info me-1">
+                                    <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                                <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
+                                    <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                                <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

@@ -20,7 +20,7 @@
 
         <main>
             <p th:if="${resource == null}">El recurso no existe</p>
-            <table th:if="${resource}" id="resourceDetail" class="table">
+            <table th:if="${resource}" id="resourceDetail" class="table border shadow">
                 <thead>
                 <tr>
                     <th>Id</th>
@@ -29,7 +29,7 @@
                     <th>Tipo</th>
                     <th>Descripción</th>
                     <th th:if="${#sets.size(resource.tags) > 0}">Etiquetas</th>
-                    <th sec:authorize="isAuthenticated()">Acciones</th>
+                    <th sec:authorize="isAuthenticated()"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,12 +47,14 @@
                         </th:block>
                     </td>
                     <td sec:authorize="isAuthenticated()">
-                        <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
-                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                        <a th:href="'/resources/delete/' + ${resource.id}"
-                           th:if="${#authentication.principal.role.isAdmin()}"
-                           class="btn btn-sm btn-danger">
-                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                        <div class="float-end">
+                            <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
+                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                            <a th:href="'/resources/delete/' + ${resource.id}"
+                               th:if="${#authentication.principal.role.isAdmin()}"
+                               class="btn btn-sm btn-danger">
+                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -79,27 +81,31 @@
                 </nav>
 
                 <p th:if="${resource != null && ratings.size() == 0L}">No hay comentarios</p>
-                <table th:if="${ratings.size() > 0L}" id="ratingsList" class="table table-striped">
+                <table th:if="${ratings.size() > 0L}" id="ratingsList" class="table table-striped border shadow">
                     <thead>
                     <tr>
                         <th>Usuario</th>
+                        <th>Título</th>
                         <th>Comentario</th>
                         <th>Puntuación</th>
-                        <th th:if="${#authentication.principal.role.isAdmin()}">Acciones</th>
+                        <th th:if="${#authentication.principal.role.isAdmin()}"></th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <tr th:each="rating : ${ratings}">
                         <td th:text="${rating.user.name}"></td>
+                        <td th:text="${rating.title}"></td>
                         <td th:text="${rating.comment}"></td>
                         <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}">
                         </td>
                         <td th:if="${#authentication.principal.role.isAdmin()}">
-                            <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                            <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                            <div class="float-end">
+                                <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
+                                    <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                                <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
