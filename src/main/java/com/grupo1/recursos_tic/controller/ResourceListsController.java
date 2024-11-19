@@ -118,6 +118,13 @@ public class ResourceListsController {
 //        System.out.println("Recursos seleccionados: " + catalog);
 
         System.out.println(resourceListObject.getResources());
+        var resourceListDB = resourceListsService.findById_Eager(resourceListObject.getId()).get();
+        // añadir los resources que vienen del formulario
+        //resourceListDB.getResources() set Resources
+        // resourceListsService.save(resourceListDB);
+        // sin tocar el resto de campos, solo la lista de resources
+
+
         resourceListsService.save(resourceListObject);
         //
 
