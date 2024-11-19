@@ -117,18 +117,13 @@ public class ResourceListsController {
     public String addList(@ModelAttribute ResourceList resourceListObject,
                           @RequestParam(required = false) Long listId) {
 
-        System.out.println("********** Recursos seleccionados: " + resourceListObject + " id: " + listId);
-
-        System.out.println(resourceListObject.getResources());
-        var resourceListDB = resourceListsService.findById_Eager(resourceListObject.getId()).get();
-
-        // añadir los resources que vienen del formulario
-        //resourceListDB.getResources() set Resources
-        // resourceListsService.save(resourceListDB);
-        // sin tocar el resto de campos, solo la lista de resources
-
-        resourceListsService.save(resourceListObject);
-        //
+        var existingResourceList = resourceListsService
+                .findById_Eager(resourceListObject.getId()).get();
+        Set<Resource> newResources = resourceListObject.getResources();
+        if (!newResources.isEmpty()) {
+            existingResourceList.setResources(newResources);
+            resourceListsService.save(existingResourceList);
+        }
 
         return "redirect:/resourcelists/" + listId;
     }

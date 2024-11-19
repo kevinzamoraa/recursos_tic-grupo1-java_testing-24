@@ -36,7 +36,7 @@ public class Resource {
 
     @ManyToMany(mappedBy = "resources")
     @ToString.Exclude
-    private List<ResourceList> lists;
+    private List<ResourceList> lists = new ArrayList<>();
 
     public void removeFromAllLists() {
         for (ResourceList list : new ArrayList<>(lists)) {

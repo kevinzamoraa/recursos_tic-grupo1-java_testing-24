@@ -4,10 +4,10 @@
     <title>Usuarios</title>
     <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/spinner :: spinner}" />
     <th:block th:replace="~{fragment/navbar :: navbar}"/>
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
 
         <header>
             <h1>Usuarios</h1>
@@ -55,8 +55,9 @@
         <p th:if="${users != null && users.size() > 0}"
            th:text="'Total de usuarios: ' + ${users.size()}"></p>
 
-        <footer th:replace="~{fragment/footer :: footer}"></footer>
     </main>
-</div>
+
+    </div>
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>

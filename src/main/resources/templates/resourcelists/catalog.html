@@ -4,9 +4,9 @@
     <title>Catálogo de recursos</title>
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
 
         <header>
             <h1>Recursos de la lista <span th:text="${listId}"></span></h1>
@@ -25,8 +25,12 @@
                     <legend>Catálogo de recursos</legend>
                     <div class="form-group">
                         <input type="hidden" name="listId" th:value="${listId}"/>
-                        <input type="hidden" name="id" th:field="*{id}" />
+
+                        <input type="hidden" id="id" th:field="*{id}" />
                         <input type="hidden" id="owner" th:field="*{owner}" />
+                        <input type="hidden" id="name" th:field="*{name}" />
+                        <input type="hidden" id="description" th:field="*{description}" />
+
                         <div>
                             <label for="catalog" class="form-label required">Recursos</label>
                             <select th:field="*{resources}" name="catalog" id="catalog" class="form-select" multiple>
@@ -51,8 +55,7 @@
 
         </main>
 
-        <footer th:replace="~{fragment/footer :: footer}"></footer>
-
     </div>
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>

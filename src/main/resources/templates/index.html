@@ -4,9 +4,10 @@
     <title>Menú</title>
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
-    <div class="container mt-4">
+
+    <div class="container mt-4 flex-grow-1">
 
         <header class="text-center">
             <img src="/img/rtic-c.svg" alt="Logo" width="128" height="128">
@@ -17,8 +18,7 @@
             <p>Bienvenido a tu brújula digital.</p>
         </main>
 
-        <th:block th:replace="~{fragment/footer :: footer}"></th:block>
-
     </div>
+    <th:block th:replace="~{fragment/footer :: footer}"></th:block>
 </body>
 </html>
