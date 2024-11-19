@@ -6,17 +6,18 @@
 </head>
 <body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
+    <div class="container mt-4 flex-grow-1 vh-100 d-flex justify-content-center align-items-center">
 
-    <div class="container mt-4 flex-grow-1">
+        <div>
+            <header class="text-center">
+                <img src="/img/rtic-c.svg" alt="Logo" width="128" height="128">
+                <h1>Recursos TIC</h1>
+            </header>
 
-        <header class="text-center">
-            <img src="/img/rtic-c.svg" alt="Logo" width="128" height="128">
-            <h1>Recursos TIC</h1>
-        </header>
-
-        <main class="text-center">
-            <p>Bienvenido a tu brújula digital.</p>
-        </main>
+            <main class="text-center">
+                <p>Bienvenido a tu brújula digital.</p>
+            </main>
+        </div>
 
     </div>
     <th:block th:replace="~{fragment/footer :: footer}"></th:block>
