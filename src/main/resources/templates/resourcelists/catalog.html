@@ -25,6 +25,8 @@
                     <legend>Catálogo de recursos</legend>
                     <div class="form-group">
                         <input type="hidden" name="listId" th:value="${listId}"/>
+                        <input type="hidden" name="id" th:field="*{id}" />
+                        <input type="hidden" id="owner" th:field="*{owner}" />
                         <div>
                             <label for="catalog" class="form-label required">Recursos</label>
                             <select th:field="*{resources}" name="catalog" id="catalog" class="form-select" multiple>

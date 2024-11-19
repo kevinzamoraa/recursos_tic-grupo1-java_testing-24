@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
@@ -96,6 +97,7 @@ public class ResourceListsController {
         List<Resource> allResources = resourceService.findAll();
         ResourceList resourceToUpdate = resourceListsService.findById_Eager(id).get();
         Set<Resource> resources = resourceToUpdate.getResources();
+        //Set<Resource> resources = resourceListsService.findById_Eager(id).get().getResources();
         //Set<Resource> resources = resourceListsService.findById(id).get().getResources();
 
         model.addAttribute("resourceListObject", resourceToUpdate);
@@ -107,7 +109,7 @@ public class ResourceListsController {
 
     /**
      * Agrega recursos a una lista de recursos
-     * @param catalog Lista de recursos seleccionada
+     * @param resourceListObject Lista de recursos seleccionada
      * @param listId Identificador de la lista de recursos
      * @return Vista de la lista de recursos
      */
@@ -115,15 +117,15 @@ public class ResourceListsController {
     public String addList(@ModelAttribute ResourceList resourceListObject,
                           @RequestParam(required = false) Long listId) {
 
-//        System.out.println("Recursos seleccionados: " + catalog);
+        System.out.println("********** Recursos seleccionados: " + resourceListObject + " id: " + listId);
 
         System.out.println(resourceListObject.getResources());
         var resourceListDB = resourceListsService.findById_Eager(resourceListObject.getId()).get();
+
         // añadir los resources que vienen del formulario
         //resourceListDB.getResources() set Resources
         // resourceListsService.save(resourceListDB);
         // sin tocar el resto de campos, solo la lista de resources
-
 
         resourceListsService.save(resourceListObject);
         //
@@ -138,6 +140,9 @@ public class ResourceListsController {
 
         if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
             throw new NoSuchElementException(notIdMsg);
+
+        //if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
+        //    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         ResourceList list = resourceListsService.findById(listId).get();
         Resource resource = resourceService.findById(id).get();
