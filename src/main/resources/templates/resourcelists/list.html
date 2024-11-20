@@ -18,7 +18,7 @@
                 <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear una lista nueva
             </button>
             <button class="btn btn-danger btn-sm" th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
-                <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas las listas
+                <i class="fa-solid fa-circle-xmark"></i> todas las listas
             </button>
         </nav>
 
@@ -41,11 +41,11 @@
                     <td>
                         <div class="float-end">
                             <a th:href="'/resourcelists/' + ${resourcelist.id}" class="btn btn-sm btn-info me-1">
-                                <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                                <i class="fa-solid fa-eye"></i></a>
                             <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                                <i class="fa-solid fa-pen-to-square"></i></a>
                             <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                                <i class="fa-solid fa-trash-can"></i></a>
                         </div>
                     </td>
                 </tr>

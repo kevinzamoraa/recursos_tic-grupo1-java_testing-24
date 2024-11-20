@@ -37,9 +37,9 @@
                     <td>
                         <div class="float-end">
                             <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                                <i class="fa-solid fa-pen-to-square"></i></a>
                             <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                                <i class="fa-solid fa-trash-can"></i></a>
                         </div>
                     </td>
                 </tr>
@@ -81,13 +81,13 @@
                         <td sec:authorize="isAuthenticated()">
                             <div class="float-end">
                                 <a th:href="'/resources/' + ${resource.id}" class="btn btn-sm btn-info me-1">
-                                    <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
+                                    <i class="fa-solid fa-eye"></i></a>
                                 <a th:href="'/resources/update/' + ${resource.id} + '/' + ${resourcelist.id}"
                                    class="btn btn-sm btn-warning me-1">
-                                    <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
+                                    <i class="fa-solid fa-pen-to-square"></i></a>
                                 <a th:href="'/resourcelists/remove/' + ${resourcelist.id} + '/' + ${resource.id}"
                                    class="btn btn-sm btn-danger">
-                                    <i class="fa-solid fa-x"></i>&nbsp;&nbsp;Quitar</a>
+                                    <i class="fa-solid fa-x"></i></a>
                             </div>
                         </td>
                     </tr>
