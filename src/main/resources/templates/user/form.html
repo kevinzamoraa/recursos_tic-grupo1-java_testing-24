@@ -42,8 +42,8 @@
                 <div>
                     <label for="role">Rol: </label>
                     <select name="role" id="role" class="btn btn-primary mb-4">
-                        <option th:each="roleOpt : ${T(com.grupo1.recursos_tic.model.userRole).values()}"
-                                th:value="${roleOpt}" th:text="${roleOpt.displayValue}"></option>
+                        <option th:each="roleOpt : ${T(com.grupo1.recursos_tic.model.UserRole).values()}"
+                                th:value="${roleOpt}" th:text="${roleOpt.userRole}"></option>
                     </select>
                 </div>
 

@@ -12,7 +12,7 @@ public enum UserRole {
     READER("Lector"),
     ADMIN("Administrador");
 
-    private final String userRole;
+    public final String userRole;
 
     public boolean isAdmin() {
         return this == ADMIN;
