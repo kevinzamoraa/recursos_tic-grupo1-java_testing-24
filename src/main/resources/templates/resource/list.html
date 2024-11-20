@@ -14,11 +14,8 @@
         </header>
 
         <nav id="actions" sec:authorize="isAuthenticated()">
-            <button class="btn btn-primary btn-sm me-2" onclick="location.href='/resources/create'">
+            <button class="btn btn-primary btn-sm" onclick="location.href='/resources/create'">
                 <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un recurso nuevo
-            </button>
-            <button class="btn btn-danger btn-sm" th:if="${resources.size() > 0 && #authentication.principal.role.isAdmin()}" onclick="location.href='/resources/delete'">
-                <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todos los recursos
             </button>
         </nav>
 

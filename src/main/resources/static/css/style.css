@@ -2,8 +2,32 @@ body {
     background: url("/img/bg.webp") center/cover no-repeat fixed;
 }
 
+h1, h2, legend, label {
+    color: purple;
+}
+
 .bg-custom-purple {
   background-color: Purple;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:focus,
+.btn-info, .btn-info:hover, .btn-info:focus {
+    background-color: lightSkyBlue;
+    border-color: lightSkyBlue;
+    color: black;
+}
+
+.btn-secondary, .btn-secondary:hover, .btn-secondary:focus,
+.btn-warning, .btn-warning:hover {
+  background-color: salmon;
+  border-color: salmon;
+  color: white;
+}
+
+.btn-danger, .btn-danger:hover {
+  background-color: purple;
+  border-color: purple;
+  color: white;
 }
 
 @media (min-width: 768px) {
@@ -22,7 +46,7 @@ body {
 
 .form-label.required::after {
   content: "*";
-  color: red;
+  color: salmon;
   font-size: 12px;
   margin-left: 5px;
 }
@@ -55,11 +79,11 @@ body {
 
 .spinner {
   margin: 0 auto;
-  border: 5px solid lightblue;
+  border: 5px solid lightSkyBlue;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: blue;
+  border-left-color: purple;
 
   animation: spin 1s ease infinite;
 }

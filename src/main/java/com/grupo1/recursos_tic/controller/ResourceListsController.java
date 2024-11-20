@@ -95,10 +95,10 @@ public class ResourceListsController {
             throw new NoSuchElementException(notIdMsg);
 
         List<Resource> allResources = resourceService.findAll();
-        ResourceList resourceToUpdate = resourceListsService.findById_Eager(id).get();
+
+        //ResourceList resourceToUpdate = resourceListsService.findById_Eager(id).get();
+        ResourceList resourceToUpdate = resourceListsService.findById(id).get();
         Set<Resource> resources = resourceToUpdate.getResources();
-        //Set<Resource> resources = resourceListsService.findById_Eager(id).get().getResources();
-        //Set<Resource> resources = resourceListsService.findById(id).get().getResources();
 
         model.addAttribute("resourceListObject", resourceToUpdate);
         model.addAttribute("allResources", allResources);
@@ -117,8 +117,8 @@ public class ResourceListsController {
     public String addList(@ModelAttribute ResourceList resourceListObject,
                           @RequestParam(required = false) Long listId) {
 
-        var existingResourceList = resourceListsService
-                .findById_Eager(resourceListObject.getId()).get();
+        //var existingResourceList = resourceListsService.findById_Eager(resourceListObject.getId()).get();
+        ResourceList existingResourceList = resourceListsService.findById(resourceListObject.getId()).get();
         Set<Resource> newResources = resourceListObject.getResources();
         if (!newResources.isEmpty()) {
             existingResourceList.setResources(newResources);
