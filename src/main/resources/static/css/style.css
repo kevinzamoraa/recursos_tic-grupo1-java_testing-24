@@ -2,8 +2,8 @@ body {
     background: url("/img/bg.webp") center/cover no-repeat fixed;
 }
 
-h1, h2, legend, label {
-    color: purple;
+h1, h2, legend, label, th {
+    color: purple !important;
 }
 
 .bg-custom-purple {
