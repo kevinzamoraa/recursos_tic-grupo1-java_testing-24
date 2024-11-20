@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Detalle</title>
+    <th:replace th:replace="~{fragment/meta :: meta}" />
+</head>
+<body class="d-flex flex-column vh-100">
+<th:block th:replace="~{fragment/spinner :: spinner}" />
+<th:block th:replace="~{fragment/navbar :: navbar}" />
+  <div class="container mt-4 flex-grow-1">
+
+      <header>
+          <h1>Detalle de las etiquetas</h1>
+      </header>
+
+
+    <nav id="actions">
+        <button class="btn btn-primary btn-sm" onclick="location.href='/tags'">
+            <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todas las etiquetas
+        </button>
+    </nav>
+
+    <main>
+        <p th:if="${tag == null}">La etiqueta no existe</p>
+        <table th:if="${tag}" id="tagDetail" class="table border shadow">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Descripción</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td th:text="${tag.id}"></td>
+                <td th:text="${tag.name}"></td>
+                <td th:text="${tag.image}"></td>
+                <td th:text="${tag.description}"></td>
+
+                <td>
+                    <div class="float-end">
+                        <a th:href="'/tags/update/' + ${tag.id}" class="btn btn-sm btn-warning me-1">
+                            <i class="fa-solid fa-pen-to-square"></i></a>
+                        <a th:href="'/tag/delete/' + ${tag.id}"
+                           th:if="${#authentication.principal.role.isAdmin()}"
+                           class="btn btn-sm btn-danger">
+                            <i class="fa-solid fa-trash-can"></i></a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    <main>
+  </div>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+</body>
+</html>

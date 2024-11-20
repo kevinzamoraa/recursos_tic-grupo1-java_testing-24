@@ -17,7 +17,7 @@ public class Rating {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user", nullable = false)
     @ToString.Exclude
     private User user;
 
@@ -25,6 +25,8 @@ public class Rating {
     @JoinColumn(name = "resource_id", nullable = false)
     @ToString.Exclude
     private Resource resource;
+
+    private String title;
 
     private String comment;
 

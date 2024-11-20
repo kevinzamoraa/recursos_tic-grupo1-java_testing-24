@@ -4,9 +4,9 @@
     <title>Formulario de la lista</title>
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
 
         <header>
             <h1 th:if="${resourcelist.id}">Editar lista <span th:text="${resourcelist.id}"></span></h1>
@@ -20,17 +20,16 @@
                     <legend>Datos de la lista</legend>
                     <input type="hidden" id="id" th:field="*{id}" />
 
-        <!--            <div>-->
-        <!--                <label for="owner">Propietario</label>-->
-        <!--                <input type="text" id="owner" th:field="*{owner}" />-->
-        <!--            </div>-->
+                    <input type="hidden" id="owner" th:field="*{owner}" />
+
                     <div>
-                        <label for="name" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="name" th:field="*{name}" />
+                        <label for="name" class="form-label required">Nombre</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" required />
                     </div>
                     <div>
-                        <label for="description" class="form-label">Descripción (TODO hacer un área de texto)</label>
-                        <input type="text" class="form-control" id="description" th:field="*{description}" />
+                        <label for="description" class="form-label">Descripción</label>
+                        <textarea rows="5" class="form-control" id="description" th:field="*{description}"
+                                  placeholder="Incluye una descripción" ></textarea>
                     </div>
                 </fieldset>
                 <div>
@@ -41,8 +40,7 @@
             </form>
         </main>
 
-        <footer th:replace="~{fragment/footer :: footer}"></footer>
-
     </div>
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>

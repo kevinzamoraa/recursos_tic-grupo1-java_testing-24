@@ -1,12 +1,14 @@
 package com.grupo1.recursos_tic.controller;
 
 import com.grupo1.recursos_tic.model.Rating;
+import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.repository.RatingRepo;
 
 import com.grupo1.recursos_tic.repository.ResourceRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +22,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class RatingController {
 
+    @Autowired
     private RatingRepo ratingRepository;
 
     // TODO UserRepo y ResourceRepo usados temporalmente
+    @Autowired
     private UserRepo userRepository;
+    @Autowired
     private ResourceRepo resourceRepository;
 
     // http://localhost:8082/ratings
@@ -79,7 +84,7 @@ public class RatingController {
         }
 
         // TODO Hacer que el rating tenga un user y un resource. Mientras tanto...
-        rating.setUser(userRepository.findById(1L).get());
+        // rating.setUser(userRepository.findById(1L).get());
         rating.setResource(resourceRepository.findById(1L).get());
 
         if (! exists) {
@@ -97,9 +102,9 @@ public class RatingController {
     // METODO BORRAR
     // http://localhost:8082/ratings/delete/1
     @GetMapping("ratings/delete/{id}")
-    public String deleteRating(@PathVariable Long id) {
+    public String deleteRating(@PathVariable User user) {
         try {
-            ratingRepository.deleteById(id);
+            ratingRepository.deleteRatingByUserId(user.getId());
             return "redirect:/ratings";
         } catch (Exception e) {
             e.printStackTrace(); // Utilizar log.error

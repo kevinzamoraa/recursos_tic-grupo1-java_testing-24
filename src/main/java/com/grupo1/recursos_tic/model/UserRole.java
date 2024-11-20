@@ -6,13 +6,17 @@ import lombok.RequiredArgsConstructor;
  * Roles de usuario
  */
 @RequiredArgsConstructor
-public enum userRole {
+public enum UserRole {
 
     AUTHOR("Autor"),
     READER("Lector"),
     ADMIN("Administrador");
 
     private final String userRole;
+
+    public boolean isAdmin() {
+        return this == ADMIN;
+    }
 
     @Override
     public String toString() { return userRole; }

@@ -3,8 +3,10 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.repository.UserRepo;
 
+import com.grupo1.recursos_tic.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,11 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
+    @Autowired
     private UserRepo userRepository;
+
+    @Autowired
+    private UserService userService;
 
     // http://localhost:8082/users
     @GetMapping("users")
@@ -92,10 +98,23 @@ public class UserController {
     @GetMapping("users/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         try {
-            userRepository.deleteById(id);
+            userService.deleteUserWithRatings(id);
             return "redirect:/users";
         } catch (Exception e) {
-            e.printStackTrace(); // Utilizar log.error
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    // TODO Hacer un método "users/delete" que borre todos los usuarios
+    // http://localhost:8082/users/delete/all
+    @GetMapping("users/delete/all")
+    public String deleteAllUsers() {
+        try {
+            userService.deleteAllUsers();
+            return "redirect:/users";
+        } catch (Exception e) {
+            e.printStackTrace();
             return "error";
         }
     }

@@ -4,9 +4,9 @@
     <title>Error</title>
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
 
         <header>
             <h1>Error</h1>
@@ -17,11 +17,12 @@
                 <code th:text="${message != 'None' ? message : 'No se encontraron errores.'}"></code>
             </p>
 
-            <button onclick="history.back()">🔙&nbsp;&nbsp;Volver</button>
+            <button class="btn btn-primary" onclick="history.back()">
+                <i class="fa-solid fa-rotate-left"></i>&nbsp;&nbsp;Volver
+            </button>
         </main>
 
-        <footer th:replace="~{fragment/footer :: footer}"></footer>
-
     </div>
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>
