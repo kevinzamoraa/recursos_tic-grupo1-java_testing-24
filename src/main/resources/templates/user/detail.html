@@ -4,31 +4,30 @@
     <title>Detalle del usuario</title>
     <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
 <th:block th:replace="~{fragment/navbar :: navbar}"/>
-<div class="container mt-4">
+<div class="container mt-4 flex-grow-1">
 
     <header>
         <h1>Detalle del usuario</h1>
     </header>
 
     <nav id="actions">
-        <button class="btn btn-primary" onclick="location.href='/users'">
+        <button class="btn btn-primary btn-sm" onclick="location.href='/users'">
             <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todos los usuarios
         </button>
     </nav>
 
     <main>
         <p th:if="${user == null}">El usuario no existe</p>
-        <table th:if="${user}" id="userDetail" class="table">
+        <table th:if="${user}" id="userDetail" class="table border shadow">
             <thead>
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
                     <th>Nombre de usuario</th>
-                    <th>Contraseña</th>
-                    <th>Acciones</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -37,18 +36,21 @@
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
                     <td th:text="${user.username}"></td>
-                    <td th:text="${user.password}"></td>
                     <td>
-                        <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
-                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                        <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
-                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                        <div class="float-end">
+                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                                <i class="fa-solid fa-pen-to-square"></i></a>
+                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
+                                <i class="fa-solid fa-trash-can"></i></a>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <footer th:replace="~{fragment/footer :: footer}"></footer>
+
     </main>
-</div>
+
+    </div>
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>

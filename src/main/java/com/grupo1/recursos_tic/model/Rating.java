@@ -26,6 +26,8 @@ public class Rating {
     @ToString.Exclude
     private Resource resource;
 
+    private String title;
+
     private String comment;
 
     private int score;

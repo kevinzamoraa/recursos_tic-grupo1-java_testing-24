@@ -38,8 +38,11 @@ public class  SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception {
 
         http
-            //.csrf(Customizer.withDefaults())
-            .csrf(csrf -> csrf.csrfTokenRepository(new HttpSessionCsrfTokenRepository()))
+            .csrf(csrf -> csrf
+                    .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+                    .ignoringRequestMatchers("/api/**")
+            )
+              //.csrf(csrf -> csrf.disable())  // O .csrf(AbstractHttpConfigurer::disable)
 
             .authorizeHttpRequests(authRequest -> authRequest
                     .requestMatchers(HttpMethod.GET,"/", "/legal", "/privacy", "/login", "/help", "/error",
@@ -48,28 +51,13 @@ public class  SecurityConfig {
                     //.requestMatchers(HttpMethod.POST,"/cookie", "/logout").permitAll()
 
                     .requestMatchers(HttpMethod.GET,"/resources/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resources/**").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/resources/update/{id}").authenticated()
+                    .requestMatchers(HttpMethod.DELETE,"/resources/delete/{id}").authenticated()
+                    .requestMatchers(HttpMethod.DELETE,"/resources/delete").authenticated()
+                    .requestMatchers("/resources/**").permitAll()
 
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/resourcelists/**").authenticated()
-
-                    .requestMatchers(HttpMethod.GET,"/users/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/users/**").authenticated()
-
-                    .requestMatchers(HttpMethod.GET,"/ratings/create").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/update/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/delete/{id}").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/ratings/**").authenticated()
+                    // TODO revisar permisos
+                    .requestMatchers("/api/**").permitAll()
 
                     .anyRequest().authenticated()
             )

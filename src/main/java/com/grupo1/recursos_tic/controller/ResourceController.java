@@ -3,17 +3,17 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.RatingService;
+import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -24,6 +24,7 @@ import static com.grupo1.recursos_tic.util.Utility.*;
 public class ResourceController {
 
     private ResourceService resourceService;
+    private ResourceListsService resourceListsService;
     private RatingService ratingService;
 
     private final String idMsg = "Falta el id o no es un entero positivo";
@@ -48,6 +49,7 @@ public class ResourceController {
 
         return resourceService.findById(id).map(resource -> {
             model.addAttribute("resource", resource);
+            if (isAuth()) model.addAttribute("lists", resourceListsService.findByOwnerIdAndResourcesId(userAuth().get().getId(), id));
             model.addAttribute("ratings", ratingService.findAllByResource_Id(id));
             return "resource/detail";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
@@ -56,6 +58,19 @@ public class ResourceController {
     @GetMapping("resources/create")
     public String getFormToCreate(Model model) {
         model.addAttribute("resource", new Resource());
+        return "resource/form";
+    }
+
+    @GetMapping("resources/create/{listId}")
+    public String getFormToCreateNew(Model model, @PathVariable Long listId) {
+        if (invalidIntPosNumber(listId) || listId == 0)
+            throw new NoSuchElementException(idMsg);
+
+        if (!resourceListsService.existsById(listId))
+            throw new NoSuchElementException(notIdMsg);
+
+        model.addAttribute("resource", new Resource());
+        model.addAttribute("listId", listId);
         return "resource/form";
     }
 
@@ -73,19 +88,44 @@ public class ResourceController {
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
     }
 
+    @GetMapping("resources/update/{id}/{listId}")
+    public String getFormToUpdateAndList(Model model, @PathVariable Long id, @PathVariable Long listId) {
+        if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
+            throw new NoSuchElementException(idMsg);
+
+        if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
+            throw new NoSuchElementException(notIdMsg);
+
+        return resourceService.findById(id).map(resource -> {
+            model.addAttribute("resource", resource);
+            model.addAttribute("listId", listId);
+            return "resource/form";
+        }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
+    }
+
     @PostMapping("resources")
-    public String save(Model model, @ModelAttribute Resource resource) {
+    public String save(Model model, @ModelAttribute Resource resource,
+                       @RequestParam(required = false) Long listId) {
         if (resource == null) throw new NoSuchElementException(dataMsg);
         String error = formValidation(resource);
         if (error != null) throw new NoSuchElementException(error);
 
         if (resource.getId() == null) { // crear
-            resourceService.save(resource);
-            return "redirect:/resources/" + resource.getId();
+            Resource savedResource = resourceService.save(resource);
+            if (listId != null && listId != 0L){
+                ResourceList resourceList = resourceListsService.findById(listId)
+                        .orElseThrow(() -> new EntityNotFoundException("Lista no encontrada"));
+                resourceList.addResource(savedResource);
+                resourceListsService.save(resourceList);
+                return "redirect:/resourcelists/" + listId;
+            };
+            return "redirect:/resources/" + savedResource.getId();
         } else { // editar
             return resourceService.findById(resource.getId()).map(optResource -> {
                 BeanUtils.copyProperties(resource, optResource);
                 resourceService.save(optResource);
+                if (listId != null && listId != 0L)
+                    return "redirect:/resourcelists/" + listId;
                 return "redirect:/resources/" + optResource.getId();
             }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
         }
@@ -100,7 +140,7 @@ public class ResourceController {
             throw new NoSuchElementException(notIdMsg);
 
         return resourceService.findById(id).map(resource -> {
-            resourceService.deleteById(resource.getId());
+            resourceService.removeResourceWithDependencies(resource.getId());
             return "redirect:/resources";
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
     }

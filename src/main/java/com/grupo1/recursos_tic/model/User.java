@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,7 +33,8 @@ public class User implements UserDetails {
 
     private String password;
 
-    private userRole role;
+    //@Enumerated(EnumType.STRING)
+    private UserRole role; // TODO Revisar el uso de este campo
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Rating> ratings = new ArrayList<>();

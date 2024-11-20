@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Detalle de la lista</title>
+    <title>Detalle de mi lista</title>
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
 
         <header>
-            <h1>Detalle de la lista</h1>
+            <h1>Detalle de mi lista</h1>
         </header>
 
         <nav id="actions">
-            <button class="btn btn-primary" onclick="location.href='/resourcelists'">
+            <button class="btn btn-primary btn-sm" onclick="location.href='/resourcelists'">
                 <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Todas las listas
             </button>
         </nav>
 
         <main>
             <p th:if="${resourcelist == null}">La lista no existe</p>
-            <table th:if="${resourcelist}" id="resourcelistDetail" class="table">
+            <table th:if="${resourcelist}" id="resourcelistDetail" class="table border shadow">
                 <thead>
                 <tr>
                     <th>Id</th>
                     <th>Nombre</th>
                     <th>Descrición</th>
-                    <th>Acciones</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,10 +35,12 @@
                     <td th:text="${resourcelist.name}"></td>
                     <td th:text="${resourcelist.description}"></td>
                     <td>
-                        <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
-                            <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a> &nbsp;&nbsp;
-                        <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
-                            <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                        <div class="float-end">
+                            <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
+                                <i class="fa-solid fa-pen-to-square"></i></a>
+                            <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
+                                <i class="fa-solid fa-trash-can"></i></a>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -48,23 +50,23 @@
                 <h2 th:if="${resourcelist}">Recursos</h2>
 
                 <nav class="my-3">
-                    <button class="btn btn-primary me-2 disabled" onclick="location.href='/resources/create'">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso
-                    </button>
-                    <button class="btn btn-primary disabled" onclick="location.href='/resources/create'">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un recurso
-                    </button>
+                    <a th:href="'/resourcelists/add/' + ${resourcelist.id}" class="btn btn-primary btn-sm me-2">
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir recursos a esta lista
+                    </a>
+                    <a th:href="'/resources/create/' + ${resourcelist.id}" class="btn btn-primary btn-sm">
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso nuevo a esta lista
+                    </a>
                 </nav>
 
                 <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos</p>
-                <table th:if="${resources.size() > 0L}" id="resourcesList" class="table">
+                <table th:if="${resources.size() > 0L}" id="resourcesList" class="table table-striped border shadow">
                     <thead>
                     <tr>
                         <th>Título</th>
                         <th>Autor</th>
                         <th>Tipo</th>
                         <th>Descripción</th>
-                        <th>Acciones</th>
+                        <th></th>
                     </tr>
                     </thead>
 
@@ -77,10 +79,16 @@
                         <td th:text="${resource.type}"></td>
                         <td th:text="${resource.description}"></td>
                         <td sec:authorize="isAuthenticated()">
-                            <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                            <a th:href="'/resources/delete/' + ${resource.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                            <div class="float-end">
+                                <a th:href="'/resources/' + ${resource.id}" class="btn btn-sm btn-info me-1">
+                                    <i class="fa-solid fa-eye"></i></a>
+                                <a th:href="'/resources/update/' + ${resource.id} + '/' + ${resourcelist.id}"
+                                   class="btn btn-sm btn-warning me-1">
+                                    <i class="fa-solid fa-pen-to-square"></i></a>
+                                <a th:href="'/resourcelists/remove/' + ${resourcelist.id} + '/' + ${resource.id}"
+                                   class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-x"></i></a>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -89,8 +97,7 @@
             </section>
         </main>
 
-        <footer th:replace="~{fragment/footer :: footer}"></footer>
-
     </div>
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>

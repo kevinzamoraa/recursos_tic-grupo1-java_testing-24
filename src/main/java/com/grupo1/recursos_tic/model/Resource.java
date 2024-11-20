@@ -32,6 +32,17 @@ public class Resource {
     private ResourceType type;
 
     @ElementCollection
-    private Set<Tag> tags = new HashSet<>();
+    private Set<EnumTag> tags = new HashSet<>();
+
+    @ManyToMany(mappedBy = "resources")
+    @ToString.Exclude
+    private List<ResourceList> lists = new ArrayList<>();
+
+    public void removeFromAllLists() {
+        for (ResourceList list : new ArrayList<>(lists)) {
+            list.removeResource(this);
+        }
+        lists.clear();
+    }
 
 }

@@ -1,52 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Listado de valoraciones</title>
+    <title>Valoraciones</title>
     <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/spinner :: spinner}" />
     <th:block th:replace="~{fragment/navbar :: navbar}"/>
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1">
 
         <header>
-            <h1>Listado de valoraciones</h1>
+            <h1>Valoraciones</h1>
         </header>
-
-        <nav id="actions">
-            <button class="btn btn-primary me-2" onclick="location.href='/ratings/create'">
-                <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear una valoración nueva
-            </button>
-            <button class="btn btn-danger" th:if="${ratings.size() > 0}" onclick="location.href='/ratings/delete'">
-                <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas las valoraciones
-            </button>
-        </nav>
 
         <main>
             <p th:if="${ratings == null || ratings.size() == 0}" class="mt-3">No hay valoraciones</p>
-            <table id="ratingList" th:if="${ratings.size() > 0}" class="table">
+            <table id="ratingList" th:if="${ratings.size() > 0}" class="table table-striped border shadow">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Nombre Usuario</th>
-                        <th>Título Recurso</th>
-                        <th>Puntuación</th>
-                        <th>Acciones</th>
+                        <th>Usuario</th>
+                        <th>Recurso</th>
+                        <th>Título</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="rating: ${ratings}">
                         <td th:text="${rating.id}"></td>
                         <td th:text="${rating.user.name}"></td>
-                        <td th:text="${rating.comment}"></td>
-                        <td th:text="${rating.score}"></td>
+                        <td th:text="${rating.resource.title}"></td>
+                        <td th:text="${rating.title}"></td>
                         <td>
-                            <a th:href="'/ratings/' + ${rating.id}" class="btn btn-sm btn-info me-1">
-                                <i class="fa-solid fa-eye"></i>&nbsp;&nbsp;Ver</a>
-                            <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar</a>
-                            <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar</a>
+                            <div class="float-end">
+                                <a th:href="'/ratings/' + ${rating.id}" class="btn btn-sm btn-info me-1">
+                                    <i class="fa-solid fa-eye"></i></a>
+                                <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
+                                    <i class="fa-solid fa-pen-to-square"></i></a>
+                                <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash-can"></i></a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -56,8 +49,7 @@
                th:text="'Total de valoraciones: ' + ${ratings.size()}"></p>
         </main>
 
-        <footer th:replace="~{fragment/footer :: footer}"></footer>
-
     </div>
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>

@@ -4,21 +4,22 @@
     <title>Menú</title>
     <th:replace th:replace="~{fragment/meta :: meta}" />
 </head>
-<body>
+<body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
-    <div class="container mt-4">
+    <div class="container mt-4 flex-grow-1 vh-100 d-flex justify-content-center align-items-center">
 
-        <header>
-            <img src="/img/rtic-c.svg" alt="Logo" width="128" height="128">
-            <h1>Recursos TIC</h1>
-        </header>
+        <div>
+            <header class="text-center">
+                <img src="/img/rtic-c.svg" alt="Logo" width="128" height="128">
+                <h1>Recursos TIC</h1>
+            </header>
 
-        <main>
-            <p>Bienvenido a tu brújula digital.</p>
-        </main>
-
-        <th:block th:replace="~{fragment/footer :: footer}"></th:block>
+            <main class="text-center">
+                <p>Bienvenido a tu brújula digital.</p>
+            </main>
+        </div>
 
     </div>
+    <th:block th:replace="~{fragment/footer :: footer}"></th:block>
 </body>
 </html>
