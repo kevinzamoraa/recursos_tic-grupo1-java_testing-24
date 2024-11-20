@@ -9,10 +9,49 @@
 <th:block th:replace="~{fragment/navbar :: navbar}" />
   <div class="container mt-4 flex-grow-1">
 
+    <header>
+      <h1 th:if="${tag.id}">Editar etiqueta <span th:text="${tag.id}"></span></h1>
+      <h1 th:unless="${tag.id}">Crear etiqueta</h1>
+    </header>
 
+    <main>
+      <p th:if="${tag == null}">La etiqueta no existe</p>
+      <form method="POST" th:object="${rating}" th:action="@{/ratings}">
+        <p th:if="${rating == null}">La etiqueta no existe</p>
 
+        <fieldset>
+          <legend>Datos de la etiqueta</legend>
+          <input type="hidden" id="id" th:field="*{id}"/>
 
+          <div>
+            <label for="id">Id</label>
+            <input type="text" id="id" name="id" th:field="*{id}"/><br/>
+          </div>
+
+          <div>
+            <label for="name">Nombre</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}"/>
+          </div>
+
+          <div>
+            <label for="imageUrl">URL de la imagen</label>
+            <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}"/>
+          </div>
+
+          <div>
+            <label for="description">Descripción</label>
+            <input type="text" class="form-control" id="description" th:field="*{description}"/>
+          </div>
+
+          <div>
+            <label for="resources">Recursos</label>
+            <input type="text" class="form-control" id="resources" th:field="*{resources}"/>
+          </div>
+        </fieldset>
+      </form>
+    </main>
   </div>
+
   <footer th:replace="~{fragment/footer :: footer}"></footer>
 </body>
 </html>
