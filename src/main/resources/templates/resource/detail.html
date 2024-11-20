@@ -76,11 +76,11 @@
 
                 <nav class="my-3">
                     <button class="btn btn-primary btn-sm" onclick="location.href='/ratings/create'">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir una valoración
+                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir una valoración a esta lista
                     </button>
                 </nav>
 
-                <p th:if="${resource != null && ratings.size() == 0L}">No hay comentarios</p>
+                <p th:if="${resource != null && ratings.size() == 0L}">No hay valoraciones</p>
                 <table th:if="${ratings.size() > 0L}" id="ratingsList" class="table table-striped border shadow">
                     <thead>
                     <tr>

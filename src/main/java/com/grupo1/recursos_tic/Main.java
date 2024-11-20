@@ -66,10 +66,10 @@ public class Main {
 		// Ratings
 		var ratingRepository = context.getBean(RatingRepo.class);
 
-		var rating1 = Rating.builder().user(user1).resource(resource2).title("Título del comentario 1")
-				.comment("Comentario de prueba 1").score(3).build();
-		var rating2 = Rating.builder().user(user2).resource(resource1).title("Título del comentario 2")
-				.comment("Comentario de prueba 2").score(4).build();
+		var rating1 = Rating.builder().user(user1).resource(resource2).title("Título de la valoración 1")
+				.comment("Valoración de prueba 1").score(3).build();
+		var rating2 = Rating.builder().user(user2).resource(resource1).title("Título de la valoración 2")
+				.comment("Valoración de prueba 2").score(4).build();
 
 		ratingRepository.saveAll(List.of(rating1, rating2));
 	}
