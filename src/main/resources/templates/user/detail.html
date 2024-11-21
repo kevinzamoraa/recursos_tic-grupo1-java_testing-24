@@ -13,7 +13,7 @@
         <h1 th:unless="${user}">Detalle del usuario</h1>
     </header>
 
-    <nav id="actions">
+    <nav id="actions" th:if="${#authentication.principal.role.isAdmin()}">
         <button class="btn btn-primary btn-sm" onclick="location.href='/users'">
             <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todos los usuarios
         </button>
