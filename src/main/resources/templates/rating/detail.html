@@ -12,7 +12,7 @@
             <h1>Detalle de la valoración</h1>
         </header>
 
-        <nav id="actions">
+        <nav id="actions" th:if="${#authentication.principal.role.isAdmin()}">
             <button class="btn btn-primary btn-sm" onclick="location.href='/ratings'">
                 <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todas las valoraciones
             </button>
