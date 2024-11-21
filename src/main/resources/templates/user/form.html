@@ -27,6 +27,10 @@
                     <input type="email" class="form-control" id="email" th:field="*{email}"/>
                 </div>
                 <div>
+                    <label for="imageUrl">Dir. URL Imagen Perfil</label>
+                    <input type="imageUrl" class="form-control" id="imageUrl" th:field="*{imageUrl}"/>
+                </div>
+                <div>
                     <label for="username">Usuario</label>
                     <input type="text" class="form-control" id="username" th:field="*{username}"/>
                 </div>
@@ -41,12 +45,13 @@
 
                 <div>
                     <label for="role">Rol: </label>
-                    <select name="role" id="role" class="btn btn-primary mb-4">
+                    <select name="role" id="role" class="btn btn-primary mb-4" th:field="*{role}">
+                        <option th:selected="${user.role != null}" value="#{user.role}"></option>
                         <option th:each="roleOpt : ${T(com.grupo1.recursos_tic.model.UserRole).values()}"
-                                th:value="${roleOpt}" th:text="${roleOpt.userRole}"></option>
+                                th:value="${roleOpt.name()}" th:text="${roleOpt.userRole}"></option>
                     </select>
                 </div>
-
+            </fieldset>
                 <div>
                     <button type="button" class="btn btn-secondary me-2" onclick="location.href='/users'">
                         <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Cancelar

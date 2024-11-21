@@ -2,6 +2,8 @@ package com.grupo1.recursos_tic.model;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 /**
  * Roles de usuario
  */
@@ -20,4 +22,5 @@ public enum UserRole {
 
     @Override
     public String toString() { return userRole; }
+
 }
