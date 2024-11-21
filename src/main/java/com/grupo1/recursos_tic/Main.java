@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -68,9 +69,9 @@ public class Main {
 		var ratingRepository = context.getBean(RatingRepo.class);
 
 		var rating1 = Rating.builder().user(user1).resource(resource2).title("Título de la valoración 1")
-				.createdAt(LocalDate.now()).comment("Valoración de prueba 1").score(3).build();
+				.createdAt(LocalDateTime.now()).comment("Valoración de prueba 1").score(3).build();
 		var rating2 = Rating.builder().user(user2).resource(resource1).title("Título de la valoración 2")
-				.createdAt(LocalDate.now()).comment("Valoración de prueba 2").score(4).build();
+				.createdAt(LocalDateTime.now()).comment("Valoración de prueba 2").score(4).build();
 
 		ratingRepository.saveAll(List.of(rating1, rating2));
 	}

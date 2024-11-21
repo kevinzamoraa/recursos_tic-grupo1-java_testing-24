@@ -22,6 +22,7 @@ public enum ResourceType {
     TVSHOW("Series de TV"),
     MOVIE("Película"),
     WEB("Página web"),
+    PORTAL("Portal"),
     BLOG("Blog"),
     POST("Entrada de blog"),
     FORUM("Foro"),

@@ -18,7 +18,7 @@
                 <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear una lista nueva
             </button>
             <button class="btn btn-danger btn-sm" th:if="${resourcelists.size() > 0}" onclick="location.href='/resourcelists/delete'">
-                <i class="fa-solid fa-circle-xmark"></i> Eliminar todas las listas
+                <i class="fa-solid fa-circle-xmark"></i> Eliminar todas mis listas
             </button>
         </nav>
 
@@ -28,15 +28,13 @@
                 <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Propietario</th>
                     <th>Descripción</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="resourcelist : ${resourcelists}">
-                    <td th:text="${resourcelist.name}"></td>
-                    <td th:text="${resourcelist.owner.name}"></td>
+                    <td th:text="${resourcelist.name}" class="fw-bold"></td>
                     <td th:text="${resourcelist.description}"></td>
                     <td>
                         <div class="float-end">

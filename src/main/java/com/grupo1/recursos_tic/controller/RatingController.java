@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -117,7 +118,7 @@ public class RatingController {
 
         //if (confirmUser(rating.getUser())) {
             if (rating.getId() == null) {
-                rating.setCreatedAt(LocalDate.now()); // Fecha de creación
+                rating.setCreatedAt(LocalDateTime.now()); // Fecha de creación
                 ratingRepository.save(rating);
             } else {
                 ratingRepository.findById(rating.getId()).ifPresent(ratingDB -> {
