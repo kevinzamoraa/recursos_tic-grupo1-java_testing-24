@@ -5,7 +5,9 @@ import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.repository.ResourceListsRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.repository.RatingRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,9 @@ public class UserService {
 
     @Autowired
     private RatingRepo ratingRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void deleteUserWithRatings(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -66,6 +71,24 @@ public class UserService {
             userRepository.deleteById(user.getId());
             System.out.println("Se ha eliminado un usuario.");
         }
+    }
+
+    public User updateUser(User user) {
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // Verificar si se está actualizando la contraseña
+        if (!user.getPassword().equals(existingUser.getPassword())) {
+            // Desencriptar la contraseña existente
+            String decryptedPassword = new String(passwordEncoder.encode(existingUser.getPassword()));
+
+            // Verificar si la nueva contraseña es válida (por ejemplo, si coincide con la actual)
+            if (!passwordEncoder.matches(user.getPassword(), decryptedPassword)) {
+                // Actualizar la contraseña con el PasswordEncoder
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+        }
+
+        return userRepository.save(user);
     }
 
 }

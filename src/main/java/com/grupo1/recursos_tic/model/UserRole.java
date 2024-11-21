@@ -2,6 +2,8 @@ package com.grupo1.recursos_tic.model;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 /**
  * Roles de usuario
  */
@@ -12,7 +14,7 @@ public enum UserRole {
     READER("Lector"),
     ADMIN("Administrador");
 
-    private final String userRole;
+    public final String userRole;
 
     public boolean isAdmin() {
         return this == ADMIN;
@@ -20,4 +22,5 @@ public enum UserRole {
 
     @Override
     public String toString() { return userRole; }
+
 }

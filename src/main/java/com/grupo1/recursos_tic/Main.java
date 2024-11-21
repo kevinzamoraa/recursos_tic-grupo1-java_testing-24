@@ -27,13 +27,13 @@ public class Main {
 		var passwordEncoder = context.getBean(PasswordEncoder.class);
 
 		var admin = User.builder().name("Administrador").email("admin@admin.es").username("admin")
-				.password(passwordEncoder.encode("admin1234")).role(UserRole.ADMIN).build();
-		var user1 = User.builder().name("Javier").email("a@a.es").role(UserRole.AUTHOR).username("javier")
-				.password(passwordEncoder.encode("AbCd4321")).build();
-		var user2 = User.builder().name("Kevin").email("b@b.es").role(UserRole.AUTHOR).username("kevin")
-				.password(passwordEncoder.encode("DcBa1234")).build();
-		var user3 = User.builder().name("Marina").email("c@c.es").role(UserRole.AUTHOR).username("marina")
-				.password(passwordEncoder.encode("DcBa1234")).build();
+				.imageUrl("#").password(passwordEncoder.encode("admin1234")).role(UserRole.ADMIN).build();
+		var user1 = User.builder().name("Javier").email("a@a.es").role(UserRole.READER).username("javier")
+				.imageUrl("#").password(passwordEncoder.encode("AbCd4321")).build();
+		var user2 = User.builder().name("Kevin").email("b@b.es").role(UserRole.READER).username("kevin")
+				.imageUrl("#").password(passwordEncoder.encode("DcBa1234")).build();
+		var user3 = User.builder().name("Marina").email("c@c.es").role(UserRole.READER).username("marina")
+				.imageUrl("#").password(passwordEncoder.encode("DcBa1234")).build();
 
 		userRepository.saveAll(List.of(admin, user1, user2, user3));
 

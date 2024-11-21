@@ -1,3 +1,4 @@
+
 package com.grupo1.recursos_tic.controller;
 
 import com.grupo1.recursos_tic.model.User;
@@ -52,7 +53,7 @@ public class UserController {
                 })
 //                .orElse("error")
                 .orElseGet(() -> {
-                // TODO Lanzar una excepción
+                    // TODO Lanzar una excepción
                     model.addAttribute("message", "User no encontrado");
                     return "error";
                 });
@@ -106,7 +107,6 @@ public class UserController {
         }
     }
 
-    // TODO Hacer un método "users/delete" que borre todos los usuarios
     // http://localhost:8082/users/delete/all
     @GetMapping("users/delete/all")
     public String deleteAllUsers() {
