@@ -36,20 +36,25 @@
                 </div>
                 <div>
                     <label for="password">Contraseña</label>
-                    <input type="password" class="form-control" id="password" th:field="*{password}"/>
+                    <input type="password" class="form-control password-field" id="password" th:field="*{password}"/>
+                    <i class="fa-solid fa-eye-slash toggle-password-icon" onclick="showPW()" aria-hidden="true"></i>
                 </div>
-                <script th:inline="javascript">
-                    let password = /*[[${user.password}]]*/ '';
-                    document.getElementById('password').value = password;
 
-                    let passwordField = document.getElementById('password');
+                <script th:inline="javascript">
+                    console.log("Script cargado")
+                    let passwordField = document.querySelector('.password-field');
+                    const togglePasswordIcon = document.querySelector('.toggle-password-icon');
 
                     function showPassword() {
-                        passwordField.style.display = 'block';
+                        passwordField.type = "text";
+                        togglePasswordIcon.classList.remove("fa-eye-slash");
+                        togglePasswordIcon.classList.add("fa-eye");
                     }
 
                     function hidePassword() {
-                        passwordField.style.display = 'none';
+                        passwordField.type = "password";
+                        togglePasswordIcon.classList.remove("fa-eye");
+                        togglePasswordIcon.classList.add("fa-eye-slash");
                     }
 
                     window.onload = function() {
@@ -59,6 +64,16 @@
                             showPassword();
                         }
                     };
+
+                    function showPW() {
+                        console.log("Evento click detectado");
+                        const type = passwordField.type === "password" ? "text" : "password";
+                        passwordField.type = type;
+
+                        // Cambiar el icono
+                        togglePasswordIcon.classList.toggle("fa-eye-slash");
+                        togglePasswordIcon.classList.toggle("fa-eye");
+                    }
                 </script>
 
                 <div>
@@ -78,7 +93,6 @@
                     </button>
                 </div>
         </form>
-
     </main>
 
     </div>
