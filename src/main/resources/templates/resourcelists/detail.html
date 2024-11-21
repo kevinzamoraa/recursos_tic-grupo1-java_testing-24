@@ -52,12 +52,15 @@
                     <a th:href="'/resourcelists/add/' + ${resourcelist.id}" class="btn btn-primary btn-sm me-2">
                         <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir recursos a esta lista
                     </a>
-                    <a th:href="'/resources/create/' + ${resourcelist.id}" class="btn btn-primary btn-sm">
+                    <a th:href="'/resources/create/' + ${resourcelist.id}" class="btn btn-primary btn-sm me-2">
                         <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso nuevo a esta lista
+                    </a>
+                    <a th:if="${resources.size() > 0}" th:href="'/resourcelists/remove/' + ${resourcelist.id}" class="btn btn-danger btn-sm">
+                        <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas los recursos de la lista
                     </a>
                 </nav>
 
-                <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos</p>
+                <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos en esta lista</p>
                 <table th:if="${resources.size() > 0L}" id="resourcesList" class="table table-striped border shadow">
                     <thead>
                     <tr>
