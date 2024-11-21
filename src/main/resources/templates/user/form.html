@@ -37,44 +37,34 @@
                 <div>
                     <label for="password">Contraseña</label>
                     <input type="password" class="form-control password-field" id="password" th:field="*{password}"/>
-                    <i class="fa-solid fa-eye-slash toggle-password-icon" onclick="showPW()" aria-hidden="true"></i>
-                </div>
+                    <!--<input type="checkbox" onclick="showPW()" class=" btn btn-sm btn-info me-1">Mostrar contraseña-->
+                    <!--<a onclick="showPW()" class=" btn btn-sm btn-info me-1 mb-2">
+                        <i class="fa-solid fa-eye toggle-password-icon" aria-hidden="true"></i></a>-->
+                    <button id="togglePasswordBtn" class=" btn btn-sm btn-info me-1 mb-2">
+                        <i class="fa-solid fa-eye toggle-password-icon" aria-hidden="true"></i></button>
+                    <script th:inline="javascript">
+                        const passwordField = document.querySelector('.password-field');
+                        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
 
-                <script th:inline="javascript">
-                    console.log("Script cargado")
-                    let passwordField = document.querySelector('.password-field');
-                    const togglePasswordIcon = document.querySelector('.toggle-password-icon');
+                        // Función para mostrar/ocultar la contraseña
+                        function showTogglePassword() {
+                            if (passwordField.type === "password") {
+                              passwordField.type = "text";
+                            } else {
+                              passwordField.type = "password";
+                            }
 
-                    function showPassword() {
-                        passwordField.type = "text";
-                        togglePasswordIcon.classList.remove("fa-eye-slash");
-                        togglePasswordIcon.classList.add("fa-eye");
-                    }
-
-                    function hidePassword() {
-                        passwordField.type = "password";
-                        togglePasswordIcon.classList.remove("fa-eye");
-                        togglePasswordIcon.classList.add("fa-eye-slash");
-                    }
-
-                    window.onload = function() {
-                        if (${user.id}) { // Si es una edición de usuario existente
-                            hidePassword();
-                        } else {
-                            showPassword();
+                            // Cambiar el icono del botón
+                            togglePasswordBtn.classList.toggle("fa-eye-slash");
+                            togglePasswordBtn.classList.toggle("fa-eye");
                         }
-                    };
 
-                    function showPW() {
-                        console.log("Evento click detectado");
-                        const type = passwordField.type === "password" ? "text" : "password";
-                        passwordField.type = type;
-
-                        // Cambiar el icono
-                        togglePasswordIcon.classList.toggle("fa-eye-slash");
-                        togglePasswordIcon.classList.toggle("fa-eye");
-                    }
-                </script>
+                        // Agregar el evento click al botón
+                        document.addEventListener('DOMContentLoaded', function() {
+                            togglePasswordBtn.addEventListener("click", showTogglePassword);
+                        });
+                    </script>
+                </div>
 
                 <div>
                     <label for="role">Rol: </label>
