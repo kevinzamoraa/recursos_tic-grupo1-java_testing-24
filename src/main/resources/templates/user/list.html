@@ -24,26 +24,27 @@
         <table id="userList" th:if="${users.size() > 0}" class="table table-striped border shadow">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
-                    <th>Nombre de usuario</th>
+                    <th>Rol</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="user: ${users}">
-                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}" class="fw-bold"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.role}"></td>
                     <td>
                         <div class="float-end">
                             <a th:href="'/users/' + ${user.id}" class="btn btn-sm btn-info me-1">
                                 <i class="fa-solid fa-eye"></i></a>
-                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
-                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
+                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger ms-1"
+                               th:classappend="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()} ? '' : 'btn-outline-secondary disabled'">
                                 <i class="fa-solid fa-trash-can"></i></a>
                         </div>
                     </td>

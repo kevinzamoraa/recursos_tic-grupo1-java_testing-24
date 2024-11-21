@@ -90,7 +90,7 @@ public class UserController {
             });
         }
 
-        return "redirect:/users";
+        return "redirect:/users/" + user.getId();
     }
 
     // METODO BORRAR

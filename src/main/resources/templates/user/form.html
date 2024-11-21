@@ -17,7 +17,7 @@
         <form method="POST" th:object="${user}" th:action="@{/users}">
             <fieldset>
                 <legend>Datos del recurso</legend>
-                <input type=hidden id="id" th:field="*{id}"/>
+                <input type="hidden" id="id" th:field="*{id}"/>
 
                 <div>
                     <label for="name" class="form-label required">Nombre y apellidos</label>
@@ -43,15 +43,15 @@
                     document.getElementById('password').value = password;
                 </script>
 
-                <!--  <div>-->
-                <!--    <label for="role">Selecciona un rol</label>-->
-                <!--    <select id="role" th:field="*{role}">-->
-                <!--      <option th:selected="${user.role == null}" value="        "></option>-->
-                <!--      <option th:text="Autor" th:value="${userRole.AUTHOR}" ></option>-->
-                <!--      <option th:text="Lector" th:value="${userRole.READER}" ></option>-->
-                <!--      <option th:text="Admin" th:value="${userRole.ADMIN}" ></option>-->
-                <!--    </select>-->
-                <!--  </div>-->
+                <div th:if="${#authentication.principal.role.isAdmin()}">
+                    <label for="role" class="form-label">Rol: </label>
+                    <select name="role" id="role" class="form-select" th:field="*{role}">
+                        <option th:selected="${user.role != null}" value="#{user.role}"></option>
+                        <option th:each="roleOpt : ${T(com.grupo1.recursos_tic.model.UserRole).values()}"
+                                th:value="${roleOpt.name()}" th:text="${roleOpt.userRole}"></option>
+                    </select>
+                </div>
+                <input th:unless="${#authentication.principal.role.isAdmin()}" type="hidden" th:field="*{role}" />
 
             </fieldset>
             <div>

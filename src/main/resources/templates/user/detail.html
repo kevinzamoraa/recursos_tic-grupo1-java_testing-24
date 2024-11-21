@@ -24,9 +24,10 @@
         <table th:if="${user}" id="userDetail" class="table border shadow">
             <thead>
                 <tr>
-                    <th>Nombre de usuario</th>
+                    <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
+                    <th>Rol</th>
                     <th></th>
                 </tr>
             </thead>
@@ -35,11 +36,13 @@
                     <td th:text="${user.username}" class="fw-bold"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
+                    <td th:text="${user.role}"></td>
                     <td>
                         <div class="float-end">
-                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
-                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
+                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger ms-1"
+                               th:if="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()}">
                                 <i class="fa-solid fa-trash-can"></i></a>
                         </div>
                     </td>
