@@ -24,19 +24,17 @@
         <table th:if="${user}" id="userDetail" class="table border shadow">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Nombre de usuario</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
-                    <th>Nombre de usuario</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}" class="fw-bold"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:text="${user.username}"></td>
                     <td>
                         <div class="float-end">
                             <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
