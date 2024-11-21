@@ -25,12 +25,6 @@
             <i class="fa-solid fa-users"></i>&nbsp;&nbsp;Usuarios
           </a>
         </li>
-        <li class="nav-item" sec:authorize="isAuthenticated()"
-            th:if="${#authentication.principal.role.isAdmin()}">
-          <a class="nav-link" href="/ratings">
-            <i class="fa-solid fa-comment"></i>&nbsp;&nbsp;Valoraciones
-          </a>
-        </li>
       </ul>
 
       <ul class="navbar-nav mb-2 mb-lg-0">

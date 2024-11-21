@@ -75,7 +75,8 @@
                 <h2 th:if="${resource}">Valoraciones</h2>
 
                 <nav class="my-3">
-                    <button class="btn btn-primary btn-sm" onclick="location.href='/ratings/create'">
+                    <button class="btn btn-primary btn-sm"
+                            th:onclick="|location.href='/ratings/create/' + ${resource.id}|">
                         <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir una valoración a esta lista
                     </button>
                 </nav>
@@ -85,6 +86,7 @@
                     <thead>
                     <tr>
                         <th>Usuario</th>
+                        <th>Fecha</th>
                         <th>Título</th>
                         <th>Comentario</th>
                         <th>Puntuación</th>
@@ -95,15 +97,20 @@
                     <tbody>
                     <tr th:each="rating : ${ratings}">
                         <td th:text="${rating.user.name}"></td>
+                        <td th:text="${rating.createdAt}"></td>
                         <td th:text="${rating.title}"></td>
                         <td th:text="${rating.comment}"></td>
                         <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}">
                         </td>
-                        <td th:if="${#authentication.principal.role.isAdmin()}">
+                        <td>
                             <div class="float-end">
-                                <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
+                                <a th:href="'/ratings/update/' + ${rating.id}"
+                                   th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}"
+                                   class="btn btn-sm btn-warning me-1">
                                     <i class="fa-solid fa-pen-to-square"></i></a>
-                                <a th:href="'/ratings/delete/' + ${rating.id}" class="btn btn-sm btn-danger">
+                                <a th:href="'/ratings/delete/' + ${rating.id}"
+                                   th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}"
+                                   class="btn btn-sm btn-danger">
                                     <i class="fa-solid fa-trash-can"></i></a>
                             </div>
                         </td>

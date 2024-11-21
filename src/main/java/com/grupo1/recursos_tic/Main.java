@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -26,11 +27,11 @@ public class Main {
 
 		var admin = User.builder().name("Administrador").email("admin@admin.es").username("admin")
 				.password(passwordEncoder.encode("admin1234")).role(UserRole.ADMIN).build();
-		var user1 = User.builder().name("Javier").email("a@a.es").role(UserRole.READER).username("javier")
+		var user1 = User.builder().name("Javier").email("a@a.es").role(UserRole.AUTHOR).username("javier")
 				.password(passwordEncoder.encode("AbCd4321")).build();
-		var user2 = User.builder().name("Kevin").email("b@b.es").role(UserRole.READER).username("kevin")
+		var user2 = User.builder().name("Kevin").email("b@b.es").role(UserRole.AUTHOR).username("kevin")
 				.password(passwordEncoder.encode("DcBa1234")).build();
-		var user3 = User.builder().name("Marina").email("c@c.es").role(UserRole.READER).username("marina")
+		var user3 = User.builder().name("Marina").email("c@c.es").role(UserRole.AUTHOR).username("marina")
 				.password(passwordEncoder.encode("DcBa1234")).build();
 
 		userRepository.saveAll(List.of(admin, user1, user2, user3));
@@ -67,9 +68,9 @@ public class Main {
 		var ratingRepository = context.getBean(RatingRepo.class);
 
 		var rating1 = Rating.builder().user(user1).resource(resource2).title("Título de la valoración 1")
-				.comment("Valoración de prueba 1").score(3).build();
+				.createdAt(LocalDate.now()).comment("Valoración de prueba 1").score(3).build();
 		var rating2 = Rating.builder().user(user2).resource(resource1).title("Título de la valoración 2")
-				.comment("Valoración de prueba 2").score(4).build();
+				.createdAt(LocalDate.now()).comment("Valoración de prueba 2").score(4).build();
 
 		ratingRepository.saveAll(List.of(rating1, rating2));
 	}
