@@ -41,6 +41,24 @@
                 <script th:inline="javascript">
                     let password = /*[[${user.password}]]*/ '';
                     document.getElementById('password').value = password;
+
+                    let passwordField = document.getElementById('password');
+
+                    function showPassword() {
+                        passwordField.style.display = 'block';
+                    }
+
+                    function hidePassword() {
+                        passwordField.style.display = 'none';
+                    }
+
+                    window.onload = function() {
+                        if (${user.id}) { // Si es una edición de usuario existente
+                            hidePassword();
+                        } else {
+                            showPassword();
+                        }
+                    };
                 </script>
 
                 <div>
