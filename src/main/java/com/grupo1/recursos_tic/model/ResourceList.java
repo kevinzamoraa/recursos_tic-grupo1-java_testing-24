@@ -34,18 +34,6 @@ public class ResourceList {
     @ToString.Exclude
     private Set<Resource> resources = new HashSet<>();
 
-    public void addResource(Resource resource) {
-        if (this.resources != null) this.resources.add(resource);
-        if (resource != null && resource.getLists() != null)
-            resource.getLists().add(this);
-    }
-
-    public void removeResource(Resource resource) {
-        if (this.resources != null) this.resources.remove(resource);
-        if (resource != null && resource.getLists() != null)
-            resource.getLists().remove(this);
-    }
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
@@ -60,6 +48,18 @@ public class ResourceList {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    public void addResource(Resource resource) {
+        if (this.resources != null) this.resources.add(resource);
+        if (resource != null && resource.getLists() != null)
+            resource.getLists().add(this);
+    }
+
+    public void removeResource(Resource resource) {
+        if (this.resources != null) this.resources.remove(resource);
+        if (resource != null && resource.getLists() != null)
+            resource.getLists().remove(this);
     }
 
 }

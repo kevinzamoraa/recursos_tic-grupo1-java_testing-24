@@ -14,56 +14,38 @@
             <h1 th:unless="${resourcelist}">Detalle de mi lista</h1>
         </header>
 
+        <div th:if="${resourcelist.description != null}">
+            <td th:text="${resourcelist.description}"></td>
+        </div>
+
         <nav id="actions">
-            <button class="btn btn-primary btn-sm" onclick="location.href='/resourcelists'">
+            <button class="btn btn-primary btn-sm me-1" onclick="location.href='/resourcelists'">
                 <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Ver todas mis listas
             </button>
+            <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
+                <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar esta lista</a>
+            <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
+                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar la lista</a>
         </nav>
 
-        <main>
-            <p th:if="${resourcelist == null}">La lista no existe</p>
-            <table th:if="${resourcelist}" id="resourcelistDetail" class="table border shadow">
+        <main sec:authorize="isAuthenticated()" class="mt-3">
+            <h2 th:if="${resourcelist}">Recursos de la lista</h2>
+
+            <nav class="my-3">
+                <a th:href="'/resourcelists/add/' + ${resourcelist.id}" class="btn btn-primary btn-sm me-2">
+                    <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir recursos a esta lista
+                </a>
+                <a th:href="'/resources/create/' + ${resourcelist.id}" class="btn btn-primary btn-sm me-2">
+                    <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso nuevo a esta lista
+                </a>
+                <a th:if="${resources.size() > 0}" th:href="'/resourcelists/remove/' + ${resourcelist.id}" class="btn btn-danger btn-sm">
+                    <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas los recursos de la lista
+                </a>
+            </nav>
+
+            <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos en esta lista</p>
+            <table th:if="${resources.size() > 0L}" id="resourcesList" class="table table-striped border shadow">
                 <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Descrición</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td th:text="${resourcelist.name}" class="fw-bold"></td>
-                    <td th:text="${resourcelist.description}"></td>
-                    <td>
-                        <div class="float-end">
-                            <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
-                                <i class="fa-solid fa-pen-to-square"></i></a>
-                            <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i></a>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <section sec:authorize="isAuthenticated()">
-                <h2 th:if="${resourcelist}">Recursos de la lista</h2>
-
-                <nav class="my-3">
-                    <a th:href="'/resourcelists/add/' + ${resourcelist.id}" class="btn btn-primary btn-sm me-2">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir recursos a esta lista
-                    </a>
-                    <a th:href="'/resources/create/' + ${resourcelist.id}" class="btn btn-primary btn-sm me-2">
-                        <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso nuevo a esta lista
-                    </a>
-                    <a th:if="${resources.size() > 0}" th:href="'/resourcelists/remove/' + ${resourcelist.id}" class="btn btn-danger btn-sm">
-                        <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas los recursos de la lista
-                    </a>
-                </nav>
-
-                <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos en esta lista</p>
-                <table th:if="${resources.size() > 0L}" id="resourcesList" class="table table-striped border shadow">
-                    <thead>
                     <tr>
                         <th>Título</th>
                         <th>Autor</th>
@@ -71,9 +53,9 @@
                         <th>Descripción</th>
                         <th></th>
                     </tr>
-                    </thead>
+                </thead>
 
-                    <tbody>
+                <tbody>
                     <tr th:each="resource : ${resources}">
                         <td>
                             <a th:href="${resource.url}" th:text="${resource.title}"></a>
@@ -94,10 +76,8 @@
                             </div>
                         </td>
                     </tr>
-                    </tbody>
-
-                </table>
-            </section>
+                </tbody>
+            </table>
         </main>
 
     </div>
