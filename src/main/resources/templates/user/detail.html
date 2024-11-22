@@ -9,12 +9,13 @@
 <div class="container mt-4 flex-grow-1">
 
     <header>
-        <h1>Detalle del usuario</h1>
+        <h1 th:if="${user}" th:text="|Usuario ${user.username}|"></h1>
+        <h1 th:unless="${user}">Detalle del usuario</h1>
     </header>
 
-    <nav id="actions">
+    <nav id="actions" th:if="${#authentication.principal.role.isAdmin()}">
         <button class="btn btn-primary btn-sm" onclick="location.href='/users'">
-            <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todos los usuarios
+            <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver la lista de usuarios
         </button>
     </nav>
 
@@ -23,24 +24,25 @@
         <table th:if="${user}" id="userDetail" class="table border shadow">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
-                    <th>Nombre de usuario</th>
+                    <th>Rol</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}" class="fw-bold"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
-                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.role}"></td>
                     <td>
                         <div class="float-end">
-                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
-                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
+                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger ms-1"
+                               th:if="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()}">
                                 <i class="fa-solid fa-trash-can"></i></a>
                         </div>
                     </td>

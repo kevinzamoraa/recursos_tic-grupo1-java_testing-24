@@ -4,6 +4,7 @@ import com.grupo1.recursos_tic.model.Rating;
 import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import static com.grupo1.recursos_tic.util.Utility.invalidIntPosNumber;
 
 @RestController
 @RequestMapping("/api")
@@ -23,7 +27,7 @@ public class ResourceApiController {
 
     /**
      * Obtiene la lista de recursos
-     * @return List<Resource>
+     * @return List<Resource> o ResponseEntity con error
      */
     @GetMapping("/resources")
     @Operation(summary = "Obtener la lista de recursos",
@@ -35,7 +39,7 @@ public class ResourceApiController {
     /**
      * Obtiene un recursos específico
      * @param id Identificador del recurso
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @GetMapping("/resources/{id}")
     @Operation(summary = "Obtener detalles de un recurso",
@@ -51,7 +55,7 @@ public class ResourceApiController {
     /**
      * Obtiene las valoraciones de un recurso
      * @param id Identificador del recurso
-     * @return List<Rating>
+     * @return List<Rating> o ResponseEntity con error
      */
     @GetMapping("/resources/{id}/ratings")
     @Operation(summary = "Obtener valoraciones de un recurso",
@@ -67,7 +71,7 @@ public class ResourceApiController {
     /**
      * Crea un recurso nuevo
      * @param resource Recurso a crear
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @PostMapping("/resources")
     @Operation(summary = "Crear un recurso nuevo",
@@ -94,7 +98,7 @@ public class ResourceApiController {
     /**
      * Actualiza un recurso existente
      * @param resource Recurso existente
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @PutMapping("/resources")
     @Operation(summary = "Actualizar un recurso existente",
@@ -115,7 +119,7 @@ public class ResourceApiController {
      * Actualiza un recurso existente parcialmente
      * @param id Identificador del recurso
      * @param resource Recurso existente
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @PatchMapping(value = "/resources/{id}",
             consumes = {"application/json", "application/merge-patch+json"})
@@ -152,14 +156,14 @@ public class ResourceApiController {
     /**
      * Borra un recurso existente
      * @param id Identificador del recurso
-     * @return Void
+     * @return Void o ResponseEntity con error
      */
     @DeleteMapping("/resources/{id}")
     @Operation(summary = "Borrar un recurso existente",
             description = "Esta operación borra un recurso existente")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         try {
-            resourceService.deleteById(id);
+            resourceService.removeResourceWithDependencies(id);
             return ResponseEntity.noContent().build(); //204
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
@@ -169,7 +173,7 @@ public class ResourceApiController {
     /**
      * Borra una lista de recursos existentes
      * @param ids Lista de identificadores de recursos
-     * @return Void
+     * @return Void o ResponseEntity con error
      */
     @DeleteMapping("/resources/list")
     @Operation(summary = "Borrar una lista de recursos",
@@ -185,7 +189,7 @@ public class ResourceApiController {
 
     /**
      * Borra todos los recursos
-     * @return Void
+     * @return Void o ResponseEntity con error
      */
     @DeleteMapping("/resources")
     @Operation(summary = "Borrar todos los recursos",

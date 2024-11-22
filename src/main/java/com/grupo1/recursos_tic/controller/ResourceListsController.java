@@ -3,19 +3,15 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.ResourceListsService;
-
 import com.grupo1.recursos_tic.service.ResourceService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Set;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 import static com.grupo1.recursos_tic.util.Utility.*;
 import static com.grupo1.recursos_tic.util.Utility.userAuth;
@@ -139,14 +135,28 @@ public class ResourceListsController {
         //if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
         //    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
-        ResourceList list = resourceListsService.findById(listId).get();
+        ResourceList existingResourceList = resourceListsService.findById(listId).get();
         Resource resource = resourceService.findById(id).get();
-        list.removeResource(resource);
-        resourceListsService.save(list);
+        existingResourceList.removeResource(resource);
+        resourceListsService.save(existingResourceList);
 
         return "redirect:/resourcelists/" + listId;
     }
 
+    @GetMapping("resourcelists/remove/{listId}")
+    public String removeResource(Model model, @PathVariable Long listId) {
+        if (invalidIntPosNumber(listId) || listId == 0)
+            throw new NoSuchElementException(idMsg);
+
+        if (!resourceListsService.existsById(listId))
+            throw new NoSuchElementException(notIdMsg);
+
+        ResourceList existingResourceList = resourceListsService.findById(listId).get();
+        existingResourceList.setResources(new HashSet<>());
+        resourceListsService.save(existingResourceList);
+
+        return "redirect:/resourcelists/" + listId;
+    }
 
     @PostMapping("resourcelists")
     public String save(@ModelAttribute ResourceList resourcelist) {

@@ -34,7 +34,7 @@
                 <tbody>
                 <tr th:each="resource : ${resources}">
                     <td th:text="${resource.type}"></td>
-                    <td th:text="${resource.title}"></td>
+                    <td th:text="${resource.title}" class="fw-bold"></td>
                     <td th:text="${resource.description}"></td>
                     <td>
                         <div class="float-end">
