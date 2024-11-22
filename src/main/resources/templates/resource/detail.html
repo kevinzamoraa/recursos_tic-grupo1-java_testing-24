@@ -24,7 +24,6 @@
             <table th:if="${resource}" id="resourceDetail" class="table border shadow">
                 <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Título</th>
                     <th>Autor</th>
                     <th>Tipo</th>
@@ -35,7 +34,6 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td th:text="${resource.id}"></td>
                     <td>
                         <a th:href="${resource.url}" th:text="${resource.title}"></a>
                     </td>

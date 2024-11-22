@@ -1,5 +1,6 @@
 package com.grupo1.recursos_tic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,7 @@ public class Resource {
 
     @ManyToMany(mappedBy = "resources")
     @ToString.Exclude
+    @JsonIgnore // Rompe la relación circular entre ResourceList y Resource que daba error en Swagger
     private List<ResourceList> lists = new ArrayList<>();
 
     public void removeFromAllLists() {

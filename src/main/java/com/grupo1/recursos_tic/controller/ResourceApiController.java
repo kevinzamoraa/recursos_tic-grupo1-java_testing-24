@@ -23,7 +23,7 @@ public class ResourceApiController {
 
     /**
      * Obtiene la lista de recursos
-     * @return List<Resource>
+     * @return List<Resource> o ResponseEntity con error
      */
     @GetMapping("/resources")
     @Operation(summary = "Obtener la lista de recursos",
@@ -35,7 +35,7 @@ public class ResourceApiController {
     /**
      * Obtiene un recursos específico
      * @param id Identificador del recurso
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @GetMapping("/resources/{id}")
     @Operation(summary = "Obtener detalles de un recurso",
@@ -51,7 +51,7 @@ public class ResourceApiController {
     /**
      * Obtiene las valoraciones de un recurso
      * @param id Identificador del recurso
-     * @return List<Rating>
+     * @return List<Rating> o ResponseEntity con error
      */
     @GetMapping("/resources/{id}/ratings")
     @Operation(summary = "Obtener valoraciones de un recurso",
@@ -67,7 +67,7 @@ public class ResourceApiController {
     /**
      * Crea un recurso nuevo
      * @param resource Recurso a crear
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @PostMapping("/resources")
     @Operation(summary = "Crear un recurso nuevo",
@@ -94,7 +94,7 @@ public class ResourceApiController {
     /**
      * Actualiza un recurso existente
      * @param resource Recurso existente
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @PutMapping("/resources")
     @Operation(summary = "Actualizar un recurso existente",
@@ -115,7 +115,7 @@ public class ResourceApiController {
      * Actualiza un recurso existente parcialmente
      * @param id Identificador del recurso
      * @param resource Recurso existente
-     * @return Resource
+     * @return Resource o ResponseEntity con error
      */
     @PatchMapping(value = "/resources/{id}",
             consumes = {"application/json", "application/merge-patch+json"})
@@ -152,7 +152,7 @@ public class ResourceApiController {
     /**
      * Borra un recurso existente
      * @param id Identificador del recurso
-     * @return Void
+     * @return Void o ResponseEntity con error
      */
     @DeleteMapping("/resources/{id}")
     @Operation(summary = "Borrar un recurso existente",
@@ -169,7 +169,7 @@ public class ResourceApiController {
     /**
      * Borra una lista de recursos existentes
      * @param ids Lista de identificadores de recursos
-     * @return Void
+     * @return Void o ResponseEntity con error
      */
     @DeleteMapping("/resources/list")
     @Operation(summary = "Borrar una lista de recursos",
@@ -185,7 +185,7 @@ public class ResourceApiController {
 
     /**
      * Borra todos los recursos
-     * @return Void
+     * @return Void o ResponseEntity con error
      */
     @DeleteMapping("/resources")
     @Operation(summary = "Borrar todos los recursos",
