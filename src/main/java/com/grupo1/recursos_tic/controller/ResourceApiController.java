@@ -4,6 +4,7 @@ import com.grupo1.recursos_tic.model.Rating;
 import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

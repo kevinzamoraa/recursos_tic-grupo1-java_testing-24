@@ -2,12 +2,10 @@
 package com.grupo1.recursos_tic.controller;
 
 import com.grupo1.recursos_tic.model.User;
-import com.grupo1.recursos_tic.repository.UserRepo;
-
 import com.grupo1.recursos_tic.service.UserService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,23 +19,19 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserRepo userRepository;
-
-    @Autowired
     private UserService userService;
 
     // http://localhost:8082/users
     @GetMapping("users")
     public String findAll(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "user/list";
     }
 
     // http://localhost:8082/users/1
     @GetMapping("users/{id}")
     public String findById(@PathVariable Long id, Model model) {
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<User> userOptional = userService.findById(id);
         userOptional.ifPresent(user -> model.addAttribute("user", user));
         // TODO Gestionar el caso en el que no se encuentra el user o usar el método 2
         return "user/detail";
@@ -46,7 +40,7 @@ public class UserController {
     // TODO Revisar la incorporación de este método
     @GetMapping("users2/{id}")
     public String findById2(@PathVariable Long id, Model model) {
-        return userRepository.findById(id)
+        return userService.findById(id)
                 .map(user -> {
                     model.addAttribute("user", user);
                     return "user-detail";
@@ -69,7 +63,7 @@ public class UserController {
     // http://localhost:8082/users/update/1
     @GetMapping("users/update/{id}")
     public String getFormToEditUser(Model model, @PathVariable Long id) {
-        userRepository.findById(id)
+        userService.findById(id)
                 .ifPresent(user -> model.addAttribute("user", user));
         return "user/form";
     }
@@ -78,16 +72,16 @@ public class UserController {
     public String saveUser(@ModelAttribute User user) {
         boolean exists = false;
         if (user.getId() != null) {
-            exists = userRepository.existsById(user.getId());
+            exists = userService.existsById(user.getId());
         }
         if (! exists) {
             // Crear un nuevo user
-            userRepository.save(user);
+            userService.save(user);
         } else {
             // Actualizar un usuario existente
-            userRepository.findById(user.getId()).ifPresent(userDB -> {
+            userService.findById(user.getId()).ifPresent(userDB -> {
                 BeanUtils.copyProperties(user, userDB);
-                userRepository.save(userDB);
+                userService.save(userDB);
             });
         }
 

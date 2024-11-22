@@ -3,14 +3,13 @@ package com.grupo1.recursos_tic.controller;
 import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.ResourceListsService;
-
 import com.grupo1.recursos_tic.service.ResourceService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 

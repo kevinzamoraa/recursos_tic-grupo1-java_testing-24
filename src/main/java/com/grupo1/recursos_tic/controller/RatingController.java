@@ -1,15 +1,12 @@
 package com.grupo1.recursos_tic.controller;
 
 import com.grupo1.recursos_tic.model.Rating;
-import com.grupo1.recursos_tic.model.User;
-import com.grupo1.recursos_tic.repository.RatingRepo;
-
-import com.grupo1.recursos_tic.repository.ResourceRepo;
-import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.service.RatingService;
+import com.grupo1.recursos_tic.service.ResourceService;
+import com.grupo1.recursos_tic.service.UserService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -29,12 +25,8 @@ import static com.grupo1.recursos_tic.util.Utility.*;
 public class RatingController {
 
     private RatingService ratingService;
-
-    // TODO usar servicio en vez de repositorio
-
-    private RatingRepo ratingRepository;
-    private ResourceRepo resourceRepository;
-    private UserRepo userRepository;
+    private ResourceService resourceService;
+    private UserService userService;
 
     private final String idMsg = "Falta el id o no es un entero positivo";
     private final String notIdMsg = "La valoración no existe";
@@ -44,14 +36,14 @@ public class RatingController {
     // http://localhost:8082/ratings
     @GetMapping("ratings")
     public String findAll(Model model) {
-        model.addAttribute("ratings", ratingRepository.findAll());
+        model.addAttribute("ratings", ratingService.findAll());
         return "rating/list";
     }
 
     // http://localhost:8082/ratings/1
     @GetMapping("ratings/{id}")
     public String findById(@PathVariable Long id, Model model) {
-        Optional<Rating> ratingOptional = ratingRepository.findById(id);
+        Optional<Rating> ratingOptional = ratingService.findById(id);
         ratingOptional.ifPresent(rating -> {
             model.addAttribute("rating", rating);
         });
@@ -60,7 +52,7 @@ public class RatingController {
 
     @GetMapping("ratings2/{id}")
     public String findById2(@PathVariable Long id, Model model) {
-        return ratingRepository.findById(id)
+        return ratingService.findById(id)
                 .map(rating -> {
                     model.addAttribute("rating", rating);
                     return "rating-detail";
@@ -84,13 +76,13 @@ public class RatingController {
         if (invalidIntPosNumber(resourceId) || resourceId == 0)
             throw new NoSuchElementException(idMsg);
 
-        if (!resourceRepository.existsById(resourceId)
-                || !userRepository.existsById(userAuth().get().getId()))
+        if (!resourceService.existsById(resourceId)
+                || !userService.existsById(userAuth().get().getId()))
             throw new NoSuchElementException(notIdMsg);
 
         Rating rating = new Rating();
-        rating.setResource(resourceRepository.findById(resourceId).get());
-        rating.setUser(userRepository.findById(userAuth().get().getId()).get());
+        rating.setResource(resourceService.findById(resourceId).get());
+        rating.setUser(userService.findById(userAuth().get().getId()).get());
         model.addAttribute("rating", rating);
         return "rating/form";
     }
@@ -101,10 +93,10 @@ public class RatingController {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(idMsg);
 
-        if (!ratingRepository.existsById(id))
+        if (!ratingService.existsById(id))
             throw new NoSuchElementException(notIdMsg);
 
-        Rating rating = ratingRepository.findById(id).get();
+        Rating rating = ratingService.findById(id).get();
         model.addAttribute("rating", rating);
 
         return "rating/form";
@@ -119,11 +111,11 @@ public class RatingController {
         //if (confirmUser(rating.getUser())) {
             if (rating.getId() == null) {
                 rating.setCreatedAt(LocalDateTime.now()); // Fecha de creación
-                ratingRepository.save(rating);
+                ratingService.save(rating);
             } else {
-                ratingRepository.findById(rating.getId()).ifPresent(ratingDB -> {
+                ratingService.findById(rating.getId()).ifPresent(ratingDB -> {
                     BeanUtils.copyProperties(rating, ratingDB);
-                    ratingRepository.save(ratingDB);
+                    ratingService.save(ratingDB);
                 });
             }
         //} else throw new NoSuchElementException(dataMsg);

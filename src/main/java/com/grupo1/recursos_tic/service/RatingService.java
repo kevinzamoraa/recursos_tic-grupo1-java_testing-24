@@ -18,8 +18,16 @@ public class RatingService {
     @Autowired
     private RatingRepo ratingRepository;
 
+    public List<Rating> findAll() {
+        return ratingRepository.findAll();
+    }
+
     public List<Rating> findAllByResource_Id(Long id) {
         return ratingRepository.findAllByResource_Id(id);
+    }
+
+    public boolean existsById(Long Id) {
+        return ratingRepository.existsById(Id);
     }
 
     public Optional<Rating> findById(long id) {
@@ -29,7 +37,6 @@ public class RatingService {
     public long count() {
         return ratingRepository.count();
     }
-
 
     // TODO revisar el uso de este método
     @Transactional
@@ -43,6 +50,10 @@ public class RatingService {
         }
     }
 
+    public void save(Rating rating) {
+        ratingRepository.save(rating);
+    }
+
     @Transactional
     public void deleteRatingById(Long id) {
         try {
@@ -51,7 +62,6 @@ public class RatingService {
             throw new RuntimeException("Error al eliminar ratings", e);
         }
     }
-
 
     @Transactional
     public void deleteAllByResource_Id(Long id) {

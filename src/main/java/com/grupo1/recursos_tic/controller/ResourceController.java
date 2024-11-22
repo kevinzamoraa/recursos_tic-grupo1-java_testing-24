@@ -145,8 +145,6 @@ public class ResourceController {
         }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
     }
 
-    // TODO Sólo el admin puede borrar recursos
-    // TODO Eliminar recursos no funciona
     @GetMapping("resources/delete")
     public String deleteAll(Model model) {
         resourceService.deleteAll();
