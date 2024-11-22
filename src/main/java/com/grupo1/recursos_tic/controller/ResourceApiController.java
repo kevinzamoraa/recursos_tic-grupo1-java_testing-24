@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import static com.grupo1.recursos_tic.util.Utility.invalidIntPosNumber;
 
 @RestController
 @RequestMapping("/api")
@@ -159,7 +162,7 @@ public class ResourceApiController {
             description = "Esta operación borra un recurso existente")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         try {
-            resourceService.deleteById(id);
+            resourceService.removeResourceWithDependencies(id);
             return ResponseEntity.noContent().build(); //204
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
