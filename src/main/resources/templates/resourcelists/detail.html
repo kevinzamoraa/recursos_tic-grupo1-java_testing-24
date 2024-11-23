@@ -47,9 +47,8 @@
             <table th:if="${resources.size() > 0L}" id="resourcesList" class="table table-striped border shadow">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Tipo</th>
                         <th>Recurso</th>
+                        <th>Tipo</th>
                         <th>Descripción</th>
                         <th></th>
                     </tr>
@@ -59,12 +58,10 @@
                     <tr th:each="resource : ${resources}">
                         <td>
                             <img th:src="${resource.getImageUrl() != null ? resource.getImageUrl() : '/img/noImage.jpg'}"
-                                 class="avatar" th:alt="${resource.getTitle()}">
-                        </td>
-                        <td th:text="${resource.type}" class="align-middle"></td>
-                        <td class="align-middle">
+                                 class="avatar me-2" th:alt="${resource.getTitle()}">
                             <a th:href="${resource.url}" th:text="${resource.title}"></a>
                         </td>
+                        <td th:text="${resource.type}" class="align-middle"></td>
                         <td th:text="${resource.description}" class="align-middle"></td>
                         <td sec:authorize="isAuthenticated()">
                             <div class="float-end">

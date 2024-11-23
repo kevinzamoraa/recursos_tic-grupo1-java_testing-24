@@ -25,9 +25,8 @@
             <table th:if="${resource}" id="resourceDetail" class="table border shadow">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>Tipo</th>
                     <th>Recurso</th>
+                    <th>Tipo</th>
                     <th>Autor</th>
                     <th>Descripción</th>
                     <th th:if="${#sets.size(resource.tags) > 0}">Etiquetas</th>
@@ -38,12 +37,10 @@
                 <tr>
                     <td>
                         <img th:src="${resource.getImageUrl() != null ? resource.getImageUrl() : '/img/noImage.jpg'}"
-                             class="avatar" th:alt="${resource.getTitle()}">
+                             class="avatar me-2" th:alt="${resource.getTitle()}">
+                        <a th:href="${resource.url}" th:text="${resource.title}" class="align-middle"></a>
                     </td>
                     <td th:text="${resource.type}" class="align-middle"></td>
-                    <td class="align-middle">
-                        <a th:href="${resource.url}" th:text="${resource.title}"></a>
-                    </td>
                     <td th:text="${resource.author}" class="align-middle"></td>
                     <td th:text="${resource.description}" class="align-middle"></td>
                     <td th:if="${#sets.size(resource.tags) > 0}" class="align-middle">
@@ -71,7 +68,7 @@
                 <ul class="list-inline">
                     <li th:each="list : ${lists}" class="list-inline-item">
                         <a th:href="'/resourcelists/' + ${list.id}" class="btn btn-outline-primary btn-sm shadow-sm">
-                            <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;<pan th:text="${list.name}"></pan></a>
+                            <i class="fa-solid fa-list-ul me-2"></i><pan th:text="${list.name}"></pan></a>
                     </li>
                 </ul>
             </section>
@@ -103,7 +100,7 @@
                     <tr th:each="rating : ${ratings}">
                         <td>
                             <img th:src="${rating.user.getImageUrl() != '' ? rating.user.getImageUrl() : '/img/user/noUser.png'}"
-                                 class="avatar rounded-circle me-1" th:alt="${rating.user.getUsername()}">
+                                 class="avatar rounded-circle me-2" th:alt="${rating.user.getUsername()}">
                             <span th:text="${rating.user.name}" class="align-middle"></span>
                         </td>
                         <td th:text="${#temporals.format(rating.createdAt, 'dd/MM/yyyy HH:mm')}" class="align-middle"></td>

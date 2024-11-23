@@ -36,9 +36,9 @@
                 <tr>
                     <td>
                         <img th:src="${user.getImageUrl() != '' ? user.getImageUrl() : '/img/user/noUser.png'}"
-                             class="avatar rounded-circle" th:alt="${user.getUsername()}">
+                             class="avatar rounded-circle me-2" th:alt="${user.getUsername()}">
+                        <span th:text="${user.username}" class="fw-bold align-middle"></span>
                     </td>
-                    <td th:text="${user.username}" class="fw-bold align-middle"></td>
                     <td th:text="${user.name}" class="align-middle"></td>
                     <td th:text="${user.email}" class="align-middle"></td>
                     <td th:text="${user.role}" class="align-middle"></td>
