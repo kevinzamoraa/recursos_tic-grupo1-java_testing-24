@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.grupo1.recursos_tic.util.Utility.stringIsEmpty;
+
 @Service
 public class UserService {
 
@@ -43,6 +45,26 @@ public class UserService {
 
     public List<Rating> findAllByUserId(User user) {
         return ratingRepository.findAllByUserId(user.getId());
+    }
+
+    public boolean existsByUsername(String username) {
+        if (stringIsEmpty(username)) return false;
+        return userRepository.existsByUsername(username);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        if (stringIsEmpty(username)) return Optional.empty();
+        return userRepository.findByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        if (stringIsEmpty(email)) return false;
+        return userRepository.existsByEmail(email);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        if (stringIsEmpty(email)) return Optional.empty();
+        return userRepository.findByEmail(email);
     }
 
     public void save(User user) {

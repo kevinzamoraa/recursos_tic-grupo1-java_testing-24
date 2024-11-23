@@ -24,6 +24,8 @@ public class Resource {
 
     private String url;
 
+    private String imageUrl;
+
     private String description;
 
     private String author;
