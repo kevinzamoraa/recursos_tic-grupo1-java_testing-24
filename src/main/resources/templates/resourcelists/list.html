@@ -27,6 +27,7 @@
             <table th:unless="${resourcelists == null || resourcelists.size() == 0}" id="resourceLists" class="table w-100 table-striped border shadow">
                 <thead>
                 <tr>
+                    <th class="list-col-size"></th>
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th></th>
@@ -34,12 +35,12 @@
                 </thead>
                 <tbody>
                 <tr th:each="resourcelist : ${resourcelists}">
-                    <td>
-                        <i class="fa-solid fa-list-ul me-2"></i><span th:text="${resourcelist.name}" class="fw-bold"></span>
-
+                    <td class="list-col-size align-middle"><i class="fa-solid fa-list-ul ms-1"></i></td>
+                    <td class="align-middle">
+                        <span th:text="${resourcelist.name}" class="fw-bold"></span>
                     </td>
-                    <td th:text="${resourcelist.description}"></td>
-                    <td>
+                    <td th:text="${resourcelist.description}" class="align-middle"></td>
+                    <td class="action-col-size align-middle">
                         <div class="float-end">
                             <a th:href="'/resourcelists/' + ${resourcelist.id}" class="btn btn-sm btn-info me-1">
                                 <i class="fa-solid fa-eye"></i></a>

@@ -20,6 +20,17 @@ h1, h2, legend, label, th {
     height: 32px;
 }
 
+.list-col-size {
+    width: 32px;
+}
+
+.avatar-col-size {
+    width: 36px;
+}
+.action-col-size {
+    width: 128px;
+}
+
 .btn-primary, .btn-primary:hover, .btn-primary:focus,
 .btn-info, .btn-info:hover, .btn-info:focus {
     background-color: lightSkyBlue;

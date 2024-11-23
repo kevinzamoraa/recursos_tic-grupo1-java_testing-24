@@ -38,7 +38,7 @@
                         <td th:text="${rating.title}"></td>
                         <td th:text="${rating.comment}"></td>
                         <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}">
-                        <td>
+                        <td class="action-col-size align-middle">
                             <div class="float-end">
                                 <a th:href="'/ratings/update/' + ${rating.id}" class="btn btn-sm btn-warning me-1">
                                     <i class="fa-solid fa-pen-to-square"></i></a>

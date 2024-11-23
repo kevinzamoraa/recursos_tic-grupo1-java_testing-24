@@ -23,6 +23,7 @@ public enum ResourceType {
     MOVIE("Película"),
     WEB("Página web"),
     PORTAL("Portal"),
+    COMMUNITY("Comunidad"),
     BLOG("Blog"),
     POST("Entrada de blog"),
     FORUM("Foro"),

@@ -24,7 +24,7 @@
         <table th:if="${user}" id="userDetail" class="table border shadow">
             <thead>
                 <tr>
-                    <th></th>
+                    <th class="avatar-col-size"></th>
                     <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
@@ -34,15 +34,16 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>
+                    <td class="align-middle avatar-col-size">
                         <img th:src="${user.getImageUrl() != '' ? user.getImageUrl() : '/img/user/noUser.png'}"
                              class="avatar rounded-circle me-2" th:alt="${user.getUsername()}">
-                        <span th:text="${user.username}" class="fw-bold align-middle"></span>
+                        <span ></span>
                     </td>
+                    <td th:text="${user.username}" class="fw-bold align-middle"></td>
                     <td th:text="${user.name}" class="align-middle"></td>
                     <td th:text="${user.email}" class="align-middle"></td>
                     <td th:text="${user.role}" class="align-middle"></td>
-                    <td>
+                    <td class="action-col-size align-middle">
                         <div class="float-end">
                             <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning">
                                 <i class="fa-solid fa-pen-to-square"></i></a>

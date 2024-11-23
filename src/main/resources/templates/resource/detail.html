@@ -25,6 +25,7 @@
             <table th:if="${resource}" id="resourceDetail" class="table border shadow">
                 <thead>
                 <tr>
+                    <th></th>
                     <th>Recurso</th>
                     <th>Tipo</th>
                     <th>Autor</th>
@@ -35,10 +36,12 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>
+                    <td class="align-middle avatar-col-size">
                         <img th:src="${resource.getImageUrl() != null ? resource.getImageUrl() : '/img/noImage.jpg'}"
-                             class="avatar me-2" th:alt="${resource.getTitle()}">
-                        <a th:href="${resource.url}" th:text="${resource.title}" class="align-middle"></a>
+                             class="avatar ms-1" th:alt="${resource.getTitle()}">
+                    </td>
+                    <td class="align-middle">
+                        <a th:href="${resource.url}" target="_blank" th:text="${resource.title}"></a>
                     </td>
                     <td th:text="${resource.type}" class="align-middle"></td>
                     <td th:text="${resource.author}" class="align-middle"></td>
@@ -48,7 +51,7 @@
                             <span th:text="${tag}" class="badge rounded-pill text-bg-success"></span>
                         </th:block>
                     </td>
-                    <td sec:authorize="isAuthenticated()">
+                    <td sec:authorize="isAuthenticated()" class="action-col-size align-middle">
                         <div class="float-end">
                             <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
@@ -87,6 +90,7 @@
                 <table th:if="${ratings.size() > 0L}" id="ratingsList" class="table table-striped border shadow">
                     <thead>
                     <tr>
+                        <th class="avatar-col-size"></th>
                         <th>Usuario</th>
                         <th>Fecha</th>
                         <th>Título</th>
@@ -98,17 +102,17 @@
 
                     <tbody>
                     <tr th:each="rating : ${ratings}">
-                        <td>
+                        <td class="align-middle avatar-col-size">
                             <img th:src="${rating.user.getImageUrl() != '' ? rating.user.getImageUrl() : '/img/user/noUser.png'}"
-                                 class="avatar rounded-circle me-2" th:alt="${rating.user.getUsername()}">
-                            <span th:text="${rating.user.name}" class="align-middle"></span>
+                                 class="avatar rounded-circle ms-1" th:alt="${rating.user.getUsername()}">
                         </td>
+                        <td th:text="${rating.user.name}" class="align-middle"></td>
                         <td th:text="${#temporals.format(rating.createdAt, 'dd/MM/yyyy HH:mm')}" class="align-middle"></td>
                         <td th:text="${rating.title}" class="fw-bold align-middle"></td>
                         <td th:text="${rating.comment}" class="align-middle"></td>
-                        <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}" class="align-middle">
+                        <td th:text="${'⭐' * rating.score.intValue()}" class="align-middle">
                         </td>
-                        <td>
+                        <td class="action-col-size align-middle">
                             <div class="float-end">
                                 <a th:href="'/ratings/update/' + ${rating.id}"
                                    th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}"
