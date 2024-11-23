@@ -10,6 +10,16 @@ h1, h2, legend, label, th {
   background-color: Purple;
 }
 
+.avatarNav {
+    width: 24px;
+    height: 24px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+}
+
 .btn-primary, .btn-primary:hover, .btn-primary:focus,
 .btn-info, .btn-info:hover, .btn-info:focus {
     background-color: lightSkyBlue;

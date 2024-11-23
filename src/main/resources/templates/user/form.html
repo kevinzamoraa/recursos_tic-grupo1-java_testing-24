@@ -11,17 +11,25 @@
     <header>
         <h1 th:if="${user.id}">Editar usuario <span th:text="${user.id}"></span></h1>
         <h1 th:unless="${user.id}">Crear un nuevo usuario</h1>
+        <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
+            <span th:text="${error}"></span>
+        </div>
     </header>
 
     <main>
         <form method="POST" th:object="${user}" th:action="@{/users}">
             <fieldset>
-                <legend>Datos del recurso</legend>
+                <legend>Datos del usuario</legend>
                 <input type="hidden" id="id" th:field="*{id}"/>
 
                 <div>
                     <label for="name" class="form-label required">Nombre y apellidos</label>
                     <input type="text" class="form-control" id="name" th:field="*{name}" required />
+                </div>
+
+                <div class="mb-4">
+                    <label for="imageUrl" class="form-label">Enlace a foto</label>
+                    <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" />
                 </div>
 
                 <div>
@@ -35,23 +43,19 @@
                 </div>
 
                 <div>
-                    <label for="password" class="form-label">Contraseña</label>
+                    <label th:if="${user.id}" for="password" class="form-label">Cambiar contraseña (no obligatorio)</label>
+                    <label th:unless="${user.id}" for="password" class="form-label">Contraseña</label>
                     <input type="password" class="form-control" id="password" th:field="*{password}"/>
                 </div>
-                <script th:inline="javascript">
-                    let password = /*[[${user.password}]]*/ '';
-                    document.getElementById('password').value = password;
-                </script>
 
-                <div th:if="${#authentication.principal.role.isAdmin()}">
+                <div sec:authorize="isAuthenticated()" th:if="${#authentication.principal.role.isAdmin()}">
                     <label for="role" class="form-label">Rol: </label>
                     <select name="role" id="role" class="form-select" th:field="*{role}">
-                        <option th:selected="${user.role != null}" value="#{user.role}"></option>
                         <option th:each="roleOpt : ${T(com.grupo1.recursos_tic.model.UserRole).values()}"
                                 th:value="${roleOpt.name()}" th:text="${roleOpt.userRole}"></option>
                     </select>
                 </div>
-                <input th:unless="${#authentication.principal.role.isAdmin()}" type="hidden" th:field="*{role}" />
+                <input sec:authorize="isAuthenticated()" th:unless="${#authentication.principal.role.isAdmin()}" type="hidden" th:field="*{role}" />
 
             </fieldset>
             <div>

@@ -24,6 +24,7 @@
         <table th:if="${user}" id="userDetail" class="table border shadow">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
@@ -33,6 +34,10 @@
             </thead>
             <tbody>
                 <tr>
+                    <td>
+                        <img th:src="${user.getImageUrl() != '' ? user.getImageUrl() : '/img/user/noUser.png'}"
+                             class="avatar rounded-circle" th:alt="${user.getUsername()}">
+                    </td>
                     <td th:text="${user.username}" class="fw-bold"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.email}"></td>
