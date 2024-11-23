@@ -5,6 +5,7 @@ import com.grupo1.recursos_tic.model.ResourceList;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
 
+import com.grupo1.recursos_tic.util.ErrMsg;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -23,10 +24,10 @@ public class ResourceListsController {
     private ResourceListsService resourceListsService;
     private ResourceService resourceService;
 
-    private final String idMsg = "Falta el id o no es un entero positivo";
-    private final String notIdMsg = "La lista de recursos no existe";
-    private final String dataMsg = "Los datos recibidos no son válidos";
-    private final String delMsg = "Error al borrar todas las listas de recursos";
+    public static String formValidation(ResourceList resourceLists) {
+        if (stringIsEmpty(resourceLists.getName())) return "Falta el nombre";
+        return null;
+    }
 
     @GetMapping("resourcelists")
     public String findAll(Model model) {
@@ -37,14 +38,13 @@ public class ResourceListsController {
     @GetMapping("resourcelists/{id}")
     public String findById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
-        if (!resourceListsService.existsById(id))
-            throw new NoSuchElementException(notIdMsg);
+        ResourceList resourceList = resourceListsService.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
 
-        ResourceList resourceList = resourceListsService.findById(id).get();
         if (!Objects.equals(resourceList.getOwner().getId(), userAuth().get().getId()))
-            throw new NoSuchElementException(dataMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
 
         model.addAttribute("resourcelist", resourceList);
         model.addAttribute("resources", resourceList.getResources());
@@ -54,23 +54,22 @@ public class ResourceListsController {
 
     @GetMapping("resourcelists/create")
     public String getFormToCreate(Model model) {
-        ResourceList resourcelist = new ResourceList();
-        resourcelist.setOwner(userAuth().get());
-        model.addAttribute("resourcelist", resourcelist);
+        ResourceList resourceList = new ResourceList();
+        resourceList.setOwner(userAuth().get());
+        model.addAttribute("resourcelist", resourceList);
         return "resourcelists/form";
     }
 
     @GetMapping("resourcelists/update/{id}")
     public String getFormToUpdate(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
-        if (!resourceListsService.existsById(id))
-            throw new NoSuchElementException(notIdMsg);
+        ResourceList resourceList = resourceListsService.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
 
-        ResourceList resourceList = resourceListsService.findById(id).get();
         if (!Objects.equals(resourceList.getOwner().getId(), userAuth().get().getId()))
-            throw new NoSuchElementException(dataMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
 
         model.addAttribute("resourcelist", resourceList);
         return "resourcelists/form";
@@ -85,18 +84,15 @@ public class ResourceListsController {
     @GetMapping("resourcelists/add/{id}")
     public String addResources(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
-        if (!resourceListsService.existsById(id))
-            throw new NoSuchElementException(notIdMsg);
-
+        ResourceList resourceList = resourceListsService.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
         List<Resource> allResources = resourceService.findAll();
 
-        //ResourceList resourceToUpdate = resourceListsService.findById_Eager(id).get();
-        ResourceList resourceToUpdate = resourceListsService.findById(id).get();
-        Set<Resource> resources = resourceToUpdate.getResources();
+        Set<Resource> resources = resourceList.getResources();
 
-        model.addAttribute("resourceListObject", resourceToUpdate);
+        model.addAttribute("resourceListObject", resourceList);
         model.addAttribute("allResources", allResources);
         model.addAttribute("resources", resources);
         model.addAttribute("listId", id);
@@ -113,12 +109,13 @@ public class ResourceListsController {
     public String addList(@ModelAttribute ResourceList resourceListObject,
                           @RequestParam(required = false) Long listId) {
 
-        //var existingResourceList = resourceListsService.findById_Eager(resourceListObject.getId()).get();
-        ResourceList existingResourceList = resourceListsService.findById(resourceListObject.getId()).get();
+        ResourceList resourceList = resourceListsService.findById(resourceListObject.getId())
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
+
         Set<Resource> newResources = resourceListObject.getResources();
         if (!newResources.isEmpty()) {
-            existingResourceList.setResources(newResources);
-            resourceListsService.save(existingResourceList);
+            resourceList.setResources(newResources);
+            resourceListsService.save(resourceList);
         }
 
         return "redirect:/resourcelists/" + listId;
@@ -127,18 +124,15 @@ public class ResourceListsController {
     @GetMapping("resourcelists/remove/{listId}/{id}")
     public String removeResource(Model model, @PathVariable Long listId, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
-        if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
-            throw new NoSuchElementException(notIdMsg);
+        ResourceList resourceList = resourceListsService.findById(listId)
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
+        Resource resource = resourceService.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
 
-        //if (!resourceService.existsById(id) || !resourceListsService.existsById(listId))
-        //    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-
-        ResourceList existingResourceList = resourceListsService.findById(listId).get();
-        Resource resource = resourceService.findById(id).get();
-        existingResourceList.removeResource(resource);
-        resourceListsService.save(existingResourceList);
+        resourceList.removeResource(resource);
+        resourceListsService.save(resourceList);
 
         return "redirect:/resourcelists/" + listId;
     }
@@ -146,21 +140,20 @@ public class ResourceListsController {
     @GetMapping("resourcelists/remove/{listId}")
     public String removeResource(Model model, @PathVariable Long listId) {
         if (invalidIntPosNumber(listId) || listId == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
-        if (!resourceListsService.existsById(listId))
-            throw new NoSuchElementException(notIdMsg);
+        ResourceList resourceList = resourceListsService.findById(listId)
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
 
-        ResourceList existingResourceList = resourceListsService.findById(listId).get();
-        existingResourceList.setResources(new HashSet<>());
-        resourceListsService.save(existingResourceList);
+        resourceList.setResources(new HashSet<>());
+        resourceListsService.save(resourceList);
 
         return "redirect:/resourcelists/" + listId;
     }
 
     @PostMapping("resourcelists")
     public String save(@ModelAttribute ResourceList resourcelist) {
-        if (resourcelist == null) throw new NoSuchElementException(dataMsg);
+        if (resourcelist == null) throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
         String error = formValidation(resourcelist);
         if (error != null) throw new NoSuchElementException(error);
 
@@ -172,21 +165,20 @@ public class ResourceListsController {
                 BeanUtils.copyProperties(resourcelist, optResourceList);
                 resourceListsService.save(optResourceList);
                 return "redirect:/resourcelists/" + optResourceList.getId();
-            }).orElseThrow(() -> new NoSuchElementException(notIdMsg));
+            }).orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
         }
     }
 
     @GetMapping("resourcelists/delete/{id}")
     public String deleteById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
-        if (!resourceListsService.existsById(id))
-            throw new NoSuchElementException(notIdMsg);
+        ResourceList resourceList = resourceListsService.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
 
-        ResourceList resourceList = resourceListsService.findById(id).get();
         if (!Objects.equals(resourceList.getOwner().getId(), userAuth().get().getId()))
-            throw new NoSuchElementException(dataMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
 
         resourceListsService.deleteById(resourceList.getId());
         return "redirect:/resourcelists";
@@ -197,13 +189,8 @@ public class ResourceListsController {
         Long id = userAuth().get().getId();
         resourceListsService.deleteAll(id);
         if (resourceListsService.count(id) != 0)
-            throw new NoSuchElementException(delMsg);
+            throw new NoSuchElementException(ErrMsg.NOT_DELETED);
         return "redirect:/resourcelists";
-    }
-
-    public static String formValidation(ResourceList resourceLists) {
-        if (stringIsEmpty(resourceLists.getName())) return "Falta el nombre";
-        return null;
     }
 
 }
