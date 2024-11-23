@@ -37,7 +37,7 @@
                 <tbody>
                 <tr>
                     <td class="align-middle avatar-col-size">
-                        <img th:src="${resource.getImageUrl() != null ? resource.getImageUrl() : '/img/noImage.jpg'}"
+                        <img th:src="${resource.getImageUrl() != '' ? resource.getImageUrl() : '/img/noImage.jpg'}"
                              class="avatar ms-1" th:alt="${resource.getTitle()}">
                     </td>
                     <td class="align-middle">
@@ -107,7 +107,7 @@
                                  class="avatar rounded-circle ms-1" th:alt="${rating.user.getUsername()}">
                         </td>
                         <td th:text="${rating.user.name}" class="align-middle"></td>
-                        <td th:text="${#temporals.format(rating.createdAt, 'dd/MM/yyyy HH:mm')}" class="align-middle"></td>
+                        <td th:text="${#temporals.format(rating.createdAt, 'dd/MM/yyyy HH:mm')}" class="align-middle small"></td>
                         <td th:text="${rating.title}" class="fw-bold align-middle"></td>
                         <td th:text="${rating.comment}" class="align-middle"></td>
                         <td th:text="${'⭐' * rating.score.intValue()}" class="align-middle">

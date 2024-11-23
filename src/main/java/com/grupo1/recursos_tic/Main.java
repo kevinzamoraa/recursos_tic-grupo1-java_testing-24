@@ -41,10 +41,10 @@ public class Main {
 		ResourceRepo resourceRepository = context.getBean(ResourceRepo.class);
 
 		var resource1 = Resource.builder().title("Stack Overflow").type(ResourceType.COMMUNITY).author("Varios")
-				.tags(Set.of(EnumTag.SOFTWARE, EnumTag.PROGRAMMING)).url("https://stackoverflow.com/")
+				.tags(Set.of(EnumTag.SOFTWARE, EnumTag.PROGRAMMING)).url("https://stackoverflow.com/").imageUrl("")
 				.description("El mayor repositorio de consultas sobre programación en Internet.").build();
 		var resource2 = Resource.builder().title("The Register").type(ResourceType.PORTAL).author("Situation Publishing")
-				.tags(Set.of(EnumTag.HARDWARE, EnumTag.SOFTWARE, EnumTag.NEWS, EnumTag.HISTORY))
+				.tags(Set.of(EnumTag.HARDWARE, EnumTag.SOFTWARE, EnumTag.NEWS, EnumTag.HISTORY)).imageUrl("")
 				.url("https://www.theregister.com/").description("Información tecnológica de actualidad.").build();
 
 		resourceRepository.saveAll(List.of(resource1, resource2));

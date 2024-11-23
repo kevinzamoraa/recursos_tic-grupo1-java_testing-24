@@ -58,7 +58,7 @@
                 <tbody>
                     <tr th:each="resource : ${resources}">
                         <td class="align-middle avatar-col-size">
-                            <img th:src="${resource.getImageUrl() != null ? resource.getImageUrl() : '/img/noImage.jpg'}"
+                            <img th:src="${resource.getImageUrl() != '' ? resource.getImageUrl() : '/img/noImage.jpg'}"
                                  class="avatar ms-1" th:alt="${resource.getTitle()}">
                         </td>
                         <td class="align-middle">
