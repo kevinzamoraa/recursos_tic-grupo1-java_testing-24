@@ -34,7 +34,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="resourcelist : ${resourcelists}">
-                    <td th:text="${resourcelist.name}" class="fw-bold"></td>
+                    <td>
+                        <i class="fa-solid fa-list-ul me-1"></i><span th:text="${resourcelist.name}" class="fw-bold"></span>
+
+                    </td>
                     <td th:text="${resourcelist.description}"></td>
                     <td>
                         <div class="float-end">

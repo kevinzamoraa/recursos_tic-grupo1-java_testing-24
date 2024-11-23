@@ -25,9 +25,10 @@
             <table th:if="${resource}" id="resourceDetail" class="table border shadow">
                 <thead>
                 <tr>
-                    <th>Título</th>
-                    <th>Autor</th>
+                    <th></th>
                     <th>Tipo</th>
+                    <th>Recurso</th>
+                    <th>Autor</th>
                     <th>Descripción</th>
                     <th th:if="${#sets.size(resource.tags) > 0}">Etiquetas</th>
                     <th sec:authorize="isAuthenticated()"></th>
@@ -36,12 +37,16 @@
                 <tbody>
                 <tr>
                     <td>
+                        <img th:src="${resource.getImageUrl() != null ? resource.getImageUrl() : '/img/noImage.jpg'}"
+                             class="avatar" th:alt="${resource.getTitle()}">
+                    </td>
+                    <td th:text="${resource.type}" class="align-middle"></td>
+                    <td class="align-middle">
                         <a th:href="${resource.url}" th:text="${resource.title}"></a>
                     </td>
-                    <td th:text="${resource.author}"></td>
-                    <td th:text="${resource.type}"></td>
-                    <td th:text="${resource.description}"></td>
-                    <td th:if="${#sets.size(resource.tags) > 0}">
+                    <td th:text="${resource.author}" class="align-middle"></td>
+                    <td th:text="${resource.description}" class="align-middle"></td>
+                    <td th:if="${#sets.size(resource.tags) > 0}" class="align-middle">
                         <th:block th:each="tag : ${resource.tags}" >
                             <span th:text="${tag}" class="badge rounded-pill text-bg-success"></span>
                         </th:block>
@@ -96,11 +101,15 @@
 
                     <tbody>
                     <tr th:each="rating : ${ratings}">
-                        <td th:text="${rating.user.name}"></td>
-                        <td th:text="${#temporals.format(rating.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
-                        <td th:text="${rating.title}" class="fw-bold"></td>
-                        <td th:text="${rating.comment}"></td>
-                        <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}">
+                        <td>
+                            <img th:src="${rating.user.getImageUrl() != '' ? rating.user.getImageUrl() : '/img/user/noUser.png'}"
+                                 class="avatar rounded-circle me-1" th:alt="${rating.user.getUsername()}">
+                            <span th:text="${rating.user.name}" class="align-middle"></span>
+                        </td>
+                        <td th:text="${#temporals.format(rating.createdAt, 'dd/MM/yyyy HH:mm')}" class="align-middle"></td>
+                        <td th:text="${rating.title}" class="fw-bold align-middle"></td>
+                        <td th:text="${rating.comment}" class="align-middle"></td>
+                        <td th:text="${rating.score + ' ' + '⭐' * rating.score.intValue()}" class="align-middle">
                         </td>
                         <td>
                             <div class="float-end">

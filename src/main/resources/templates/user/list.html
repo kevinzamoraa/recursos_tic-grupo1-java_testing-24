@@ -38,10 +38,10 @@
                         <img th:src="${user.getImageUrl() != '' ? user.getImageUrl() : '/img/user/noUser.png'}"
                              class="avatar rounded-circle" th:alt="${user.getUsername()}">
                     </td>
-                    <td th:text="${user.username}" class="fw-bold"></td>
-                    <td th:text="${user.name}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.role}"></td>
+                    <td th:text="${user.username}" class="fw-bold align-middle"></td>
+                    <td th:text="${user.name}" class="align-middle"></td>
+                    <td th:text="${user.email}"  class="align-middle"></td>
+                    <td th:text="${user.role}" class="align-middle"></td>
                     <td>
                         <div class="float-end">
                             <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning">
