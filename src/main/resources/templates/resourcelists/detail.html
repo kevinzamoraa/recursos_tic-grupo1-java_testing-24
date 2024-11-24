@@ -22,9 +22,11 @@
             <button class="btn btn-primary btn-sm me-1" onclick="location.href='/resourcelists'">
                 <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver todas mis listas
             </button>
-            <a th:href="'/resourcelists/update/' + ${resourcelist.id}" class="btn btn-sm btn-warning me-1">
+            <a th:href="'/resourcelists/update/' + ${resourcelist.id}"
+               class="btn btn-sm btn-warning me-1">
                 <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar esta lista</a>
-            <a th:href="'/resourcelists/delete/' + ${resourcelist.id}" class="btn btn-sm btn-danger">
+            <a th:href="'/resourcelists/delete/' + ${resourcelist.id}"
+               class="btn btn-sm btn-danger me-1">
                 <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar la lista</a>
         </nav>
 
@@ -44,6 +46,7 @@
             </nav>
 
             <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos en esta lista</p>
+            <div class="table-responsive">
             <table th:if="${resources.size() > 0L}" id="resourcesList" class="table table-striped border shadow">
                 <thead>
                     <tr>
@@ -68,19 +71,21 @@
                         <td th:text="${resource.description}" class="align-middle"></td>
                         <td sec:authorize="isAuthenticated()" class="action-col-size align-middle">
                             <div class="float-end">
-                                <a th:href="'/resources/' + ${resource.id}" class="btn btn-sm btn-info me-1">
+                                <a th:href="'/resources/' + ${resource.id}"
+                                   class="btn btn-sm btn-info btn-mini-size me-1">
                                     <i class="fa-solid fa-eye"></i></a>
                                 <a th:href="'/resources/update/' + ${resource.id} + '/' + ${resourcelist.id}"
-                                   class="btn btn-sm btn-warning me-1">
+                                   class="btn btn-sm btn-warning btn-mini-size me-1">
                                     <i class="fa-solid fa-pen-to-square"></i></a>
                                 <a th:href="'/resourcelists/remove/' + ${resourcelist.id} + '/' + ${resource.id}"
-                                   class="btn btn-sm btn-danger">
+                                   class="btn btn-sm btn-danger btn-mini-size me-1">
                                     <i class="fa-solid fa-x"></i></a>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            </div>
         </main>
 
     </div>

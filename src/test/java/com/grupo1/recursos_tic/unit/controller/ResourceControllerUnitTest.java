@@ -38,7 +38,6 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("findAll() utilizando mocks se prueba la interacción con servicio y model")
     void findAll() {
-
         Resource resource1 = Resource.builder().id(1L).build();
         Resource resource2 = Resource.builder().id(2L).build();
         List<Resource> resources = List.of(resource1, resource2);
@@ -55,7 +54,6 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("findById cuando el recurso SÍ existe")
     void findById_WhenManufacturerExists() {
-
         Long resourceId = 1L;
         Resource resource1 = Resource.builder()
                 .id(resourceId)
@@ -75,7 +73,6 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("findById cuando el recurso NO existe")
     void findById_WhenResourceDoesNotExist() {
-
         Long resourceId = 1L;
         when(resourceService.findById(resourceId)).thenReturn(Optional.empty());
 

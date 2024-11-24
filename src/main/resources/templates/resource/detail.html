@@ -22,6 +22,7 @@
 
         <main>
             <p th:if="${resource == null}">El recurso no existe</p>
+            <div class="table-responsive">
             <table th:if="${resource}" id="resourceDetail" class="table border shadow">
                 <thead>
                 <tr>
@@ -53,17 +54,19 @@
                     </td>
                     <td sec:authorize="isAuthenticated()" class="action-col-size align-middle">
                         <div class="float-end">
-                            <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/resources/update/' + ${resource.id}"
+                               class="btn btn-sm btn-warning btn-mini-size me-1">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
                             <a th:href="'/resources/delete/' + ${resource.id}"
                                th:if="${#authentication.principal.role.isAdmin()}"
-                               class="btn btn-sm btn-danger">
+                               class="btn btn-sm btn-danger btn-mini-size me-1">
                                 <i class="fa-solid fa-trash-can"></i></a>
                         </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            </div>
 
             <section sec:authorize="isAuthenticated()"
                      th:if="${lists != null && lists.size() > 0L}" class="mt-4">
@@ -87,6 +90,7 @@
                 </nav>
 
                 <p th:if="${resource != null && ratings.size() == 0L}">No hay valoraciones</p>
+                <div class="table-responsive">
                 <table th:if="${ratings.size() > 0L}" id="ratingsList" class="table table-striped border shadow">
                     <thead>
                     <tr>
@@ -116,11 +120,11 @@
                             <div class="float-end">
                                 <a th:href="'/ratings/update/' + ${rating.id}"
                                    th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}"
-                                   class="btn btn-sm btn-warning">
+                                   class="btn btn-sm btn-warning btn-mini-size me-1">
                                     <i class="fa-solid fa-pen-to-square"></i></a>
                                 <a th:href="'/ratings/delete/' + ${rating.id}"
                                    th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}"
-                                   class="btn btn-sm btn-danger ms-1">
+                                   class="btn btn-sm btn-danger btn-mini-size me-1">
                                     <i class="fa-solid fa-trash-can"></i></a>
                             </div>
                         </td>
@@ -128,6 +132,7 @@
                     </tbody>
 
                 </table>
+                </div>
             </section>
         </main>
 
