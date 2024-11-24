@@ -14,7 +14,7 @@
     </header>
 
     <nav id="actions" th:if="${#authentication.principal.role.isAdmin()}">
-        <button class="btn btn-primary btn-sm" onclick="location.href='/users'">
+        <button class="btn btn-primary shadow-sm btn-sm" onclick="location.href='/users'">
             <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver la lista de usuarios
         </button>
     </nav>
@@ -22,7 +22,7 @@
     <main>
         <p th:if="${user == null}">El usuario no existe</p>
         <div class="table-responsive">
-        <table th:if="${user}" id="userDetail" class="table border shadow">
+        <table th:if="${user}" id="userDetail" class="table border shadow-sm">
             <thead>
                 <tr>
                     <th class="avatar-col-size"></th>

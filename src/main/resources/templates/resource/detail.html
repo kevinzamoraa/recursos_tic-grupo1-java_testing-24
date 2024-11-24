@@ -15,7 +15,7 @@
         </header>
 
         <nav id="actions">
-            <button class="btn btn-primary btn-sm" onclick="location.href='/resources'">
+            <button class="btn btn-primary btn-sm shadow-sm" onclick="location.href='/resources'">
                 <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver la lista de recursos
             </button>
         </nav>
@@ -23,7 +23,7 @@
         <main>
             <p th:if="${resource == null}">El recurso no existe</p>
             <div class="table-responsive">
-            <table th:if="${resource}" id="resourceDetail" class="table border shadow">
+            <table th:if="${resource}" id="resourceDetail" class="table border shadow-sm">
                 <thead>
                 <tr>
                     <th></th>
@@ -82,8 +82,8 @@
             <section sec:authorize="isAuthenticated()">
                 <h2 th:if="${resource}">Valoraciones</h2>
 
-                <nav class="my-3">
-                    <button class="btn btn-primary btn-sm"
+                <nav>
+                    <button class="btn btn-primary btn-sm shadow-sm"
                             th:onclick="|location.href='/ratings/create/' + ${resource.id}|">
                         <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir una valoración a esta lista
                     </button>
@@ -91,7 +91,8 @@
 
                 <p th:if="${resource != null && ratings.size() == 0L}">No hay valoraciones</p>
                 <div class="table-responsive">
-                <table th:if="${ratings.size() > 0L}" id="ratingsList" class="table table-striped border shadow">
+                <table th:if="${ratings.size() > 0L}" id="ratingsList"
+                       class="table table-striped border shadow-sm">
                     <thead>
                     <tr>
                         <th class="avatar-col-size"></th>
