@@ -6,6 +6,7 @@
 </head>
 <body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/spinner :: spinner}" />
+    <th:block th:replace="~{fragment/modal :: modal}" />
     <th:block th:replace="~{fragment/navbar :: navbar}" />
     <div class="container mt-4 flex-grow-1">
 
@@ -19,15 +20,17 @@
         </div>
 
         <nav id="actions">
-            <button class="btn btn-primary btn-sm shadow-sm me-1" onclick="location.href='/resourcelists'">
-                <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver todas mis listas
-            </button>
+            <a href="/resourcelists" class="btn btn-primary btn-sm shadow-sm me-2">
+                <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver todas mis listas</a>
             <a th:href="'/resourcelists/update/' + ${resourcelist.id}"
-               class="btn btn-sm btn-warning shadow-sm me-1">
+               class="btn btn-sm btn-warning shadow-sm me-2">
                 <i class="fa-solid fa-pen-to-square"></i>&nbsp;&nbsp;Editar esta lista</a>
-            <a th:href="'/resourcelists/delete/' + ${resourcelist.id}"
-               class="btn btn-sm btn-danger shadow-sm me-1">
-                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar la lista</a>
+            <button type="button" class="btn btn-sm btn-danger shadow-sm"
+                    data-bs-toggle="modal" data-bs-target="#confirm"
+                    th:data-bs-url="'/resourcelists/delete/' + ${resourcelist.id}"
+                    th:data-bs-text="'¿Deseas eliminar la lista «' + ${resourcelist.name} + '»?'">
+                <i class="fa-solid fa-trash-can"></i>&nbsp;&nbsp;Eliminar la lista
+            </button>
         </nav>
 
         <main sec:authorize="isAuthenticated()" class="mt-3">
@@ -42,10 +45,12 @@
                    class="btn btn-primary btn-sm shadow-sm me-2">
                     <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir un recurso nuevo a esta lista
                 </a>
-                <a th:if="${resources.size() > 0}" th:href="'/resourcelists/remove/' + ${resourcelist.id}"
-                   class="btn btn-danger shadow-sm btn-sm">
+                <button th:if="${resources.size() > 0}" type="button" class="btn btn-danger shadow-sm btn-sm"
+                        data-bs-toggle="modal" data-bs-target="#confirm"
+                        th:data-bs-url="'/resourcelists/remove/' + ${resourcelist.id}"
+                        data-bs-text="¿Deseas eliminar todos los recursos incluidos en esta lista?">
                     <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;Eliminar todas los recursos de la lista
-                </a>
+                </button>
             </nav>
 
             <p th:if="${resourcelist != null && resources.size() == 0L}">No hay recursos en esta lista</p>
@@ -80,9 +85,12 @@
                                 <a th:href="'/resources/update/' + ${resource.id} + '/' + ${resourcelist.id}"
                                    class="btn btn-sm btn-warning btn-mini-size me-1">
                                     <i class="fa-solid fa-pen-to-square"></i></a>
-                                <a th:href="'/resourcelists/remove/' + ${resourcelist.id} + '/' + ${resource.id}"
-                                   class="btn btn-sm btn-danger btn-mini-size me-1">
-                                    <i class="fa-solid fa-x"></i></a>
+                                <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                        data-bs-toggle="modal" data-bs-target="#confirm"
+                                        th:data-bs-url="'/resourcelists/remove/' + ${resourcelist.id} + '/' + ${resource.id}"
+                                        th:data-bs-text="'¿Deseas eliminar el recurso «' + ${resource.title} + '» de esta lista?'">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
