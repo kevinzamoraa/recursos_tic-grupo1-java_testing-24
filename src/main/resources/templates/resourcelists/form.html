@@ -9,7 +9,7 @@
     <div class="container mt-4 flex-grow-1">
 
         <header>
-            <h1 th:if="${resourcelist.id}">Editar lista <span th:text="${resourcelist.id}"></span></h1>
+            <h1 th:if="${resourcelist.id}">Editar lista <span th:text="${resourcelist.name}"></span></h1>
             <h1 th:unless="${resourcelist.id}">Crear una nueva lista</h1>
         </header>
 

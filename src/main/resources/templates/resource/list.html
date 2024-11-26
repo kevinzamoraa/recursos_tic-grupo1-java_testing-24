@@ -6,6 +6,7 @@
 </head>
 <body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/spinner :: spinner}" />
+    <th:block th:replace="~{fragment/modal :: modal}" />
     <th:block th:replace="~{fragment/navbar :: navbar}" />
     <div class="container mt-4 flex-grow-1">
 
@@ -50,9 +51,13 @@
                                class="btn btn-sm btn-info btn-mini-size me-1"><i class="fa-solid fa-eye"></i></a>
                             <a sec:authorize="isAuthenticated()" th:href="'/resources/update/' + ${resource.id}"
                                class="btn btn-sm btn-warning btn-mini-size me-1"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a sec:authorize="isAuthenticated()" th:if="${#authentication.principal.role.isAdmin()}"
-                               th:href="'/resources/delete/' + ${resource.id}"
-                               class="btn btn-sm btn-danger btn-mini-size me-1"><i class="fa-solid fa-trash-can"></i></a>
+                            <button sec:authorize="isAuthenticated()" th:if="${#authentication.principal.role.isAdmin()}"
+                                    type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                    data-bs-toggle="modal" data-bs-target="#confirm"
+                                    th:data-bs-url="'/resources/delete/' + ${resource.id}"
+                                    th:data-bs-text="'¿Desea eliminar el recurso «' + ${resource.title} + '»?'">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>
