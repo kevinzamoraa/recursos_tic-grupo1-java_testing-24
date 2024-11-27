@@ -106,8 +106,8 @@ public class ResourceListsController {
      * @return Vista de la lista de recursos
      */
     @PostMapping("/resourcelists/add")
-    public String addList(@ModelAttribute ResourceList resourceListObject,
-                          @RequestParam(required = false) Long listId) {
+    public String addToList(@ModelAttribute ResourceList resourceListObject,
+                            @RequestParam(required = false) Long listId) {
 
         ResourceList resourceList = resourceListsService.findById(resourceListObject.getId())
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -122,7 +122,7 @@ public class ResourceListsController {
     }
 
     @GetMapping("resourcelists/remove/{listId}/{id}")
-    public String removeResource(Model model, @PathVariable Long listId, @PathVariable Long id) {
+    public String removeFromList(@PathVariable Long listId, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
             throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
@@ -138,7 +138,7 @@ public class ResourceListsController {
     }
 
     @GetMapping("resourcelists/remove/{listId}")
-    public String removeResource(Model model, @PathVariable Long listId) {
+    public String remove(@PathVariable Long listId) {
         if (invalidIntPosNumber(listId) || listId == 0)
             throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
@@ -170,7 +170,7 @@ public class ResourceListsController {
     }
 
     @GetMapping("resourcelists/delete/{id}")
-    public String deleteById(Model model, @PathVariable Long id) {
+    public String deleteById(@PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
@@ -185,7 +185,7 @@ public class ResourceListsController {
     }
 
     @GetMapping("resourcelists/delete")
-    public String deleteAll(Model model) {
+    public String deleteAll() {
         Long id = userAuth().get().getId();
         resourceListsService.deleteAll(id);
         if (resourceListsService.count(id) != 0)

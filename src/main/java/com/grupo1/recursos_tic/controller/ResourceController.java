@@ -86,6 +86,7 @@ public class ResourceController {
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
 
         model.addAttribute("resource", resource);
+
         return "resource/form";
     }
 
@@ -107,7 +108,7 @@ public class ResourceController {
     }
 
     @PostMapping("resources")
-    public String save(Model model, @ModelAttribute Resource resource,
+    public String save(@ModelAttribute Resource resource,
                        @RequestParam(required = false) Long listId) {
         if (resource == null) throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
         String error = formValidation(resource);
@@ -135,19 +136,19 @@ public class ResourceController {
     }
 
     @GetMapping("resources/delete/{id}")
-    public String deleteById(Model model, @PathVariable Long id) {
+    public String deleteById(@PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
             throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
-        Resource resource = resourceService.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
+        if (!resourceService.existsById(id))
+            throw new NoSuchElementException(ErrMsg.NOT_FOUND);
 
-        resourceService.removeResourceWithDependencies(resource.getId());
+        resourceService.removeResourceWithDependencies(id);
         return "redirect:/resources";
     }
 
     @GetMapping("resources/delete")
-    public String deleteAll(Model model) {
+    public String deleteAll() {
         resourceService.deleteAll();
         if (resourceService.count() != 0)
             throw new NoSuchElementException(ErrMsg.NOT_DELETED);
