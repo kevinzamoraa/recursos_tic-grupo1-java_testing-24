@@ -44,7 +44,7 @@ public class ResourceController {
     @GetMapping("resources/{id}")
     public String findById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new NumberFormatException(ErrMsg.INVALID_ID);
 
         Resource resource = resourceService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -66,7 +66,7 @@ public class ResourceController {
     @GetMapping("resources/create/{listId}")
     public String getFormToCreateNew(Model model, @PathVariable Long listId) {
         if (invalidIntPosNumber(listId) || listId == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new NumberFormatException(ErrMsg.INVALID_ID);
 
         if (!resourceListsService.existsById(listId))
             throw new NoSuchElementException(ErrMsg.NOT_FOUND);
@@ -80,7 +80,7 @@ public class ResourceController {
     @GetMapping("resources/update/{id}")
     public String getFormToUpdate(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new NumberFormatException(ErrMsg.INVALID_ID);
 
         Resource resource = resourceService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -93,7 +93,7 @@ public class ResourceController {
     @GetMapping("resources/update/{id}/{listId}")
     public String getFormToUpdateAndList(Model model, @PathVariable Long id, @PathVariable Long listId) {
         if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new NumberFormatException(ErrMsg.INVALID_ID);
 
         if (!resourceListsService.existsById(listId))
             throw new NoSuchElementException(ErrMsg.NOT_FOUND);
@@ -110,7 +110,7 @@ public class ResourceController {
     @PostMapping("resources")
     public String save(@ModelAttribute Resource resource,
                        @RequestParam(required = false) Long listId) {
-        if (resource == null) throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
+        if (resource == null) throw new NumberFormatException(ErrMsg.INVALID_INPUT);
         String error = formValidation(resource);
         if (error != null) throw new NoSuchElementException(error);
 
@@ -138,7 +138,7 @@ public class ResourceController {
     @GetMapping("resources/delete/{id}")
     public String deleteById(@PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new NumberFormatException(ErrMsg.INVALID_ID);
 
         if (!resourceService.existsById(id))
             throw new NoSuchElementException(ErrMsg.NOT_FOUND);

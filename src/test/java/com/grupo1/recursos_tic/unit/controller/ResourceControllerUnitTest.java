@@ -113,7 +113,7 @@ public class ResourceControllerUnitTest {
     void findById_WithInvalidId() {
         Long invalidId = 0L;  // o -1L
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.findById(model, invalidId);
         });
 
@@ -136,7 +136,7 @@ public class ResourceControllerUnitTest {
     @DisplayName("findById cuando el ID del recurso es null")
     void findById_WithNullId() {
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.findById(model, null);
         });
 
@@ -197,7 +197,7 @@ public class ResourceControllerUnitTest {
     void getFormToCreateNew_WithInvalidListId() {
         Long invalidListId = 0L;
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.getFormToCreateNew(model, invalidListId);
         });
 
@@ -220,7 +220,7 @@ public class ResourceControllerUnitTest {
     @DisplayName("getFormToCreateNew cuando el ID de lista es null")
     void getFormToCreateNew_WithNullListId() {
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.getFormToCreateNew(model, null);
         });
 
@@ -422,7 +422,7 @@ public class ResourceControllerUnitTest {
     void deleteById_WithInvalidResourceId() {
         Long invalidId = 0L;
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.deleteById(invalidId);
         });
 
@@ -431,27 +431,29 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("deleteById cunado el ID del recurso no es numérico")
+    @DisplayName("deleteById cuando el ID del recurso no es numérico")
     void deleteById_WithNonNumericId() {
-
-        assertThrows(NumberFormatException.class, () -> {
-            resourceController.deleteById(Long.parseLong("abc"));
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
+            resourceController.deleteById(Long.valueOf("abc"));
         });
 
         verify(resourceService, never()).existsById(anyLong());
         verify(resourceService, never()).removeResourceWithDependencies(anyLong());
+        // assertEquals(ErrMsg.INVALID_ID, exception.getMessage()); // ?? cadena devuelta
+        assertEquals("For input string: \"abc\"", exception.getMessage());
     }
 
     @Test
     @DisplayName("deleteById cuando el ID del recurso es nulo")
     void deleteById_WithNullResourceId() {
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.deleteById(null);
         });
 
         verify(resourceListsService, never()).existsById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*
