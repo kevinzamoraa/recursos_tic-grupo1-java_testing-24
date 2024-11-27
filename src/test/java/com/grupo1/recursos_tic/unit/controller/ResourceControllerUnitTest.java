@@ -23,6 +23,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Este test se encarga de verificar que el controlador ResourceController
+ * funciona correctamente.
+ * Fecha de última modificación: noviembre 2020
+ * Versión: 1.0
+ * Autor: Javier Guerra
+ * Unit tests for {@link ResourceController} class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class ResourceControllerUnitTest {
 
@@ -100,12 +108,13 @@ public class ResourceControllerUnitTest {
         Long resourceId = 1L;
         when(resourceService.findById(resourceId)).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             resourceController.findById(model, resourceId);
         });
 
         verify(resourceService).findById(resourceId);
         verify(model, never()).addAttribute(anyString(), any()); // No se añade nada al modelo
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
     }
 
     @Test
@@ -119,17 +128,21 @@ public class ResourceControllerUnitTest {
 
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     @Test
     @DisplayName("findById cuando el ID del recurso no es numérico")
     void findById_WithNonNumericId() {
-        assertThrows(NumberFormatException.class, () -> {
+
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.findById(model, Long.parseLong("abc"));
         });
 
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals("For input string: \"abc\"", exception.getMessage());
+        // assertEquals(ErrMsg.INVALID_ID, exception.getMessage()); // TODO ?? cadena devuelta
     }
 
     @Test
@@ -142,6 +155,7 @@ public class ResourceControllerUnitTest {
 
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*
@@ -184,12 +198,13 @@ public class ResourceControllerUnitTest {
 
         when(resourceListsService.existsById(listId)).thenReturn(false);
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             resourceController.getFormToCreateNew(model, listId);
         });
 
         verify(resourceListsService).existsById(listId);
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
     }
 
     @Test
@@ -203,17 +218,20 @@ public class ResourceControllerUnitTest {
 
         verify(resourceListsService, never()).existsById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     @Test
     @DisplayName("getFormToCreateNew cuando el ID de la lista no es numérico")
     void getFormToCreateNew_WithNonNumericId() {
-        assertThrows(NumberFormatException.class, () -> {
+
+        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
             resourceController.getFormToCreateNew(model, Long.parseLong("abc"));
         });
 
         verify(resourceListsService, never()).existsById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals("For input string: \"abc\"", exception.getMessage());
     }
 
     @Test
@@ -226,6 +244,7 @@ public class ResourceControllerUnitTest {
 
         verify(resourceListsService, never()).existsById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*
@@ -409,12 +428,13 @@ public class ResourceControllerUnitTest {
 
         when(resourceService.existsById(resourceId)).thenReturn(false);
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             resourceController.deleteById(resourceId);
         });
 
         verify(resourceService).existsById(resourceId);
         verify(resourceService, never()).removeResourceWithDependencies(anyLong());
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
     }
 
     @Test
@@ -428,6 +448,7 @@ public class ResourceControllerUnitTest {
 
         verify(resourceService, never()).existsById(anyLong());
         verify(resourceService, never()).removeResourceWithDependencies(anyLong());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     @Test
@@ -439,7 +460,6 @@ public class ResourceControllerUnitTest {
 
         verify(resourceService, never()).existsById(anyLong());
         verify(resourceService, never()).removeResourceWithDependencies(anyLong());
-        // assertEquals(ErrMsg.INVALID_ID, exception.getMessage()); // ?? cadena devuelta
         assertEquals("For input string: \"abc\"", exception.getMessage());
     }
 
@@ -477,7 +497,7 @@ public class ResourceControllerUnitTest {
     @DisplayName("getFormToUpdate cuando NO se han borrado los recursos")
     void deleteAll_WhenResourcesDoesNotExist() {
 
-        when(resourceService.count()).thenReturn(5L); // ?? ¿Cómo probar que realmente se borra?
+        when(resourceService.count()).thenReturn(5L); // TODO ¿Cómo probar que realmente se borra?
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             resourceController.deleteAll();
@@ -492,7 +512,7 @@ public class ResourceControllerUnitTest {
     @DisplayName("getFormToUpdate cuando se produce una excepción en el servicio")
     void deleteAll_ServiceThrowsException() {
 
-        doThrow(new RuntimeException("Service error")).when(resourceService).deleteAll(); // ??
+        doThrow(new RuntimeException("Service error")).when(resourceService).deleteAll(); // TODO Service error
 
         assertThrows(RuntimeException.class, () -> {
             resourceController.deleteAll();
