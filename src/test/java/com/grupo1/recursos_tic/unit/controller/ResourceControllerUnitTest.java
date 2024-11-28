@@ -1,10 +1,7 @@
 package com.grupo1.recursos_tic.unit.controller;
 
 import com.grupo1.recursos_tic.controller.ResourceController;
-import com.grupo1.recursos_tic.model.Rating;
-import com.grupo1.recursos_tic.model.Resource;
-import com.grupo1.recursos_tic.model.ResourceList;
-import com.grupo1.recursos_tic.model.ResourceType;
+import com.grupo1.recursos_tic.model.*;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
@@ -15,8 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ public class ResourceControllerUnitTest {
     private ResourceListsService resourceListsService;
     @Mock
     private RatingService ratingService;
-    @Mock
+//    @Mock
     private Utility utility; // TODO revisar si es necesario
     @Mock
     private Model model;
@@ -159,18 +158,38 @@ public class ResourceControllerUnitTest {
 
         when(resourceService.findById(resourceId)).thenReturn(resourceOpt);
         when(ratingService.findAllByResource_Id(resourceId)).thenReturn(ratings);
+        when(resourceListsService.findByOwnerIdAndResourcesId(1L, resourceId)).thenReturn(resourceLists); // TODO
+
+        try(MockedStatic<Utility> mockedStatic = mockStatic(Utility.class)) {
+            mockedStatic.when(Utility::isAuth).thenReturn(true);
+            User user = new User();
+            user.setId(1L);
+            mockedStatic.when(Utility::userAuth).thenReturn(Optional.of(user));
+
+            String view = resourceController.findById(model, resourceId);
+
+            when(Utility.isAuth()).thenReturn(true);
+            verify(resourceService).findById(resourceId);
+            verify(ratingService).findAllByResource_Id(resourceId);
+            verify(resourceListsService).findByOwnerIdAndResourcesId(1L, resourceId);
+            verify(model).addAttribute("resource", resource);
+            verify(model).addAttribute("ratings", ratings);
+            assertEquals("resource/detail", view);
+        }
+
+//        when(Utility.isAuth()).thenReturn(true);
+
         //when(utility.isAuth()).thenReturn(true); // TODO
-        //when(resourceListsService.findByOwnerIdAndResourcesId(1L, resourceId)).thenReturn(resourceLists); // TODO
 
-        String view = resourceController.findById(model, resourceId);
-
-        verify(resourceService).findById(resourceId);
-        verify(ratingService).findAllByResource_Id(resourceId);
-        //verify(resourceListsService).findByOwnerIdAndResourcesId(1L, resourceId); // TODO
-        verify(model).addAttribute("resource", resource);
-        verify(model).addAttribute("ratings", ratings);
-        //verify(model).addAttribute("lists", resourceLists); // TODO
-        assertEquals("resource/detail", view);
+//        String view = resourceController.findById(model, resourceId);
+//
+//        verify(resourceService).findById(resourceId);
+//        verify(ratingService).findAllByResource_Id(resourceId);
+//        //verify(resourceListsService).findByOwnerIdAndResourcesId(1L, resourceId); // TODO
+//        verify(model).addAttribute("resource", resource);
+//        verify(model).addAttribute("ratings", ratings);
+//        //verify(model).addAttribute("lists", resourceLists); // TODO
+//        assertEquals("resource/detail", view);
     }
 
     @Test
@@ -617,6 +636,7 @@ public class ResourceControllerUnitTest {
 
         when(resourceService.count()).thenReturn(5L); // TODO ¿Cómo probar que realmente se borra?
 
+        // Revisar la jerarquía de excepciones, de PersistenceException heredan muchas de ellas
         // TODO Qué excepción se debe usar? SQLException?
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             resourceController.deleteAll();
@@ -633,7 +653,7 @@ public class ResourceControllerUnitTest {
 
         doThrow(new RuntimeException("Service error")).when(resourceService).deleteAll(); // TODO Service error
 
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(ResponseStatusException.class, () -> {
             resourceController.deleteAll();
         });
     }
