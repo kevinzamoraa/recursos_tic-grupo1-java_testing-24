@@ -73,7 +73,7 @@
             </div>
 
             <section sec:authorize="isAuthenticated()"
-                     th:if="${lists != null && lists.size() > 0L}" class="mt-4">
+                     th:if="${lists != null && lists.size() > 0L}" class="mt-1">
                 <h2>Listas del recurso</h2>
                 <ul class="list-inline">
                     <li th:each="list : ${lists}" class="list-inline-item">
@@ -139,6 +139,9 @@
 
                 </table>
                 </div>
+
+                <p th:if="${ratings != null && ratings.size() > 0}"
+                   th:text="'Total de valoraciones: ' + ${ratings.size()}"></p>
             </section>
         </main>
 

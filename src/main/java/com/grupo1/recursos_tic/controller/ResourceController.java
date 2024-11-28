@@ -30,7 +30,8 @@ public class ResourceController {
     public static String formValidation(Resource resource) {
         if (stringIsEmpty(resource.getTitle())) return "Falta el título";
         if (stringIsEmpty(resource.getUrl())) return "Faltan la URL";
-        if (invalidIntPosNumber((long) resource.getType().ordinal()))
+        if (resource.getType() == null ||
+                !resource.getType().isValidType(resource.getType().ordinal()))
             return "Falta el tipo de recurso";
         return null;
     }
