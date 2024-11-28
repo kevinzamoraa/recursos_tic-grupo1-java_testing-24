@@ -146,7 +146,7 @@ public class UserController {
     @GetMapping("users/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         try {
-            userService.deleteUserWithRatings(id);
+            userService.deleteUserWithDependencies(id);
             return "redirect:/users";
         } catch (Exception e) {
             e.printStackTrace();
