@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,14 +30,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserControllerUnitTest {
 
-    @Mock
-    private UserController userController;
+
     @Mock
     private UserService userService;
     @Mock
     private RatingService ratingService;
     @InjectMocks
-    private UserControllerIntegrationTest controller;
+    private UserController userController;
     @Mock
     private Model model;
 
@@ -90,7 +90,7 @@ public class UserControllerUnitTest {
                 .build();
         Optional<User> userOpt = Optional.of(user1);
 
-        when(UserService.findById(userId)).thenReturn(userOpt);
+        when(userService.findById(userId)).thenReturn(userOpt);
 
         String view = userController.findById(userId, model);
 
@@ -102,29 +102,48 @@ public class UserControllerUnitTest {
     @Test
     @DisplayName("findById cuando el usuario NO existe")
     void findById_WhenUserDoesNotExist() {
-        Long userId = 1L;
-        when(userService.findById(userId)).thenReturn(Optional.empty());
+        Long invalidId = 999L;
 
-        assertThrows(NoSuchElementException.class, () -> {
-            userController.findById(userId, model);
-        });
+        when(userService.findById(any(Long.class))).thenReturn(Optional.empty());
 
-        verify(userService).findById(userId);
-        verify(model, never()).addAttribute(anyString(), any()); // No se añade nada al modelo
-    }
 
-    @Test
-    @DisplayName("findById cuando el ID del usuario no es válido")
-    void findById_WithInvalidId() {
-        Long invalidId = 0L;  // o -1L
-
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             userController.findById(invalidId, model);
         });
 
-        verify(userService, never()).findById(anyLong());
+        assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode());
+
+        verify(userService).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
+//        Long userId = 1L;
+//        when(userService.findById(userId)).thenReturn(Optional.empty());
+//
+//        assertThrows(NoSuchElementException.class, () -> {
+//            userController.findById(userId, model);
+//        });
+//
+//        verify(userService).findById(userId);
+//        verify(model, never()).addAttribute(anyString(), any()); // No se añade nada al modelo
     }
+
+    // ya lo hace spring
+//    @Test
+//    @DisplayName("findById cuando el ID del usuario no es válido")
+//    void findById_WithInvalidId() {
+//        Long invalidId = null;  // o -1L
+//
+//        when(userService.findById(any(Long.class))).thenReturn(Optional.empty());
+//
+//
+//        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+//            userController.findById(invalidId, model);
+//        });
+//
+//        assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode());
+//
+//        verify(userService).findById(anyLong());
+//        verify(model, never()).addAttribute(anyString(), any());
+//    }
 
     @Test
     @DisplayName("findById cuando el ID del usuario no es numérico")

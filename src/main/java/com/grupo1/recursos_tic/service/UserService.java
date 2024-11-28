@@ -39,7 +39,7 @@ public class UserService {
         return userRepository.existsById(Id);
     }
 
-    public static Optional<User> findById(long id) {
+    public Optional<User> findById(long id) {
         return userRepository.findById(id);
     }
 
