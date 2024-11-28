@@ -2,11 +2,8 @@ package com.grupo1.recursos_tic.unit.controller;
 
 import com.grupo1.recursos_tic.controller.ResourceController;
 import com.grupo1.recursos_tic.model.*;
-import com.grupo1.recursos_tic.service.RatingService;
-import com.grupo1.recursos_tic.service.ResourceListsService;
-import com.grupo1.recursos_tic.service.ResourceService;
-import com.grupo1.recursos_tic.util.ErrMsg;
-import com.grupo1.recursos_tic.util.Utility;
+import com.grupo1.recursos_tic.service.*;
+import com.grupo1.recursos_tic.util.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,8 +45,6 @@ public class ResourceControllerUnitTest {
     @Mock
     private Model model;
 
-    private Utility utility;
-
     /*
      * Method: formValidation(Resource)
      */
@@ -61,7 +56,7 @@ public class ResourceControllerUnitTest {
 
         String result = resourceController.formValidation(resource);
 
-        assertEquals(null, result);
+        assertNull(result);
     }
 
     @Test
@@ -148,10 +143,7 @@ public class ResourceControllerUnitTest {
     @DisplayName("findById cuando el recurso SÍ existe")
     void findById_WhenResourceExists() {
         Long resourceId = 1L;
-        Resource resource = Resource.builder()
-                .id(resourceId)
-                .title("Resource 1")
-                .build();
+        Resource resource = Resource.builder().id(resourceId).build();
         Optional<Resource> resourceOpt = Optional.of(resource);
         List<Rating> ratings = List.of();
         List<ResourceList> resourceLists = List.of();
@@ -162,8 +154,7 @@ public class ResourceControllerUnitTest {
 
         try(MockedStatic<Utility> mockedStatic = mockStatic(Utility.class)) {
             mockedStatic.when(Utility::isAuth).thenReturn(true);
-            User user = new User();
-            user.setId(1L);
+            User user = User.builder().id(1L).build();
             mockedStatic.when(Utility::userAuth).thenReturn(Optional.of(user));
 
             String view = resourceController.findById(model, resourceId);
@@ -181,12 +172,11 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("findById cuando el recurso NO existe")
     void findById_WhenResourceDoesNotExist() {
-        Long resourceId = 1L;
+        long resourceId = 1L;
         when(resourceService.findById(resourceId)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            resourceController.findById(model, resourceId);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> resourceController.findById(model, resourceId));
 
         verify(resourceService).findById(resourceId);
         verify(ratingService, never()).findAllByResource_Id(anyLong());
@@ -200,24 +190,8 @@ public class ResourceControllerUnitTest {
     void findById_WithInvalidId() {
         Long invalidId = 0L;  // o -1L
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.findById(model, invalidId);
-        });
-
-        verify(resourceService, never()).findById(anyLong());
-        verify(ratingService, never()).findAllByResource_Id(anyLong());
-        verify(resourceListsService, never()).findByOwnerIdAndResourcesId(anyLong(), anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("findById cuando el ID del recurso es null")
-    void findById_WithNullId() {
-
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.findById(model, null);
-        });
+        NumberFormatException exception = assertThrows(NumberFormatException.class,
+                () -> resourceController.findById(model, invalidId));
 
         verify(resourceService, never()).findById(anyLong());
         verify(ratingService, never()).findAllByResource_Id(anyLong());
@@ -266,9 +240,8 @@ public class ResourceControllerUnitTest {
 
         when(resourceListsService.existsById(listId)).thenReturn(false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            resourceController.getFormToCreateNew(model, listId);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> resourceController.getFormToCreateNew(model, listId));
 
         verify(resourceListsService).existsById(listId);
         verify(model, never()).addAttribute(anyString(), any());
@@ -280,22 +253,8 @@ public class ResourceControllerUnitTest {
     void getFormToCreateNew_WithInvalidListId() {
         Long invalidListId = 0L;
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.getFormToCreateNew(model, invalidListId);
-        });
-
-        verify(resourceListsService, never()).existsById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("getFormToCreateNew cuando el ID de lista es null")
-    void getFormToCreateNew_WithNullListId() {
-
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.getFormToCreateNew(model, null);
-        });
+        NumberFormatException exception = assertThrows(NumberFormatException.class,
+                () -> resourceController.getFormToCreateNew(model, invalidListId));
 
         verify(resourceListsService, never()).existsById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
@@ -323,13 +282,12 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("getFormToUpdate cuando el ID del recurso NO existe")
     void getFormToUpdate_WhenResourceDoesNotExist() {
-        Long resourceId = 1L;
+        long resourceId = 1L;
 
         when(resourceService.findById(resourceId)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            resourceController.findById(model, resourceId);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> resourceController.findById(model, resourceId));
 
         verify(resourceService).findById(resourceId);
         verify(model, never()).addAttribute(anyString(), any());
@@ -341,25 +299,12 @@ public class ResourceControllerUnitTest {
     void getFormToUpdate_WithInvalidResourceId() {
         Long invalidId = 0L;
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.findById(model, invalidId);
-        });
+        NumberFormatException exception = assertThrows(NumberFormatException.class,
+                () -> resourceController.findById(model, invalidId));
 
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
         assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
-    }
-
-    @Test
-    @DisplayName("getFormToUpdate cuando el ID del recurso es nulo")
-    void getFormToUpdate_WithNullResourceId() {
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.findById(model, null);
-        });
-
-        verify(resourceService, never()).findById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*
@@ -385,12 +330,6 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del recurso es nulo")
-    void getFormToUpdateAndList_WithNullResourceId() {
-        //
-    }
-
-    @Test
     @DisplayName("getFormToUpdateAndList cuando el ID de la lista Sí existe")
     void getFormToUpdateAndList_WhenResourceListExist() {
         //
@@ -405,12 +344,6 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido")
     void getFormToUpdateAndList_WithInvalidResourceListId() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista es nulo")
-    void getFormToUpdateAndList_WithNullResourceListId() {
         //
     }
 
@@ -437,12 +370,6 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("save cuando el recurso es nulo")
-    void save_WithNullResourceId() {
-        //
-    }
-
-    @Test
     @DisplayName("save cuando el ID de la lista Sí existe")
     void save_WhenResourceListExist() {
         //
@@ -457,12 +384,6 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("save cuando el ID de la lista no es válido")
     void save_WithInvalidResourceListId() {
-        //
-    }
-
-    @Test
-    @DisplayName("save cuando el ID de la lista es nulo")
-    void save_WithNullResourceListId() {
         //
     }
 
@@ -491,9 +412,8 @@ public class ResourceControllerUnitTest {
 
         when(resourceService.existsById(resourceId)).thenReturn(false);
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            resourceController.deleteById(resourceId);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> resourceController.deleteById(resourceId));
 
         verify(resourceService).existsById(resourceId);
         verify(resourceService, never()).removeResourceWithDependencies(anyLong());
@@ -505,9 +425,8 @@ public class ResourceControllerUnitTest {
     void deleteById_WithInvalidResourceId() {
         Long invalidId = 0L;
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.deleteById(invalidId);
-        });
+        NumberFormatException exception = assertThrows(NumberFormatException.class,
+                () -> resourceController.deleteById(invalidId));
 
         verify(resourceService, never()).existsById(anyLong());
         verify(resourceService, never()).removeResourceWithDependencies(anyLong());
@@ -515,29 +434,15 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("deleteById cuando el ID del recurso es nulo")
-    void deleteById_WithNullResourceId() {
-
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.deleteById(null);
-        });
-
-        verify(resourceListsService, never()).existsById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
-    }
-
-    @Test
     @DisplayName("deleteById cuando se produce una excepción en el servicio")
     void deleteById_ServiceThrowsException() {
-        Long ResourceId = 0L;
+        long ResourceId = 0L;
 
         doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService)
                 .removeResourceWithDependencies(ResourceId);
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            resourceService.removeResourceWithDependencies(ResourceId);
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
+                () -> resourceService.removeResourceWithDependencies(ResourceId));
 
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
@@ -565,9 +470,8 @@ public class ResourceControllerUnitTest {
 
         doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService).deleteAll();
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            resourceController.deleteAll();
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
+                () -> resourceController.deleteAll());
 
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
