@@ -30,7 +30,7 @@ public class ResourceController {
     private ResourceListsService resourceListsService;
     private RatingService ratingService;
 
-    public static String formValidation(Resource resource) {
+    public String formValidation(Resource resource) {
         if (stringIsEmpty(resource.getTitle())) return "Falta el título";
         if (stringIsEmpty(resource.getUrl())) return "Faltan la URL";
         if (resource.getType() == null ||
@@ -149,17 +149,20 @@ public class ResourceController {
         if (!resourceService.existsById(id))
             throw new NoSuchElementException(ErrMsg.NOT_FOUND);
 
-        resourceService.removeResourceWithDependencies(id);
+        try {
+            resourceService.removeResourceWithDependencies(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
+        }
         return "redirect:/resources";
     }
 
     @GetMapping("resources/delete")
     public String deleteAll() {
-
         try {
             resourceService.deleteAll();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "error al borrar"); // 409 status().isConflict()
+            throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
         }
         if (resourceService.count() != 0)
             throw new NoSuchElementException(ErrMsg.NOT_DELETED);

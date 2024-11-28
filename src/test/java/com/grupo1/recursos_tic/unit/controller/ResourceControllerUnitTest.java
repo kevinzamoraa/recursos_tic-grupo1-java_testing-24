@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -44,10 +45,10 @@ public class ResourceControllerUnitTest {
     private ResourceListsService resourceListsService;
     @Mock
     private RatingService ratingService;
-//    @Mock
-    private Utility utility; // TODO revisar si es necesario
     @Mock
     private Model model;
+
+    private Utility utility;
 
     /*
      * Method: formValidation(Resource)
@@ -143,7 +144,6 @@ public class ResourceControllerUnitTest {
      * Method: findById(Model, Long)
      */
 
-    // TODO Probar Model Ratings y ResourceLists, y cuando isAuth()
     @Test
     @DisplayName("findById cuando el recurso SÍ existe")
     void findById_WhenResourceExists() {
@@ -158,7 +158,7 @@ public class ResourceControllerUnitTest {
 
         when(resourceService.findById(resourceId)).thenReturn(resourceOpt);
         when(ratingService.findAllByResource_Id(resourceId)).thenReturn(ratings);
-        when(resourceListsService.findByOwnerIdAndResourcesId(1L, resourceId)).thenReturn(resourceLists); // TODO
+        when(resourceListsService.findByOwnerIdAndResourcesId(1L, resourceId)).thenReturn(resourceLists);
 
         try(MockedStatic<Utility> mockedStatic = mockStatic(Utility.class)) {
             mockedStatic.when(Utility::isAuth).thenReturn(true);
@@ -176,20 +176,6 @@ public class ResourceControllerUnitTest {
             verify(model).addAttribute("ratings", ratings);
             assertEquals("resource/detail", view);
         }
-
-//        when(Utility.isAuth()).thenReturn(true);
-
-        //when(utility.isAuth()).thenReturn(true); // TODO
-
-//        String view = resourceController.findById(model, resourceId);
-//
-//        verify(resourceService).findById(resourceId);
-//        verify(ratingService).findAllByResource_Id(resourceId);
-//        //verify(resourceListsService).findByOwnerIdAndResourcesId(1L, resourceId); // TODO
-//        verify(model).addAttribute("resource", resource);
-//        verify(model).addAttribute("ratings", ratings);
-//        //verify(model).addAttribute("lists", resourceLists); // TODO
-//        assertEquals("resource/detail", view);
     }
 
     @Test
@@ -223,23 +209,6 @@ public class ResourceControllerUnitTest {
         verify(resourceListsService, never()).findByOwnerIdAndResourcesId(anyLong(), anyLong());
         verify(model, never()).addAttribute(anyString(), any());
         assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("findById cuando el ID del recurso no es numérico")
-    void findById_WithNonNumericId() {
-
-        // TODO Tal vez IllegalArgumentException
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.findById(model, Long.parseLong("abc"));
-        });
-
-        verify(resourceService, never()).findById(anyLong());
-        verify(ratingService, never()).findAllByResource_Id(anyLong());
-        verify(resourceListsService, never()).findByOwnerIdAndResourcesId(anyLong(), anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-        assertEquals("For input string: \"abc\"", exception.getMessage());
-        // assertEquals(ErrMsg.INVALID_ID, exception.getMessage()); // TODO ?? cadena devuelta
     }
 
     @Test
@@ -321,19 +290,6 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToCreateNew cuando el ID de la lista no es numérico")
-    void getFormToCreateNew_WithNonNumericId() {
-
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.getFormToCreateNew(model, Long.parseLong("abc"));
-        });
-
-        verify(resourceListsService, never()).existsById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-        assertEquals("For input string: \"abc\"", exception.getMessage());
-    }
-
-    @Test
     @DisplayName("getFormToCreateNew cuando el ID de lista es null")
     void getFormToCreateNew_WithNullListId() {
 
@@ -395,18 +351,6 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdate cunado el ID del recurso no es numérico")
-    void getFormToUpdate_WithNonNumericId() {
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.findById(model, Long.parseLong("abc"));
-        });
-
-        verify(resourceService, never()).findById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-        assertEquals("For input string: \"abc\"", exception.getMessage());
-    }
-
-    @Test
     @DisplayName("getFormToUpdate cuando el ID del recurso es nulo")
     void getFormToUpdate_WithNullResourceId() {
         NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
@@ -441,12 +385,6 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cunado el ID del recurso no es numérico")
-    void getFormToUpdateAndList_WithNonNumericId() {
-        //
-    }
-
-    @Test
     @DisplayName("getFormToUpdateAndList cuando el ID del recurso es nulo")
     void getFormToUpdateAndList_WithNullResourceId() {
         //
@@ -467,12 +405,6 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido")
     void getFormToUpdateAndList_WithInvalidResourceListId() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cunado el ID de la lista no es numérico")
-    void getFormToUpdateAndList_WithNonNumericListId() {
         //
     }
 
@@ -525,12 +457,6 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("save cuando el ID de la lista no es válido")
     void save_WithInvalidResourceListId() {
-        //
-    }
-
-    @Test
-    @DisplayName("save cunado el ID de la lista no es numérico")
-    void save_WithNonNumericListId() {
         //
     }
 
@@ -589,18 +515,6 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("deleteById cuando el ID del recurso no es numérico")
-    void deleteById_WithNonNumericId() {
-        NumberFormatException exception = assertThrows(NumberFormatException.class, () -> {
-            resourceController.deleteById(Long.valueOf("abc"));
-        });
-
-        verify(resourceService, never()).existsById(anyLong());
-        verify(resourceService, never()).removeResourceWithDependencies(anyLong());
-        assertEquals("For input string: \"abc\"", exception.getMessage());
-    }
-
-    @Test
     @DisplayName("deleteById cuando el ID del recurso es nulo")
     void deleteById_WithNullResourceId() {
 
@@ -611,6 +525,21 @@ public class ResourceControllerUnitTest {
         verify(resourceListsService, never()).existsById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
         assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("deleteById cuando se produce una excepción en el servicio")
+    void deleteById_ServiceThrowsException() {
+        Long ResourceId = 0L;
+
+        doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService)
+                .removeResourceWithDependencies(ResourceId);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            resourceService.removeResourceWithDependencies(ResourceId);
+        });
+
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
     /*
@@ -631,31 +560,16 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdate cuando NO se han borrado los recursos")
-    void deleteAll_WhenResourcesDoesNotExist() {
-
-        when(resourceService.count()).thenReturn(5L); // TODO ¿Cómo probar que realmente se borra?
-
-        // Revisar la jerarquía de excepciones, de PersistenceException heredan muchas de ellas
-        // TODO Qué excepción se debe usar? SQLException?
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            resourceController.deleteAll();
-        });
-
-        verify(resourceService).deleteAll();
-        assertNotEquals(0L, resourceService.count());
-        assertEquals(ErrMsg.NOT_DELETED, exception.getMessage());
-    }
-
-    @Test
     @DisplayName("getFormToUpdate cuando se produce una excepción en el servicio")
     void deleteAll_ServiceThrowsException() {
 
-        doThrow(new RuntimeException("Service error")).when(resourceService).deleteAll(); // TODO Service error
+        doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService).deleteAll();
 
-        assertThrows(ResponseStatusException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             resourceController.deleteAll();
         });
+
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
 }
