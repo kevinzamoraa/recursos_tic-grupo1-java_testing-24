@@ -1,7 +1,9 @@
 package com.grupo1.recursos_tic.integration.controller;
 
 import com.grupo1.recursos_tic.config.WithMockUserSecurityContextFactory;
+import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.model.UserRole;
+import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.UserService;
 import com.grupo1.recursos_tic.service.UserService;
@@ -41,15 +43,36 @@ public class UserControllerIntegrationTest {
     private RatingService ratingService;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private UserRepo userRepo;
 
-    @BeforeEach
+//    @BeforeEach
+//    @WithMockUser(username = "admin", roles = "ADMIN")
+//    public void setUp() {
+//        // Configurar el contexto de seguridad antes de cada prueba
+//        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+//                "admin", "Admin1234", Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+//
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//    }
+
+    @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    public void setUp() {
-        // Configurar el contexto de seguridad antes de cada prueba
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                "admin", "Admin1234", Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+    void test() throws Exception {
+//        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+//                "admin", "Admin1234", Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        User user = userRepo.save(User.builder().username("admin").password("Admin1234").role(UserRole.ADMIN).build());
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        userRepo.save(User.builder().username("user").password("User1234").role(UserRole.READER).build());
+
+        mockMvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("users", hasSize(2)))
+        ;
     }
 
     @Test
