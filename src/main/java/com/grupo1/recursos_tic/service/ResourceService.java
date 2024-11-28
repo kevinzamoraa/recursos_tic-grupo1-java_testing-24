@@ -60,13 +60,13 @@ public class ResourceService {
     }
 
     public void deleteAllByIdInBatch(List<Long> ids) {
-        // TODO disasociar
-        resourceRepository.deleteAllByIdInBatch(ids);
+        ids.forEach(id -> {if (existsById(id)) removeResourceWithDependencies(id);});
     }
 
     public void deleteAll() {
-        // TODO disasociar
-        resourceRepository.deleteAll();
+        resourceRepository.findAll().forEach(
+                resource -> removeResourceWithDependencies(resource.getId())
+        );
     }
 
 }

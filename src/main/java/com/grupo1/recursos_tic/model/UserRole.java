@@ -2,8 +2,6 @@ package com.grupo1.recursos_tic.model;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-
 /**
  * Roles de usuario
  */

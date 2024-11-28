@@ -50,4 +50,13 @@ public class Utility {
         return Optional.empty();
     }
 
+    /**
+     * Comprueba si el usuario autenticado es el mismo que el usuario pasado como parámetro
+     * @param user El usuario que se quiere comprobar
+     * @return true si son iguales / false en caso contrario
+     */
+    public static boolean confirmUser(User user) {
+        return userAuth().map(u -> u.getId().equals(user.getId())).orElse(false);
+    }
+
 }

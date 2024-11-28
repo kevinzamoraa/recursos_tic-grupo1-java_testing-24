@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static com.grupo1.recursos_tic.util.Utility.stringIsEmpty;
+
 @Service
 public class UserService {
 
@@ -28,6 +30,64 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public boolean existsById(Long Id) {
+        return userRepository.existsById(Id);
+    }
+
+    public Optional<User> findById(long id) {
+        return userRepository.findById(id);
+    }
+
+    public List<Rating> findAllByUserId(User user) {
+        return ratingRepository.findAllByUserId(user.getId());
+    }
+
+    public boolean existsByUsername(String username) {
+        if (stringIsEmpty(username)) return false;
+        return userRepository.existsByUsername(username);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        if (stringIsEmpty(username)) return Optional.empty();
+        return userRepository.findByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        if (stringIsEmpty(email)) return false;
+        return userRepository.existsByEmail(email);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        if (stringIsEmpty(email)) return Optional.empty();
+        return userRepository.findByEmail(email);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public User updateUser(User user) {
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // Verificar si se está actualizando la contraseña
+        if (!user.getPassword().equals(existingUser.getPassword())) {
+            // Desencriptar la contraseña existente
+            String decryptedPassword = new String(passwordEncoder.encode(existingUser.getPassword()));
+
+            // Verificar si la nueva contraseña es válida (por ejemplo, si coincide con la actual)
+            if (!passwordEncoder.matches(user.getPassword(), decryptedPassword)) {
+                // Actualizar la contraseña con el PasswordEncoder
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+        }
+
+        return userRepository.save(user);
+    }
 
     public void deleteUserWithRatings(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -56,10 +116,6 @@ public class UserService {
         }
     }
 
-   public List<Rating> findAllByUserId(User user) {
-        return ratingRepository.findAllByUserId(user.getId());
-   }
-
     @Transactional
     public void deleteAllUsers() {
         List<User> users = userRepository.findAll();
@@ -71,24 +127,6 @@ public class UserService {
             userRepository.deleteById(user.getId());
             System.out.println("Se ha eliminado un usuario.");
         }
-    }
-
-    public User updateUser(User user) {
-        User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        // Verificar si se está actualizando la contraseña
-        if (!user.getPassword().equals(existingUser.getPassword())) {
-            // Desencriptar la contraseña existente
-            String decryptedPassword = new String(passwordEncoder.encode(existingUser.getPassword()));
-
-            // Verificar si la nueva contraseña es válida (por ejemplo, si coincide con la actual)
-            if (!passwordEncoder.matches(user.getPassword(), decryptedPassword)) {
-                // Actualizar la contraseña con el PasswordEncoder
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-            }
-        }
-
-        return userRepository.save(user);
     }
 
 }

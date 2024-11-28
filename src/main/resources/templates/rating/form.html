@@ -9,7 +9,7 @@
     <div class="container mt-4 flex-grow-1">
 
         <header>
-            <h1 th:if="${rating.id}">Editar valoración <span th:text="${rating.id}"></span></h1>
+            <h1 th:if="${rating.id}">Editar valoración</span></h1>
             <h1 th:unless="${rating.id}">Crear valoración</h1>
         </header>
 
@@ -19,36 +19,30 @@
                 <p th:if="${rating == null}">La valoración no existe</p>
                 <fieldset>
                     <legend>Datos de la valoración</legend>
-                        <input type="hidden" id="id" th:field="*{id}"/>
 
-
-                    <!--    TODO Cuando se cree o edite un recurso, ya se sabrá el usuario y el recurso pero...
-                            mientras tanto se puede hacer un selector de usuarios y un selector de recursos
-                            para el rating-->
-
-
-                    <!--    <div>-->
-                    <!--        <label for="user">Autor</label>-->
-                    <!--        <input type="text" id="user" th:field="*{user}" />-->
-                    <!--    </div>-->
-
-                    <!--    <div>-->
-                    <!--        <label for="resource">Recurso</label>-->
-                    <!--        <input type="text" id="resource" th:field="*{resource}" />-->
-                    <!--    </div>-->
+                    <input type="hidden" id="id" th:field="*{id}" />
+                    <input type="hidden" id="user" th:field="*{user}" />
+                    <input type="hidden" id="resource" th:field="*{resource}" />
+                    <input type="hidden" id="createdAt" th:field="*{createdAt}" />
 
                     <div>
-                        <label for="comment">Comentario</label>
+                        <label for="title" class="form-label required">Título</label>
+                        <input type="text" class="form-control" id="title" th:field="*{title}" required />
+                    </div>
+
+                    <div>
+                        <label for="comment" class="form-label">Comentario</label>
                         <input type="text" class="form-control" id="comment" th:field="*{comment}"/>
                     </div>
 
                     <div>
-                        <label for="score">Puntuación</label>
-                        <input type="number" class="form-control" id="score" th:field="*{score}"/>
+                        <label for="score" class="form-label">Puntuación</label>
+                        <input type="number" class="form-control" id="score" th:field="*{score}" min="0" max="5" />
                     </div>
+
                 </fieldset>
                 <div>
-                    <button type="button" class="btn btn-secondary me-2" onclick="location.href='/ratings'">
+                    <button type="button" class="btn btn-secondary me-2" onclick="history.back()">
                         <i class="fa-solid fa-xmark"></i>&nbsp;&nbsp;Cancelar
                     </button>
                     <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Guardar

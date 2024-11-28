@@ -43,7 +43,9 @@ public enum EnumTag {
     PROJECTS("Proyectos"),
     SUPPORT("Soporte"),
     IMPORTANT("Importante"),
-    TIPS("Tips");
+    NEWS("Noticias"),
+    TIPS("Tips"),
+    OTHER("Otro");
 
     private final String tag;
 

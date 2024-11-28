@@ -5,48 +5,64 @@
     <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
 <body class="d-flex flex-column vh-100">
+<th:block th:replace="~{fragment/modal :: modal}" />
 <th:block th:replace="~{fragment/navbar :: navbar}"/>
 <div class="container mt-4 flex-grow-1">
 
     <header>
-        <h1>Detalle del usuario</h1>
+        <h1 th:if="${user}" th:text="|Usuario ${user.username}|"></h1>
+        <h1 th:unless="${user}">Detalle del usuario</h1>
     </header>
 
-    <nav id="actions">
-        <button class="btn btn-primary btn-sm" onclick="location.href='/users'">
-            <i class="fa-solid fa-table-list"></i>&nbsp;&nbsp;Listar todos los usuarios
+    <nav id="actions" th:if="${#authentication.principal.role.isAdmin()}">
+        <button class="btn btn-primary shadow-sm btn-sm" onclick="location.href='/users'">
+            <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver la lista de usuarios
         </button>
     </nav>
 
     <main>
         <p th:if="${user == null}">El usuario no existe</p>
-        <table th:if="${user}" id="userDetail" class="table border shadow">
+        <div class="table-responsive">
+        <table th:if="${user}" id="userDetail" class="table border shadow-sm">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th class="avatar-col-size"></th>
+                    <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo electrónico</th>
-                    <th>Nombre de usuario</th>
+                    <th>Rol</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td th:text="${user.id}"></td>
-                    <td th:text="${user.name}"></td>
-                    <td th:text="${user.email}"></td>
-                    <td th:text="${user.username}"></td>
-                    <td>
+                    <td class="align-middle avatar-col-size">
+                        <img th:src="${user.getImageUrl() != '' ? user.getImageUrl() : '/img/user/noUser.png'}"
+                             class="avatar rounded-circle me-2" th:alt="${user.getUsername()}">
+                        <span ></span>
+                    </td>
+                    <td th:text="${user.username}" class="fw-bold align-middle"></td>
+                    <td th:text="${user.name}" class="align-middle"></td>
+                    <td th:text="${user.email}" class="align-middle"></td>
+                    <td th:text="${user.role}" class="align-middle"></td>
+                    <td class="action-col-size align-middle">
                         <div class="float-end">
-                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/users/update/' + ${user.id}"
+                               class="btn btn-sm btn-warning btn-mini-size me-1">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
-                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i></a>
+                            <button th:if="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()}"
+                                    type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                    data-bs-toggle="modal" data-bs-target="#confirm"
+                                    th:data-bs-url="'/users/delete/' + ${user.id}"
+                                    th:data-bs-text="'¿Deseas eliminar al usuario «' + ${user.username} + '»?'">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+        </div>
 
     </main>
 

@@ -38,17 +38,15 @@ public class  SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception {
 
         http
-            .csrf(csrf -> csrf
-                    .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
-                    .ignoringRequestMatchers("/api/**")
-            )
-              //.csrf(csrf -> csrf.disable())  // O .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(authRequest -> authRequest
+                    // Swagger
+                    .requestMatchers("/api/**").permitAll()
+                    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
                     .requestMatchers(HttpMethod.GET,"/", "/legal", "/privacy", "/login", "/help", "/error",
                             "/css/**", "/js/**", "/img/**", "/webjars/**", "/auth/**", "/favicon.ico").permitAll()
-
-                    //.requestMatchers(HttpMethod.POST,"/cookie", "/logout").permitAll()
 
                     .requestMatchers(HttpMethod.GET,"/resources/create").authenticated()
                     .requestMatchers(HttpMethod.POST,"/resources/update/{id}").authenticated()
@@ -56,8 +54,8 @@ public class  SecurityConfig {
                     .requestMatchers(HttpMethod.DELETE,"/resources/delete").authenticated()
                     .requestMatchers("/resources/**").permitAll()
 
-                    // TODO revisar permisos
-                    .requestMatchers("/api/**").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/users/create").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/users").permitAll()
 
                     .anyRequest().authenticated()
             )
@@ -68,7 +66,10 @@ public class  SecurityConfig {
                     .permitAll()
             )
 
-            .logout(logout -> logout.permitAll())
+            .logout(logout -> logout
+                    .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true)
+            )
 
             .exceptionHandling(exceptionHandling -> exceptionHandling
                     .accessDeniedPage("/error"));
