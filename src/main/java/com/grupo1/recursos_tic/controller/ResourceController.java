@@ -45,7 +45,7 @@ public class ResourceController {
         return "resource/list";
     }
 
-    // @AuthenticationPrincipal String username
+    // Probar @AuthenticationPrincipal String username
     // https://www.baeldung.com/get-user-in-spring-security
     @GetMapping("resources/{id}")
     public String findById(Model model, @PathVariable Long id) {
