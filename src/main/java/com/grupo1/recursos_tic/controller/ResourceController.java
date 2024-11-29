@@ -120,7 +120,7 @@ public class ResourceController {
                 throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         String error = formValidation(resource);
-        if (error != null) throw new NoSuchElementException(error);
+        if (error != null) throw new ResponseStatusException(HttpStatus.CONFLICT);
 
         if (resource.getId() == null) { // crear
             Resource savedResource = resourceService.save(resource);
@@ -166,7 +166,7 @@ public class ResourceController {
             throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
         }
         if (resourceService.count() != 0)
-            throw new NoSuchElementException(ErrMsg.NOT_DELETED);
+            throw new RuntimeException(ErrMsg.NOT_DELETED);
         return "redirect:/resources";
     }
 }

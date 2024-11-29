@@ -26,7 +26,7 @@ public class ResourceListsController {
     private ResourceListsService resourceListsService;
     private ResourceService resourceService;
 
-    public static String formValidation(ResourceList resourceLists) {
+    public String formValidation(ResourceList resourceLists) {
         if (stringIsEmpty(resourceLists.getName())) return "Falta el nombre";
         return null;
     }
@@ -197,7 +197,7 @@ public class ResourceListsController {
             throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
         }
         if (resourceListsService.count(id) != 0)
-            throw new NoSuchElementException(ErrMsg.NOT_DELETED);
+            throw new RuntimeException(ErrMsg.NOT_DELETED);
         return "redirect:/resourcelists";
     }
 
