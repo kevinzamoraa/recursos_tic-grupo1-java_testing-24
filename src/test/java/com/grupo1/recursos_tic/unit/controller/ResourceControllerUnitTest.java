@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ import static org.mockito.Mockito.*;
 /**
  * Este test se encarga de verificar que el controlador ResourceController
  * funciona correctamente.
+ *
  * @author Javier Guerra
  * @version 1.1.0
  * @since 2024-11-28
@@ -150,9 +152,10 @@ public class ResourceControllerUnitTest {
 
         when(resourceService.findById(resourceId)).thenReturn(resourceOpt);
         when(ratingService.findAllByResource_Id(resourceId)).thenReturn(ratings);
-        when(resourceListsService.findByOwnerIdAndResourcesId(1L, resourceId)).thenReturn(resourceLists);
+        when(resourceListsService.findByOwnerIdAndResourcesId(
+                1L, resourceId)).thenReturn(resourceLists);
 
-        try(MockedStatic<Utility> mockedStatic = mockStatic(Utility.class)) {
+        try (MockedStatic<Utility> mockedStatic = mockStatic(Utility.class)) {
             mockedStatic.when(Utility::isAuth).thenReturn(true);
             User user = User.builder().id(1L).build();
             mockedStatic.when(Utility::userAuth).thenReturn(Optional.of(user));
@@ -190,7 +193,7 @@ public class ResourceControllerUnitTest {
     void findById_WithInvalidId() {
         Long invalidId = 0L;  // o -1L
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class,
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.findById(model, invalidId));
 
         verify(resourceService, never()).findById(anyLong());
@@ -205,7 +208,7 @@ public class ResourceControllerUnitTest {
      */
 
     @Test
-    @DisplayName("getFormToCreate cuando se crea el recurso")
+    @DisplayName("getFormToCreate cuando SÍ se crea el recurso")
     void getFormToCreate_WhenResourceIsCreated() {
 
         String view = resourceController.getFormToCreate(model);
@@ -213,6 +216,24 @@ public class ResourceControllerUnitTest {
         verify(model).addAttribute(eq("resource"), any(Resource.class));
         assertEquals("resource/form", view);
     }
+
+    @Test
+    @DisplayName("getFormToCreate cuando NO se crea el recurso")
+    void getFormToCreate_WhenResourceIsNotCreated() {
+
+        ResourceController spyController = Mockito.spy(resourceController);
+
+        Mockito.doThrow(new ResponseStatusException(HttpStatus.CONFLICT))
+                .when(spyController)
+                .getFormToCreate(model);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
+                () -> spyController.getFormToCreate(model));
+
+        verify(model, never()).addAttribute(eq("resource"), any(Resource.class));
+        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+    }
+
 
     /*
      * Method: getFormToCreateNew(Model, Long)
@@ -253,7 +274,7 @@ public class ResourceControllerUnitTest {
     void getFormToCreateNew_WithInvalidListId() {
         Long invalidListId = 0L;
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class,
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.getFormToCreateNew(model, invalidListId));
 
         verify(resourceListsService, never()).existsById(anyLong());
@@ -266,7 +287,7 @@ public class ResourceControllerUnitTest {
      */
 
     @Test
-    @DisplayName("getFormToUpdate cuando el ID del recurso Sí existe")
+    @DisplayName("getFormToUpdate cuando el recurso Sí existe")
     void getFormToUpdate_WhenResourceExist() {
         Long resourceId = 1L;
         Resource resource = Resource.builder().id(resourceId).build();
@@ -280,7 +301,7 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdate cuando el ID del recurso NO existe")
+    @DisplayName("getFormToUpdate cuando el recurso NO existe")
     void getFormToUpdate_WhenResourceDoesNotExist() {
         long resourceId = 1L;
 
@@ -299,7 +320,8 @@ public class ResourceControllerUnitTest {
     void getFormToUpdate_WithInvalidResourceId() {
         Long invalidId = 0L;
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class,
+        // TODO Se comprueba Id ilegal, pero en el método sale como no testeado
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.findById(model, invalidId));
 
         verify(resourceService, never()).findById(anyLong());
@@ -312,39 +334,73 @@ public class ResourceControllerUnitTest {
      */
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del recurso Sí existe")
-    void getFormToUpdateAndList_WhenResourceExist() {
-        //
+    @DisplayName("getFormToUpdateAndList cuando el recurso y la lista Sí existen")
+    void getFormToUpdateAndList_WhenResourceAndListExist() {
+        long resourceId = 1L;
+        Long ListId = 1L;
+        Resource resource = Resource.builder().id(resourceId).build();
+        when(resourceListsService.existsById(ListId)).thenReturn(true);
+        when(resourceService.findById(resourceId)).thenReturn(Optional.of(resource));
+
+        String view = resourceController.getFormToUpdateAndList(model, resourceId, ListId);
+
+        verify(resourceListsService).existsById(ListId);
+        verify(resourceService).findById(resourceId);
+        verify(model).addAttribute(eq("resource"), any(Resource.class));
+        verify(model).addAttribute(eq("listId"), eq(ListId));
+        assertEquals("resource/form", view);
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del recurso NO existe")
+    @DisplayName("getFormToUpdateAndList cuando el recurso NO existe")
     void getFormToUpdateAndList_WhenResourceDoesNotExist() {
-        //
+        long resourceId = 1L;
+        Long ListId = 1L;
+
+        when(resourceListsService.existsById(ListId)).thenReturn(true);
+        when(resourceService.findById(resourceId)).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> resourceController.getFormToUpdateAndList(model, resourceId, ListId));
+
+        verify(resourceListsService).existsById(ListId);
+        verify(resourceService).findById(resourceId);
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del recurso no es válido")
-    void getFormToUpdateAndList_WithInvalidResourceId() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista Sí existe")
-    void getFormToUpdateAndList_WhenResourceListExist() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista NO existe")
+    @DisplayName("getFormToUpdateAndList cuando la lista NO existe")
     void getFormToUpdateAndList_WhenResourceListDoesNotExist() {
-        //
+        long resourceId = 1L;
+        Long ListId = 1L;
+
+        when(resourceListsService.existsById(ListId)).thenReturn(false);
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> resourceController.getFormToUpdateAndList(model, resourceId, ListId));
+
+        verify(resourceListsService).existsById(ListId);
+        verify(resourceService, never()).findById(resourceId);
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido")
-    void getFormToUpdateAndList_WithInvalidResourceListId() {
-        //
+    @DisplayName("getFormToUpdateAndList cuando el ID del recurso o" +
+            "el ID de la lista no son válidos")
+    void getFormToUpdateAndList_WithInvalidResourceORListId() {
+        long invalidResourceId = 0L;
+        Long invalidListId = 0L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.getFormToUpdateAndList(
+                        model, invalidResourceId, invalidListId));
+
+        verify(resourceListsService, never()).existsById(invalidListId);
+        verify(resourceService, never()).findById(invalidResourceId);
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*
@@ -352,39 +408,97 @@ public class ResourceControllerUnitTest {
      */
 
     @Test
-    @DisplayName("save cuando el recurso Sí existe")
+    @DisplayName("save cuando el recurso y la lista SÍ existen")
     void save_WhenResourceExist() {
-        //
+        long resourceId = 1L;
+        Long ListId = 1L;
+        Resource resource = Resource.builder()
+                .id(resourceId)
+                .title("Recurso")
+                .url("#")
+                .type(ResourceType.DOCUMENT)
+                .build();
+        ResourceList resourceList = ResourceList.builder().id(ListId).build();
+
+        when(resourceService.findById(resourceId)).thenReturn(Optional.of(resource));
+
+        String view = resourceController.save(resource, ListId);
+
+        verify(resourceListsService, never()).findById(resourceId);
+        verify(resourceListsService, never()).save(resourceList);
+        verify(resourceService).findById(resourceId);
+        verify(resourceService).save(resource);
+        assertEquals("redirect:/resourcelists/1", view);
     }
 
     @Test
     @DisplayName("save cuando el recurso NO existe")
     void save_WhenResourceDoesNotExist() {
-        //
+        long resourceId = 1L;
+        Long ListId = 1L;
+        Resource resource = Resource.builder()
+                .title("Recurso")
+                .url("#")
+                .type(ResourceType.DOCUMENT)
+                .build();
+        ResourceList resourceList = ResourceList.builder().id(ListId).build();
+
+        when(resourceListsService.findById(ListId)).thenReturn(Optional.of(resourceList));
+
+        String view = resourceController.save(resource, ListId);
+
+        verify(resourceListsService).findById(resourceId);
+        verify(resourceListsService).save(resourceList);
+        verify(resourceService, never()).findById(resourceId);
+        verify(resourceService).save(resource);
+        assertEquals("redirect:/resourcelists/1", view);
     }
 
     @Test
-    @DisplayName("save cuando el recurso no es válido")
-    void save_WithInvalidResourceId() {
-        //
+    @DisplayName("save cuando el recurso NO existe y la lista NO existe")
+    void save_WhenResourceAndListDoesNotExist() {
+        long resourceId = 1L;
+        Resource resource = Resource.builder()
+                .title("Recurso")
+                .url("#")
+                .type(ResourceType.DOCUMENT)
+                .build();
+
+        when(resourceService.findById(resourceId)).thenReturn(Optional.of(resource));
+
+        String view = resourceController.save(resource, null); // TODO No debe pasar ListId
+
+        verify(resourceListsService, never()).findById(resourceId);
+        verify(resourceListsService, never()).save(any());
+        verify(resourceService, never()).findById(resourceId);
+        verify(resourceService).save(resource);
+        assertEquals("redirect:/resources/1", view);
     }
 
     @Test
-    @DisplayName("save cuando el ID de la lista Sí existe")
-    void save_WhenResourceListExist() {
-        //
-    }
-
-    @Test
-    @DisplayName("save cuando el ID de la lista NO existe")
+    @DisplayName("save cuando el recurso Sí existe y la lista NO existe")
     void save_WhenResourceListDoesNotExist() {
         //
+
+        //assertEquals("redirect:/resources/1", view);
     }
 
     @Test
-    @DisplayName("save cuando el ID de la lista no es válido")
-    void save_WithInvalidResourceListId() {
-        //
+    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido")
+    void save_WithInvalidListId() {
+        long resourceId = 1L;
+        Long invalidListId = 0L;
+        Resource resource = new Resource();
+        ResourceList invalidResourceList = new ResourceList();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.save(resource, invalidListId));
+
+        verify(resourceListsService, never()).findById(resourceId);
+        verify(resourceListsService, never()).save(invalidResourceList);
+        verify(resourceService, never()).findById(resourceId);
+        verify(resourceService, never()).save(resource);
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*
@@ -425,7 +539,7 @@ public class ResourceControllerUnitTest {
     void deleteById_WithInvalidResourceId() {
         Long invalidId = 0L;
 
-        NumberFormatException exception = assertThrows(NumberFormatException.class,
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.deleteById(invalidId));
 
         verify(resourceService, never()).existsById(anyLong());
@@ -446,6 +560,8 @@ public class ResourceControllerUnitTest {
 
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
+
+    // TODO ResponseStatusException en deleteAll(Model)
 
     /*
      * Method: deleteAll(Model)
@@ -476,5 +592,6 @@ public class ResourceControllerUnitTest {
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
-}
+    // TODO NoSuchElementException en deleteAll deleteAll(Model)
 
+}

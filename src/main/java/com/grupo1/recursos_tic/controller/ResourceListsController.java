@@ -8,9 +8,11 @@ import com.grupo1.recursos_tic.service.ResourceService;
 import com.grupo1.recursos_tic.util.ErrMsg;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -38,7 +40,7 @@ public class ResourceListsController {
     @GetMapping("resourcelists/{id}")
     public String findById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         ResourceList resourceList = resourceListsService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -63,7 +65,7 @@ public class ResourceListsController {
     @GetMapping("resourcelists/update/{id}")
     public String getFormToUpdate(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         ResourceList resourceList = resourceListsService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -84,12 +86,11 @@ public class ResourceListsController {
     @GetMapping("resourcelists/add/{id}")
     public String addResources(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         ResourceList resourceList = resourceListsService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
         List<Resource> allResources = resourceService.findAll();
-
         Set<Resource> resources = resourceList.getResources();
 
         model.addAttribute("resourceListObject", resourceList);
@@ -124,7 +125,7 @@ public class ResourceListsController {
     @GetMapping("resourcelists/remove/{listId}/{id}")
     public String removeFromList(@PathVariable Long listId, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         ResourceList resourceList = resourceListsService.findById(listId)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -138,9 +139,9 @@ public class ResourceListsController {
     }
 
     @GetMapping("resourcelists/remove/{listId}")
-    public String remove(@PathVariable Long listId) {
+    public String removeAll(@PathVariable Long listId) {
         if (invalidIntPosNumber(listId) || listId == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         ResourceList resourceList = resourceListsService.findById(listId)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -153,7 +154,6 @@ public class ResourceListsController {
 
     @PostMapping("resourcelists")
     public String save(@ModelAttribute ResourceList resourcelist) {
-        if (resourcelist == null) throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
         String error = formValidation(resourcelist);
         if (error != null) throw new NoSuchElementException(error);
 
@@ -172,7 +172,7 @@ public class ResourceListsController {
     @GetMapping("resourcelists/delete/{id}")
     public String deleteById(@PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         ResourceList resourceList = resourceListsService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -180,14 +180,22 @@ public class ResourceListsController {
         if (!Objects.equals(resourceList.getOwner().getId(), userAuth().get().getId()))
             throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
 
-        resourceListsService.deleteById(resourceList.getId());
+        try {
+            resourceListsService.deleteById(resourceList.getId());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
+        }
         return "redirect:/resourcelists";
     }
 
     @GetMapping("resourcelists/delete")
     public String deleteAll() {
         Long id = userAuth().get().getId();
-        resourceListsService.deleteAll(id);
+        try {
+            resourceListsService.deleteAll(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
+        }
         if (resourceListsService.count(id) != 0)
             throw new NoSuchElementException(ErrMsg.NOT_DELETED);
         return "redirect:/resourcelists";
