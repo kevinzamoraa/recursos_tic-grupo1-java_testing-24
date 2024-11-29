@@ -1,4 +1,4 @@
-package com.grupo1.recursos_tic.selenium.resource;
+package com.grupo1.recursos_tic.acceptance.template.resource;
 
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import org.junit.jupiter.api.*;
@@ -12,12 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class list {
+public class ResourceListAcceptanceTest {
 
     @Autowired
     private ResourceListsService resourceListsService;
 
-    WebDriver driver;
+    private WebDriver driver;
+    private ResourceListAcceptancePage page;
 
     @BeforeEach
     void setUp() {

@@ -39,7 +39,7 @@ public class ResourceControllerIntegrationTest {
     void findAll() throws Exception {
         mockMvc.perform(get("/resources"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("resourcelists/list"));
+                .andExpect(view().name("resource/list"));
     }
 
 }

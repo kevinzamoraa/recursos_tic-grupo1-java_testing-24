@@ -432,6 +432,14 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
+    @DisplayName("save cuando el recurso Sí existe y la lista NO existe")
+    void save_WhenResourceListDoesNotExist() {
+
+        // TODO
+        //assertEquals("redirect:/resources/1", view);
+    }
+
+    @Test
     @DisplayName("save cuando el recurso NO existe")
     void save_WhenResourceDoesNotExist() {
         long resourceId = 1L;
@@ -478,14 +486,6 @@ public class ResourceControllerUnitTest {
         verify(resourceListsService, never()).save(any());
         verify(resourceService, never()).findById(resourceId);
         assertEquals("redirect:/resources/1", view);
-    }
-
-    @Test
-    @DisplayName("save cuando el recurso Sí existe y la lista NO existe")
-    void save_WhenResourceListDoesNotExist() {
-
-        // TODO
-        //assertEquals("redirect:/resources/1", view);
     }
 
     @Test
