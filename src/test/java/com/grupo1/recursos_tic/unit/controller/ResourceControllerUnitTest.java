@@ -464,14 +464,20 @@ public class ResourceControllerUnitTest {
                 .type(ResourceType.DOCUMENT)
                 .build();
 
-        when(resourceService.findById(resourceId)).thenReturn(Optional.of(resource));
+//        when(resourceService.findById(resourceId)).thenReturn(Optional.empty());
 
+        // simular thenAnswer
+        doAnswer(invocation -> {
+            Resource resourceArg = invocation.getArgument(0);
+            resourceArg.setId(resourceId);
+            return resourceArg;
+        }).when(resourceService).save(resource);
         String view = resourceController.save(resource, null); // TODO No debe pasar ListId
 
+        verify(resourceService).save(resource);
         verify(resourceListsService, never()).findById(resourceId);
         verify(resourceListsService, never()).save(any());
         verify(resourceService, never()).findById(resourceId);
-        verify(resourceService).save(resource);
         assertEquals("redirect:/resources/1", view);
     }
 
@@ -550,13 +556,14 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("deleteById cuando se produce una excepción en el servicio")
     void deleteById_ServiceThrowsException() {
-        long ResourceId = 0L;
+        long ResourceId = 1L;
 
+        when(resourceService.existsById(ResourceId)).thenReturn(true);
         doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService)
                 .removeResourceWithDependencies(ResourceId);
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-                () -> resourceService.removeResourceWithDependencies(ResourceId));
+                () -> resourceController.deleteById(ResourceId));
 
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
