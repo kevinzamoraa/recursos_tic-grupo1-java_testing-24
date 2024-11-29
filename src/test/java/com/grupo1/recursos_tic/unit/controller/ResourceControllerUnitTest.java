@@ -322,7 +322,7 @@ public class ResourceControllerUnitTest {
 
         // TODO Se comprueba Id ilegal, pero en el método sale como no testeado
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> resourceController.findById(model, invalidId));
+                () -> resourceController.getFormToUpdate(model, invalidId));
 
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
@@ -464,15 +464,14 @@ public class ResourceControllerUnitTest {
                 .type(ResourceType.DOCUMENT)
                 .build();
 
-//        when(resourceService.findById(resourceId)).thenReturn(Optional.empty());
-
         // simular thenAnswer
         doAnswer(invocation -> {
             Resource resourceArg = invocation.getArgument(0);
             resourceArg.setId(resourceId);
             return resourceArg;
         }).when(resourceService).save(resource);
-        String view = resourceController.save(resource, null); // TODO No debe pasar ListId
+
+        String view = resourceController.save(resource, null);
 
         verify(resourceService).save(resource);
         verify(resourceListsService, never()).findById(resourceId);
@@ -484,8 +483,8 @@ public class ResourceControllerUnitTest {
     @Test
     @DisplayName("save cuando el recurso Sí existe y la lista NO existe")
     void save_WhenResourceListDoesNotExist() {
-        //
 
+        // TODO
         //assertEquals("redirect:/resources/1", view);
     }
 
@@ -559,6 +558,7 @@ public class ResourceControllerUnitTest {
         long ResourceId = 1L;
 
         when(resourceService.existsById(ResourceId)).thenReturn(true);
+
         doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService)
                 .removeResourceWithDependencies(ResourceId);
 
@@ -567,8 +567,6 @@ public class ResourceControllerUnitTest {
 
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
-
-    // TODO ResponseStatusException en deleteAll(Model) Pero ya está
 
     /*
      * Method: deleteAll(Model)
