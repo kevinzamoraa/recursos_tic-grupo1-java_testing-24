@@ -41,12 +41,12 @@
                 </thead>
                 <tbody>
                 <tr th:each="resourcelist : ${resourcelists}">
-                    <td class="list-col-size align-middle"><i class="fa-solid fa-list-ul ms-1"></i></td>
-                    <td class="align-middle">
+                    <td class="list-col-size"><i class="fa-solid fa-list-ul ms-1"></i></td>
+                    <td>
                         <span th:text="${resourcelist.name}" class="fw-bold"></span>
                     </td>
-                    <td th:text="${resourcelist.description}" class="align-middle"></td>
-                    <td class="action-col-size align-middle">
+                    <td th:utext="${resourcelist.description}"></td>
+                    <td class="action-col-size">
                         <div class="float-end">
                             <a th:href="'/resourcelists/' + ${resourcelist.id}"
                                class="btn btn-sm btn-info btn-mini-size me-1">

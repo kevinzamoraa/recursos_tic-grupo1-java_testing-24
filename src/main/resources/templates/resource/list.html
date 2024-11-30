@@ -36,16 +36,16 @@
                 </thead>
                 <tbody>
                 <tr th:each="resource : ${resources}">
-                    <td class="align-middle avatar-col-size">
+                    <td class="avatar-col-size">
                         <img th:src="${resource.getImageUrl() != '' ? resource.getImageUrl() : '/img/noImage.jpg'}"
                              class="avatar ms-1" th:alt="${resource.getTitle()}">
                     </td>
-                    <td class="align-middle">
+                    <td>
                         <a th:href="${resource.url}" target="_blank" th:text="${resource.title}"></a>
                     </td>
-                    <td th:text="${resource.type}" class="align-middle"></td>
-                    <td th:text="${resource.description}" class="align-middle"></td>
-                    <td class="action-col-size align-middle">
+                    <td th:text="${resource.type}"></td>
+                    <td th:utext="${resource.description}"></td>
+                    <td class="action-col-size">
                         <div class="float-end">
                             <a th:href="'/resources/' + ${resource.id}"
                                class="btn btn-sm btn-info btn-mini-size me-1"><i class="fa-solid fa-eye"></i></a>

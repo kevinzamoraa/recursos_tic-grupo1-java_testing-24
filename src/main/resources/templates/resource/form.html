@@ -3,6 +3,19 @@
 <head>
     <title>Formulario del recurso</title>
     <th:replace th:replace="~{fragment/meta :: meta}" />
+
+    <script src="/js/tinymce/tinymce.min.js"></script>
+    <script src="/js/tinymce/langs/es.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#description',
+            language: 'es',
+            plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+            toolbar_mode: 'floating',
+            height: 200
+        });
+    </script>
+
 </head>
 <body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}" />
@@ -42,7 +55,7 @@
                             <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" />
                         </div>
 
-                        <div>
+                        <div class="mb-3">
                             <label for="description" class="form-label">Descripción</label>
                             <textarea rows="5" class="form-control" id="description" th:field="*{description}"
                                       placeholder="Incluye una descripción" ></textarea>

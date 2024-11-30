@@ -3,6 +3,19 @@
 <head>
     <title>Formulario de la valoración</title>
     <th:replace th:replace="~{fragment/meta :: meta}"/>
+
+    <script src="/js/tinymce/tinymce.min.js"></script>
+    <script src="/js/tinymce/langs/es.js"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#comment',
+            language: 'es',
+            plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+            toolbar_mode: 'floating',
+            height: 200
+        });
+    </script>
+
 </head>
 <body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/navbar :: navbar}"/>
@@ -30,14 +43,15 @@
                         <input type="text" class="form-control" id="title" th:field="*{title}" required />
                     </div>
 
-                    <div>
+                    <div class="mb-3">
                         <label for="comment" class="form-label">Comentario</label>
-                        <input type="text" class="form-control" id="comment" th:field="*{comment}"/>
+                        <textarea rows="5" class="form-control" id="comment" th:field="*{comment}"
+                                  placeholder="Incluye un comentario" ></textarea>
                     </div>
 
                     <div>
                         <label for="score" class="form-label">Puntuación</label>
-                        <input type="number" class="form-control" id="score" th:field="*{score}" min="0" max="5" />
+                        <input type="range" class="form-range" min="0" max="5" step="1" id="score" th:field="*{score}" />
                     </div>
 
                 </fieldset>
