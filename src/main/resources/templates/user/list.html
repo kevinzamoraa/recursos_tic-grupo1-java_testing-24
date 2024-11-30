@@ -53,7 +53,7 @@
                                     th:classappend="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()} ? '' : 'btn-outline-secondary disabled'"
                                     data-bs-toggle="modal" data-bs-target="#confirm"
                                     th:data-bs-url="'/users/delete/' + ${user.id}"
-                                    th:data-bs-text="'¿Deseas eliminar al usuario «' + ${user.username} + '»?'">
+                                    th:data-bs-text="'¿Deseas eliminar al usuario «' + ${user.username} + '»?<br/><br/><strong>ADVERTENCIA</strong>:<br/>Al eliminar el usuario, se eliminarán sus listas y comentarios.'">
                                 <i class="fa-solid fa-trash-can"></i><span class="visually-hidden">Eliminar</span>
                             </button>
                         </div>
