@@ -33,10 +33,10 @@
             <table th:unless="${resourcelists == null || resourcelists.size() == 0}" id="resourceLists" class="table w-100 table-striped border shadow-sm">
                 <thead>
                 <tr>
-                    <th class="list-col-size"></th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th></th>
+                    <th scope="col" class="list-col-size">Imagen</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col" class="visually-hidden">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,17 +48,17 @@
                     <td th:utext="${resourcelist.description}"></td>
                     <td class="action-col-size">
                         <div class="float-end">
-                            <a th:href="'/resourcelists/' + ${resourcelist.id}"
+                            <a th:href="'/resourcelists/' + ${resourcelist.id}" title="Ver la lista"
                                class="btn btn-sm btn-info btn-mini-size me-1">
-                                <i class="fa-solid fa-eye"></i></a>
-                            <a th:href="'/resourcelists/update/' + ${resourcelist.id}"
+                                <i class="fa-solid fa-eye"></i><span class="visually-hidden">Ver</span></a>
+                            <a th:href="'/resourcelists/update/' + ${resourcelist.id}" title="Editar la lista"
                                class="btn btn-sm btn-warning btn-mini-size me-1">
-                                <i class="fa-solid fa-pen-to-square"></i></a>
-                            <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                <i class="fa-solid fa-pen-to-square"></i><span class="visually-hidden">Editar</span></a>
+                            <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1" title="Eliminar la lista"
                                     data-bs-toggle="modal" data-bs-target="#confirm"
                                     th:data-bs-url="'/resourcelists/delete/' + ${resourcelist.id}"
                                     th:data-bs-text="'¿Deseas eliminar la lista «' + ${resourcelist.name} + '»?'">
-                                <i class="fa-solid fa-trash-can"></i>
+                                <i class="fa-solid fa-trash-can"></i><span class="visually-hidden">Eliminar</span>
                             </button>
                         </div>
                     </td>

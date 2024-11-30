@@ -27,13 +27,13 @@
             <table th:if="${resource}" id="resourceDetail" class="table border shadow-sm">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>Recurso</th>
-                    <th>Tipo</th>
-                    <th>Autor</th>
-                    <th>Descripción</th>
-                    <th th:if="${#sets.size(resource.tags) > 0}">Etiquetas</th>
-                    <th sec:authorize="isAuthenticated()"></th>
+                    <th scope="col" class="visually-hidden avatar-col-size">Imagen</th>
+                    <th scope="col">Recurso</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col" th:if="${#sets.size(resource.tags) > 0}">Etiquetas</th>
+                    <th scope="col" sec:authorize="isAuthenticated()" class="visually-hidden">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,15 +55,15 @@
                     </td>
                     <td sec:authorize="isAuthenticated()" class="action-col-size">
                         <div class="float-end">
-                            <a th:href="'/resources/update/' + ${resource.id}"
+                            <a th:href="'/resources/update/' + ${resource.id}" title="Editar el recurso"
                                class="btn btn-sm btn-warning btn-mini-size me-1">
-                                <i class="fa-solid fa-pen-to-square"></i></a>
+                                <i class="fa-solid fa-pen-to-square"></i><span class="visually-hidden">Editar</span></a>
                             <button th:if="${#authentication.principal.role.isAdmin()}"
-                                    type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                    type="button" class="btn btn-sm btn-danger btn-mini-size me-1" title="Eliminar el recurso"
                                     data-bs-toggle="modal" data-bs-target="#confirm"
                                     th:data-bs-url="'/resources/delete/' + ${resource.id}"
                                     th:data-bs-text="'¿Deseas eliminar el recurso «' + ${resource.title} + '»?'">
-                                <i class="fa-solid fa-trash-can"></i>
+                                <i class="fa-solid fa-trash-can"></i><span class="visually-hidden">Eliminar</span>
                             </button>
                         </div>
                     </td>
@@ -99,13 +99,13 @@
                        class="table table-striped border shadow-sm">
                     <thead>
                     <tr>
-                        <th class="avatar-col-size"></th>
-                        <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Título</th>
-                        <th>Comentario</th>
-                        <th>Puntuación</th>
-                        <th th:if="${#authentication.principal.role.isAdmin()}"></th>
+                        <th scope="col" class="visually-hidden avatar-col-size">Avatar</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Comentario</th>
+                        <th scope="col">Puntuación</th>
+                        <th scope="col" th:if="${#authentication.principal.role.isAdmin()}" class="visually-hidden">Acciones</th>
                     </tr>
                     </thead>
 
@@ -123,14 +123,14 @@
                         </td>
                         <td class="action-col-size">
                             <div class="float-end" th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}">
-                                <a th:href="'/ratings/update/' + ${rating.id}"
+                                <a th:href="'/ratings/update/' + ${rating.id}" title="Editar la valoración"
                                    class="btn btn-sm btn-warning btn-mini-size me-1">
-                                    <i class="fa-solid fa-pen-to-square"></i></a>
-                                <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                    <i class="fa-solid fa-pen-to-square"></i><span class="visually-hidden">Editar</span></a>
+                                <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1" title="Eliminar la valoración"
                                         data-bs-toggle="modal" data-bs-target="#confirm"
                                         th:data-bs-url="'/ratings/delete/' + ${rating.id}"
                                         th:data-bs-text="'¿Deseas eliminar la valoración «' + ${rating.title} + '»?'">
-                                    <i class="fa-solid fa-trash-can"></i>
+                                    <i class="fa-solid fa-trash-can"></i><span class="visually-hidden">Eliminar</span>
                                 </button>
                             </div>
                         </td>
