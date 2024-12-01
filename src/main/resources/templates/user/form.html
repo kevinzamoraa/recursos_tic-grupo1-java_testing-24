@@ -9,7 +9,7 @@
 <div class="container mt-4 flex-grow-1">
 
     <header>
-        <h1 th:if="${user.id}">Editar usuario <span th:text="${user.id}"></span></h1>
+        <h1 th:if="${user.id}">Editar usuario <span th:text="${user.username}"></span></h1>
         <h1 th:unless="${user.id}">Crear un nuevo usuario</h1>
         <div th:if="${error}" class="alert alert-danger mt-3" role="alert">
             <span th:text="${error}"></span>
@@ -21,27 +21,22 @@
             <fieldset>
                 <legend>Datos del usuario</legend>
                 <input type="hidden" id="id" th:field="*{id}"/>
-
                 <div>
                     <label for="name" class="form-label required">Nombre y apellidos</label>
                     <input type="text" class="form-control" id="name" th:field="*{name}" required />
                 </div>
-
                 <div>
                     <label for="imageUrl" class="form-label">Enlace a foto</label>
                     <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}" />
                 </div>
-
                 <div>
                     <label for="email" class="form-label required">Correo Electrónico</label>
                     <input type="email" class="form-control" id="email" th:field="*{email}" required />
                 </div>
-
                 <div>
                     <label for="username" class="form-label required">Usuario de la aplicación</label>
                     <input type="text" class="form-control" id="username" th:field="*{username}" required />
                 </div>
-
                 <div>
                     <label th:if="${user.id}" for="password" class="form-label">Cambiar contraseña (no obligatorio)</label>
                     <label th:unless="${user.id}" for="password" class="form-label">Contraseña</label>

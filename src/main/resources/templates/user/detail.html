@@ -5,6 +5,7 @@
     <th:replace th:replace="~{fragment/meta :: meta}"/>
 </head>
 <body class="d-flex flex-column vh-100">
+<th:block th:replace="~{fragment/modal :: modal}" />
 <th:block th:replace="~{fragment/navbar :: navbar}"/>
 <div class="container mt-4 flex-grow-1">
 
@@ -14,14 +15,15 @@
     </header>
 
     <nav id="actions" th:if="${#authentication.principal.role.isAdmin()}">
-        <button class="btn btn-primary btn-sm" onclick="location.href='/users'">
+        <button class="btn btn-primary shadow-sm btn-sm" onclick="location.href='/users'">
             <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver la lista de usuarios
         </button>
     </nav>
 
     <main>
         <p th:if="${user == null}">El usuario no existe</p>
-        <table th:if="${user}" id="userDetail" class="table border shadow">
+        <div class="table-responsive">
+        <table th:if="${user}" id="userDetail" class="table border shadow-sm">
             <thead>
                 <tr>
                     <th class="avatar-col-size"></th>
@@ -45,16 +47,22 @@
                     <td th:text="${user.role}" class="align-middle"></td>
                     <td class="action-col-size align-middle">
                         <div class="float-end">
-                            <a th:href="'/users/update/' + ${user.id}" class="btn btn-sm btn-warning">
+                            <a th:href="'/users/update/' + ${user.id}"
+                               class="btn btn-sm btn-warning btn-mini-size me-1">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
-                            <a th:href="'/users/delete/' + ${user.id}" class="btn btn-sm btn-danger ms-1"
-                               th:if="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()}">
-                                <i class="fa-solid fa-trash-can"></i></a>
+                            <button th:if="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()}"
+                                    type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                    data-bs-toggle="modal" data-bs-target="#confirm"
+                                    th:data-bs-url="'/users/delete/' + ${user.id}"
+                                    th:data-bs-text="'¿Deseas eliminar al usuario «' + ${user.username} + '»?'">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
+        </div>
 
     </main>
 

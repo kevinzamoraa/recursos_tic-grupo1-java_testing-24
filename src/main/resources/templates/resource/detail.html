@@ -6,6 +6,7 @@
 </head>
 <body class="d-flex flex-column vh-100">
     <th:block th:replace="~{fragment/spinner :: spinner}" />
+    <th:block th:replace="~{fragment/modal :: modal}" />
     <th:block th:replace="~{fragment/navbar :: navbar}" />
     <div class="container mt-4 flex-grow-1">
 
@@ -15,14 +16,15 @@
         </header>
 
         <nav id="actions">
-            <button class="btn btn-primary btn-sm" onclick="location.href='/resources'">
+            <button class="btn btn-primary btn-sm shadow-sm" onclick="location.href='/resources'">
                 <i class="fa-solid fa-list-ul"></i>&nbsp;&nbsp;Ver la lista de recursos
             </button>
         </nav>
 
         <main>
             <p th:if="${resource == null}">El recurso no existe</p>
-            <table th:if="${resource}" id="resourceDetail" class="table border shadow">
+            <div class="table-responsive">
+            <table th:if="${resource}" id="resourceDetail" class="table border shadow-sm">
                 <thead>
                 <tr>
                     <th></th>
@@ -53,20 +55,25 @@
                     </td>
                     <td sec:authorize="isAuthenticated()" class="action-col-size align-middle">
                         <div class="float-end">
-                            <a th:href="'/resources/update/' + ${resource.id}" class="btn btn-sm btn-warning me-1">
+                            <a th:href="'/resources/update/' + ${resource.id}"
+                               class="btn btn-sm btn-warning btn-mini-size me-1">
                                 <i class="fa-solid fa-pen-to-square"></i></a>
-                            <a th:href="'/resources/delete/' + ${resource.id}"
-                               th:if="${#authentication.principal.role.isAdmin()}"
-                               class="btn btn-sm btn-danger">
-                                <i class="fa-solid fa-trash-can"></i></a>
+                            <button th:if="${#authentication.principal.role.isAdmin()}"
+                                    type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                    data-bs-toggle="modal" data-bs-target="#confirm"
+                                    th:data-bs-url="'/resources/delete/' + ${resource.id}"
+                                    th:data-bs-text="'¿Deseas eliminar el recurso «' + ${resource.title} + '»?'">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            </div>
 
             <section sec:authorize="isAuthenticated()"
-                     th:if="${lists != null && lists.size() > 0L}" class="mt-4">
+                     th:if="${lists != null && lists.size() > 0L}" class="mt-1">
                 <h2>Listas del recurso</h2>
                 <ul class="list-inline">
                     <li th:each="list : ${lists}" class="list-inline-item">
@@ -79,15 +86,17 @@
             <section sec:authorize="isAuthenticated()">
                 <h2 th:if="${resource}">Valoraciones</h2>
 
-                <nav class="my-3">
-                    <button class="btn btn-primary btn-sm"
+                <nav>
+                    <button class="btn btn-primary btn-sm shadow-sm"
                             th:onclick="|location.href='/ratings/create/' + ${resource.id}|">
                         <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Añadir una valoración a esta lista
                     </button>
                 </nav>
 
                 <p th:if="${resource != null && ratings.size() == 0L}">No hay valoraciones</p>
-                <table th:if="${ratings.size() > 0L}" id="ratingsList" class="table table-striped border shadow">
+                <div class="table-responsive">
+                <table th:if="${ratings.size() > 0L}" id="ratingsList"
+                       class="table table-striped border shadow-sm">
                     <thead>
                     <tr>
                         <th class="avatar-col-size"></th>
@@ -113,21 +122,26 @@
                         <td th:text="${'⭐' * rating.score.intValue()}" class="align-middle">
                         </td>
                         <td class="action-col-size align-middle">
-                            <div class="float-end">
+                            <div class="float-end" th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}">
                                 <a th:href="'/ratings/update/' + ${rating.id}"
-                                   th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}"
-                                   class="btn btn-sm btn-warning">
+                                   class="btn btn-sm btn-warning btn-mini-size me-1">
                                     <i class="fa-solid fa-pen-to-square"></i></a>
-                                <a th:href="'/ratings/delete/' + ${rating.id}"
-                                   th:if="${rating.user.id == #authentication.principal.id or #authentication.principal.role.isAdmin()}"
-                                   class="btn btn-sm btn-danger ms-1">
-                                    <i class="fa-solid fa-trash-can"></i></a>
+                                <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                        data-bs-toggle="modal" data-bs-target="#confirm"
+                                        th:data-bs-url="'/ratings/delete/' + ${rating.id}"
+                                        th:data-bs-text="'¿Deseas eliminar la valoración «' + ${rating.title} + '»?'">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
                     </tbody>
 
                 </table>
+                </div>
+
+                <p th:if="${ratings != null && ratings.size() > 0}"
+                   th:text="'Total de valoraciones: ' + ${ratings.size()}"></p>
             </section>
         </main>
 

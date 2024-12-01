@@ -9,7 +9,7 @@
     <div class="container mt-4 flex-grow-1">
 
         <header>
-            <h1 th:if="${resource.id}">Editar recurso <span th:text="${resource.id}"></span></h1>
+            <h1 th:if="${resource.id}">Editar <span th:text="${resource.title}"></span></h1>
             <h1 th:unless="${resource.id}">Crear un nuevo recurso</h1>
         </header>
 

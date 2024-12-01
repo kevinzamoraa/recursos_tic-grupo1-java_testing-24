@@ -5,6 +5,7 @@ import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceService;
 import com.grupo1.recursos_tic.service.UserService;
 
+import com.grupo1.recursos_tic.util.ErrMsg;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
@@ -27,11 +28,6 @@ public class RatingController {
     private RatingService ratingService;
     private ResourceService resourceService;
     private UserService userService;
-
-    private final String idMsg = "Falta el id o no es un entero positivo";
-    private final String notIdMsg = "La valoración no existe";
-    private final String dataMsg = "Los datos recibidos no son válidos";
-    private final String delMsg = "Error al borrar todos los recursos";
 
     // http://localhost:8082/ratings
     @GetMapping("ratings")
@@ -74,11 +70,11 @@ public class RatingController {
     public String getFormToCreateNewRatingWithResourceId(
             @PathVariable Long resourceId, Model model) {
         if (invalidIntPosNumber(resourceId) || resourceId == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
         if (!resourceService.existsById(resourceId)
                 || !userService.existsById(userAuth().get().getId()))
-            throw new NoSuchElementException(notIdMsg);
+            throw new NoSuchElementException(ErrMsg.NOT_FOUND);
 
         Rating rating = new Rating();
         rating.setResource(resourceService.findById(resourceId).get());
@@ -91,10 +87,10 @@ public class RatingController {
     @GetMapping("ratings/update/{id}")
     public String getFormToEditRating(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NoSuchElementException(idMsg);
+            throw new NoSuchElementException(ErrMsg.INVALID_ID);
 
         if (!ratingService.existsById(id))
-            throw new NoSuchElementException(notIdMsg);
+            throw new NoSuchElementException(ErrMsg.NOT_FOUND);
 
         Rating rating = ratingService.findById(id).get();
         model.addAttribute("rating", rating);
@@ -104,7 +100,7 @@ public class RatingController {
 
     @PostMapping("ratings")
     public String saveRating(@ModelAttribute Rating rating) {
-        if (rating == null) throw new NoSuchElementException(dataMsg);
+        if (rating == null) throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
         // String error = formValidation(rating);
         // if (error != null) throw new NoSuchElementException(error);
 
@@ -118,7 +114,7 @@ public class RatingController {
                     ratingService.save(ratingDB);
                 });
             }
-        //} else throw new NoSuchElementException(dataMsg);
+        //} else throw new NoSuchElementException(ErrMsg.INVALID_INPUT);
 
         return "redirect:/resources/" + rating.getResource().getId();
     }

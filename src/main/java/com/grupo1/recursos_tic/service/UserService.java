@@ -20,7 +20,7 @@ import static com.grupo1.recursos_tic.util.Utility.stringIsEmpty;
 public class UserService {
 
     @Autowired
-    private UserRepo userRepository;
+    private static UserRepo userRepository;
 
     @Autowired
     private ResourceListsRepo resourceListRepository;
@@ -67,6 +67,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public long count() {
+        return userRepository.count();
+    }
+
     public void save(User user) {
         userRepository.save(user);
     }
@@ -89,7 +93,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void deleteUserWithRatings(Long userId) {
+    public void deleteUserWithDependencies(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             try {

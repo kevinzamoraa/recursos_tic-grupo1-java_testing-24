@@ -33,7 +33,13 @@ public enum ResourceType {
     REPOSITORY("Repositorio"),
     OTHER("Otro");
 
+    public static final ResourceType INVALID = null; // Para test
     private final String resourceType;
+
+    public boolean isValidType(int ordinal) {
+        ResourceType[] values = ResourceType.values();
+        return ordinal >= 0 && ordinal < values.length;
+    }
 
     @Override
     public String toString() { return resourceType; }

@@ -3,6 +3,7 @@ package com.grupo1.recursos_tic.integration.controller;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.MediaType;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,8 @@ public class ResourceControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+
     void findAll() throws Exception {
         mockMvc.perform(get("/resources"))
                 .andExpect(status().isOk())

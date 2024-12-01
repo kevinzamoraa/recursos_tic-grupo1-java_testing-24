@@ -7,6 +7,7 @@ import com.grupo1.recursos_tic.service.UserService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -40,8 +42,10 @@ public class UserController {
     @GetMapping("users/{id}")
     public String findById(@PathVariable Long id, Model model) {
         Optional<User> userOptional = userService.findById(id);
-        userOptional.ifPresent(user -> model.addAttribute("user", user));
-        // TODO Gestionar el caso en el que no se encuentra el user o usar el método 2
+
+        model.addAttribute("user", userOptional.orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+        ));
         return "user/detail";
     }
 
@@ -146,7 +150,7 @@ public class UserController {
     @GetMapping("users/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
         try {
-            userService.deleteUserWithRatings(id);
+            userService.deleteUserWithDependencies(id);
             return "redirect:/users";
         } catch (Exception e) {
             e.printStackTrace();

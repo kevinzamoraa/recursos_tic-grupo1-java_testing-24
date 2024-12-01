@@ -28,7 +28,16 @@ h1, h2, legend, label, th {
     width: 36px;
 }
 .action-col-size {
-    width: 128px;
+    width: 140px;
+}
+
+.btn {
+    margin-top: 0.32em;
+    margin-bottom: 0.32em;
+}
+
+.btn-mini-size {
+    width: 32px;
 }
 
 .btn-primary, .btn-primary:hover, .btn-primary:focus,

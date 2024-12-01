@@ -5,9 +5,11 @@ import lombok.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -40,9 +42,11 @@ public class User implements UserDetails {
 //    private List<Rating> ratings = new ArrayList<>();
 
 
+    // TODO adaptar este me´todo para que devuelva los roles del usuario reales
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("READ");
+      return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+
     }
 
     @Override
