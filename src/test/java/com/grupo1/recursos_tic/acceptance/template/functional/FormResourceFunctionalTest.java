@@ -1,13 +1,11 @@
-package com.grupo1.recursos_tic.acceptance.template.resource;
+package com.grupo1.recursos_tic.acceptance.template.functional;
 
 import org.openqa.selenium.WebDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class DetailResourceAcceptanceTest {
+public class FormResourceFunctionalTest {
 
     private WebDriver driver;
-    private DetailResourceAcceptancePage page;
-
-
+    private FormResourceFunctionalPage page;
 }

@@ -1,4 +1,4 @@
-package com.grupo1.recursos_tic.acceptance.template.resource;
+package com.grupo1.recursos_tic.acceptance.template.functional;
 
 import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.model.UserRole;
@@ -11,14 +11,14 @@ import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class ListResourceAcceptancePage {
+public class ListResourceFunctionalPage {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final WebDriver driver;
 
     @Autowired
-    public ListResourceAcceptancePage(
+    public ListResourceFunctionalPage(
             WebDriver driver,
             UserService userService,
             PasswordEncoder passwordEncoder

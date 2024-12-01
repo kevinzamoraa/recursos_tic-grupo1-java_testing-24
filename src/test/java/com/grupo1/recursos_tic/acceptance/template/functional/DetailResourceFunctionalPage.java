@@ -1,10 +1,10 @@
-package com.grupo1.recursos_tic.acceptance.template.resource;
+package com.grupo1.recursos_tic.acceptance.template.functional;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class DetailResourceAcceptancePage {
+public class DetailResourceFunctionalPage {
 
     private WebDriver driver;
 
