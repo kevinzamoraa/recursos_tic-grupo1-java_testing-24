@@ -1,4 +1,4 @@
-package com.grupo1.recursos_tic.acceptance.template.functional;
+package com.grupo1.recursos_tic.functional.template;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -1,4 +1,4 @@
-package com.grupo1.recursos_tic.acceptance.template.functional;
+package com.grupo1.recursos_tic.functional.template;
 
 import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.model.UserRole;
