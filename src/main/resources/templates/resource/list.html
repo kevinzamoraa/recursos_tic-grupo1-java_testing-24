@@ -15,7 +15,8 @@
         </header>
 
         <nav id="actions" sec:authorize="isAuthenticated()">
-            <button class="btn btn-primary btn-sm shadow-sm" onclick="location.href='/resources/create'">
+            <button id="btnCreateResource" class="btn btn-primary btn-sm shadow-sm"
+                    onclick="location.href='/resources/create'">
                 <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un recurso nuevo
             </button>
         </nav>
