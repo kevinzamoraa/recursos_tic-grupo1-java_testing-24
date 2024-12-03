@@ -6,6 +6,9 @@ import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
 import com.grupo1.recursos_tic.service.UserDetailsServiceImpl;
 import com.grupo1.recursos_tic.util.ErrMsg;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +42,10 @@ public class ResourceControllerIntegrationTest {
     private ResourceListsService resourceListsService;
     @Autowired
     private RatingService ratingService;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -85,14 +92,15 @@ public class ResourceControllerIntegrationTest {
 
     @Test
     @DisplayName("Buscar recurso con ID válido y usuario autenticado")
+
 //    TODO autenticación
 //    @WithMockUser(username = "admin", authorities = "ADMIN")
-
     @WithUserDetails(value = "admin", userDetailsServiceBeanName = "UserDetailsServiceImpl")
 
     void findById_WithAuthenticated() throws Exception {
+
 //        UserDetailsServiceImpl user = new UserDetailsServiceImpl("admin", "Admin1234",
-//                AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
+//                AuthorityUtils.createAuthorityList("ADMIN"));
 //
 //        SecurityContextHolder.setContext(new SecurityContextImpl(
 //                new AuthenticationToken(user),
@@ -113,7 +121,7 @@ public class ResourceControllerIntegrationTest {
                         hasProperty("title", is("Recurso1"))
                 ))
                 .andExpect(model().attributeExists("ratings"))
-                .andExpect(model().attributeExists("lists"));
+                .andExpect(model().attributeExists("lists")); // Sólo con autenticación
 
         // TODO revisar .andExpect que faltan
     }
