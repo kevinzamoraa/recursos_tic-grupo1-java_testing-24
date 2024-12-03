@@ -47,8 +47,7 @@ jobs:
       - name: Site
         run: mvn site
 
-      # TODO kevin, crear proyecto en SonarCloud y obtener token y añadirlo en GitHub repository secrets
-      #      - name: Análisis con SonarCloud
-      #        env:
-      #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #        run: mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=kevinzamoraa_recursos_tic-grupo1-java_testing-24 -Dsonar.organization=kevinzamoraa -Dsonar.host.url=https://sonarcloud.io
+      - name: Análisis con SonarCloud
+        env:
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=kevinzamoraa_recursos_tic-grupo1-java_testing-24
