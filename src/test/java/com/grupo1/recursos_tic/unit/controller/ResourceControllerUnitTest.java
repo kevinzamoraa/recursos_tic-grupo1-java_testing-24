@@ -86,7 +86,7 @@ public class ResourceControllerUnitTest {
     @DisplayName("formValidation() cuando el tipo de recurso no es válido")
     void formValidation_WhenInvalidType() {
 
-        Resource resource = Resource.builder().title("Titulo").url("#").type(ResourceType.INVALID).build();
+        Resource resource = Resource.builder().title("Titulo").url("#").type(null).build();
 
         String result = resourceController.formValidation(resource);
 
@@ -94,7 +94,7 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("formValidation() cuando el tipo de recurso es nulo")
+    @DisplayName("formValidation() cuando el tipo de recurso no es válido")
     void formValidation_WhenNullType() {
 
         Resource resource = Resource.builder().title("Titulo").url("#").type(null).build();
@@ -143,8 +143,8 @@ public class ResourceControllerUnitTest {
      */
 
     @Test
-    @DisplayName("findById cuando el recurso SÍ existe")
-    void findById_WhenResourceExists() {
+    @DisplayName("findById cuando el recurso SÍ existe y el usuario SÍ está autenticado")
+    void findById_WhenResourceExists_Authenticated() {
         Long resourceId = 1L;
         Resource resource = Resource.builder().id(resourceId).build();
         Optional<Resource> resourceOpt = Optional.of(resource);
@@ -163,13 +163,41 @@ public class ResourceControllerUnitTest {
 
             String view = resourceController.findById(model, resourceId);
 
-            when(Utility.isAuth()).thenReturn(true);
             assertFalse(invalidIntPosNumber(resourceId) || resourceId == 0);
             verify(resourceService).findById(resourceId);
             verify(ratingService).findAllByResource_Id(resourceId);
             verify(resourceListsService).findByOwnerIdAndResourcesId(1L, resourceId);
             verify(model).addAttribute("resource", resource);
             verify(model).addAttribute("ratings", ratings);
+            verify(model).addAttribute("lists", resourceLists);
+            assertEquals("resource/detail", view);
+        }
+    }
+
+    @Test
+    @DisplayName("findById cuando el recurso SÍ existe y el usuario NO está autenticado")
+    void findById_WhenResourceExists_NotAuthenticated() {
+        Long resourceId = 1L;
+        Resource resource = Resource.builder().id(resourceId).build();
+        Optional<Resource> resourceOpt = Optional.of(resource);
+        List<Rating> ratings = List.of();
+
+        when(resourceService.findById(resourceId)).thenReturn(resourceOpt);
+        when(ratingService.findAllByResource_Id(resourceId)).thenReturn(ratings);
+
+        try (MockedStatic<Utility> mockedStatic = mockStatic(Utility.class)) {
+            mockedStatic.when(Utility::isAuth).thenReturn(false);
+            mockedStatic.when(Utility::userAuth).thenReturn(Optional.empty());
+
+            String view = resourceController.findById(model, resourceId);
+
+            assertFalse(invalidIntPosNumber(resourceId) || resourceId == 0);
+            verify(resourceService).findById(resourceId);
+            verify(ratingService).findAllByResource_Id(resourceId);
+            verify(resourceListsService, never()).findByOwnerIdAndResourcesId(anyLong(), anyLong());
+            verify(model).addAttribute("resource", resource);
+            verify(model).addAttribute("ratings", ratings);
+            verify(model, never()).addAttribute(eq("lists"), any());
             assertEquals("resource/detail", view);
         }
     }
@@ -192,9 +220,25 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("findById cuando el ID del recurso no es válido")
-    void findById_WithInvalidId() {
+    @DisplayName("findById cuando el ID del recurso no es válido por ser 0")
+    void findById_WithInvalidId_zero() {
         Long invalidId = 0L;  // o -1L
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.findById(model, invalidId));
+
+        assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
+        verify(resourceService, never()).findById(anyLong());
+        verify(ratingService, never()).findAllByResource_Id(anyLong());
+        verify(resourceListsService, never()).findByOwnerIdAndResourcesId(anyLong(), anyLong());
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("findById cuando el ID del recurso no es válido por ser negativo")
+    void findById_WithInvalidId_negative() {
+        Long invalidId = -1L;  // o -1L
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.findById(model, invalidId));
@@ -276,9 +320,23 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToCreateNew cuando el ID de la lista no es válido")
-    void getFormToCreateNew_WithInvalidListId() {
+    @DisplayName("getFormToCreateNew cuando el ID de la lista no es válido por ser 0")
+    void getFormToCreateNew_WithInvalidListId_zero() {
         Long invalidListId = 0L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.getFormToCreateNew(model, invalidListId));
+
+        assertTrue(invalidIntPosNumber(invalidListId) || invalidListId == 0);
+        verify(resourceListsService, never()).existsById(anyLong());
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getFormToCreateNew cuando el ID de la lista no es válido por ser negativo")
+    void getFormToCreateNew_WithInvalidListId_negativo() {
+        Long invalidListId = -1L;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.getFormToCreateNew(model, invalidListId));
@@ -325,9 +383,23 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdate cuando el ID del recurso no es válido")
-    void getFormToUpdate_WithInvalidResourceId() {
+    @DisplayName("getFormToUpdate cuando el ID del recurso no es válido por ser 0")
+    void getFormToUpdate_WithInvalidResourceId_zero() {
         Long invalidId = 0L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.getFormToUpdate(model, invalidId));
+
+        assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
+        verify(resourceService, never()).findById(anyLong());
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
+    }
+
+    @Test
+    @DisplayName("getFormToUpdate cuando el ID del recurso no es válido por ser negativo")
+    void getFormToUpdate_WithInvalidResourceId_negative() {
+        Long invalidId = -1L;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.getFormToUpdate(model, invalidId));
@@ -402,20 +474,73 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del recurso o" +
-            "el ID de la lista no son válidos")
-    void getFormToUpdateAndList_WithInvalidResourceORListId() {
+    @DisplayName("getFormToUpdateAndList cuando el ID del recurso no es válido por ser 0")
+    void getFormToUpdateAndList_WithInvalidResourceId_zero() {
         long invalidResourceId = 0L;
+        Long listId = 1L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.getFormToUpdateAndList(
+                        model, invalidResourceId, listId));
+
+        assertTrue(invalidResourceId == 0);
+        assertFalse(listId == 0);
+        verify(resourceListsService, never()).existsById(listId);
+        verify(resourceService, never()).findById(invalidResourceId);
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser 0")
+    void getFormToUpdateAndList_WithInvalidListId_zero() {
+        long resourceId = 1L;
         Long invalidListId = 0L;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.getFormToUpdateAndList(
-                        model, invalidResourceId, invalidListId));
+                        model, resourceId, invalidListId));
 
-        assertTrue(invalidIntPosNumber(invalidResourceId) || invalidResourceId == 0);
-        assertTrue(invalidIntPosNumber(invalidListId) || invalidListId == 0);
+        assertFalse(resourceId == 0);
+        assertTrue(invalidListId == 0);
         verify(resourceListsService, never()).existsById(invalidListId);
+        verify(resourceService, never()).findById(resourceId);
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getFormToUpdateAndList cuando el ID del recurso no es válido por ser negativo")
+    void getFormToUpdateAndList_WithInvalidResourceId_negative() {
+        long invalidResourceId = -1L;
+        Long listId = 1L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.getFormToUpdateAndList(
+                        model, invalidResourceId, listId));
+
+        assertTrue(invalidIntPosNumber(invalidResourceId));
+        assertFalse(invalidIntPosNumber(listId));
+        verify(resourceListsService, never()).existsById(listId);
         verify(resourceService, never()).findById(invalidResourceId);
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser negativo")
+    void getFormToUpdateAndList_WithInvalidResourceORListId_negative() {
+        long resourceId = 1L;
+        Long invalidListId = -1L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.getFormToUpdateAndList(
+                        model, resourceId, invalidListId));
+
+        assertFalse(invalidIntPosNumber(resourceId));
+        assertTrue(invalidIntPosNumber(invalidListId));
+        verify(resourceListsService, never()).existsById(invalidListId);
+        verify(resourceService, never()).findById(resourceId);
         verify(model, never()).addAttribute(anyString(), any());
         assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
@@ -530,10 +655,31 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido")
-    void save_WithInvalidListId() {
+    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser 0")
+    void save_WithInvalidListId_zero() {
         long resourceId = 1L;
         Long invalidListId = 0L;
+        Resource resource = new Resource();
+        ResourceList invalidResourceList = new ResourceList();
+        ResourceController spyResourceController = Mockito.spy(resourceController);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> spyResourceController.save(resource, invalidListId));
+
+        assertTrue(invalidListId != null && invalidListId <= 0);
+        Mockito.verify(spyResourceController, Mockito.never()).formValidation(resource);
+        verify(resourceListsService, never()).findById(resourceId);
+        verify(resourceListsService, never()).save(invalidResourceList);
+        verify(resourceService, never()).findById(resourceId);
+        verify(resourceService, never()).save(resource);
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser negativo")
+    void save_WithInvalidListId_negative() {
+        long resourceId = 1L;
+        Long invalidListId = -1L;
         Resource resource = new Resource();
         ResourceList invalidResourceList = new ResourceList();
         ResourceController spyResourceController = Mockito.spy(resourceController);
@@ -602,9 +748,23 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("deleteById cuando el ID del recurso no es válido")
-    void deleteById_WithInvalidResourceId() {
+    @DisplayName("deleteById cuando el ID del recurso no es válido por ser 0")
+    void deleteById_WithInvalidResourceId_zero() {
         Long invalidId = 0L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> resourceController.deleteById(invalidId));
+
+        assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
+        verify(resourceService, never()).existsById(anyLong());
+        verify(resourceService, never()).removeResourceWithDependencies(anyLong());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("deleteById cuando el ID del recurso no es válido por ser negativo")
+    void deleteById_WithInvalidResourceId_negative() {
+        Long invalidId = -1L;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> resourceController.deleteById(invalidId));
