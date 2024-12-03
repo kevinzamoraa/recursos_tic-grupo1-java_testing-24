@@ -4,6 +4,8 @@ import com.grupo1.recursos_tic.service.UserService;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,11 @@ public class ListResourceFunctionalTest {
         //resourceService.deleteAll();
 
         // Activar para Chrome, desactivar Firefox
-        //ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--headless"); // para que no se abra el navegador
-        //options.addArguments("--disable-gpu"); // Deshabilita la aceleración de hardware
-        //options.addArguments("--window-size=1920,1080"); // Tamaño de la ventana
+        // Info: En linux no funciona si no es con la versión 113
+        // ChromeOptions options = new ChromeOptions();
+        // options.addArguments("--headless"); // para que no se abra el navegador
+        // options.addArguments("--disable-gpu"); // Deshabilita la aceleración de hardware
+        // options.addArguments("--window-size=1920,1080"); // Tamaño de la ventana
         //options.addArguments("--no-sandbox"); // Bypass OS security model, requerido en entornos sin GUI
         //options.addArguments("--disable-dev-shm-usage"); // Deshabilita el uso de /dev/shm manejo de memoria compartida
         //driver = new ChromeDriver(options);
