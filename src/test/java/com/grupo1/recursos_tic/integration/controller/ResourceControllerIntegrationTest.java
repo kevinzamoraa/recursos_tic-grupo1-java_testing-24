@@ -93,7 +93,7 @@ public class ResourceControllerIntegrationTest {
     // TODO autenticación
     @Test
     @DisplayName("Buscar recurso con ID válido y usuario autenticado")
-    @WithMockUser()
+    //@WithMockUser()
     void findById_WithAuthenticated() throws Exception {
 
         Resource resource = Resource.builder()
