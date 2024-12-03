@@ -4,7 +4,10 @@ import com.grupo1.recursos_tic.model.Resource;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
+import com.grupo1.recursos_tic.service.UserDetailsServiceImpl;
 import com.grupo1.recursos_tic.util.ErrMsg;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -82,14 +85,25 @@ public class ResourceControllerIntegrationTest {
 
     @Test
     @DisplayName("Buscar recurso con ID válido y usuario autenticado")
+//    TODO autenticación
+//    @WithMockUser(username = "admin", authorities = "ADMIN")
+
+    @WithUserDetails(value = "admin", userDetailsServiceBeanName = "UserDetailsServiceImpl")
+
     void findById_WithAuthenticated() throws Exception {
+//        UserDetailsServiceImpl user = new UserDetailsServiceImpl("admin", "Admin1234",
+//                AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
+//
+//        SecurityContextHolder.setContext(new SecurityContextImpl(
+//                new AuthenticationToken(user),
+//                SecurityContextHolder.MODE_INHERITABLETHREADLOCAL
+//        ));
+
         Resource resource = Resource.builder()
                 .title("Recurso1")
                 .tags(new HashSet<>())
                 .build();
         resource = resourceService.save(resource);
-
-        // TODO autenticación
 
         mockMvc.perform(get("/resources/" + resource.getId()))
                 .andExpect(status().isOk())
@@ -98,7 +112,8 @@ public class ResourceControllerIntegrationTest {
                 .andExpect(model().attribute("resource",
                         hasProperty("title", is("Recurso1"))
                 ))
-                .andExpect(model().attributeExists("ratings"));
+                .andExpect(model().attributeExists("ratings"))
+                .andExpect(model().attributeExists("lists"));
 
         // TODO revisar .andExpect que faltan
     }
@@ -125,7 +140,7 @@ public class ResourceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Buscar recurso con ID inválido por ser 0")
+    @DisplayName("Buscar recurso con ID no válido por ser 0")
     void findById_InvalidId_zero() throws Exception {
         mockMvc.perform(get("/resources/0"))
                 .andExpect(status().isBadRequest())
@@ -137,7 +152,7 @@ public class ResourceControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Buscar recurso con ID inválido por ser negativo")
+    @DisplayName("Buscar recurso con ID no válido por ser negativo")
     void findById_InvalidId_negative() throws Exception {
         mockMvc.perform(get("/resources/-1"))
                 .andExpect(status().isBadRequest())

@@ -42,7 +42,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("READ");
+        return AuthorityUtils.createAuthorityList("ADMIN", "AUTHOR", "READER");
     }
 
     @Override
