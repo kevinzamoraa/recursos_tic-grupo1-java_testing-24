@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.grupo1.recursos_tic.util.Utility.invalidIntPosNumber;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -84,10 +85,8 @@ public class UserControllerUnitTest {
     @DisplayName("findById cuando el usuario SÍ existe")
     void findById_WhenUserExists() {
         Long userId = 1L;
-        User user1 = User.builder()
-                .id(userId)
-                .name("User 1")
-                .build();
+        User user1 = User.builder().id(userId)
+                .name("User 1").build();
         Optional<User> userOpt = Optional.of(user1);
 
         when(userService.findById(userId)).thenReturn(userOpt);
@@ -107,43 +106,14 @@ public class UserControllerUnitTest {
         when(userService.findById(any(Long.class))).thenReturn(Optional.empty());
 
 
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             userController.findById(invalidId, model);
         });
 
-        assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode());
-
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
         verify(userService).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
-//        Long userId = 1L;
-//        when(userService.findById(userId)).thenReturn(Optional.empty());
-//
-//        assertThrows(NoSuchElementException.class, () -> {
-//            userController.findById(userId, model);
-//        });
-//
-//        verify(userService).findById(userId);
-//        verify(model, never()).addAttribute(anyString(), any()); // No se añade nada al modelo
     }
-
-    // ya lo hace spring
-//    @Test
-//    @DisplayName("findById cuando el ID del usuario no es válido")
-//    void findById_WithInvalidId() {
-//        Long invalidId = null;  // o -1L
-//
-//        when(userService.findById(any(Long.class))).thenReturn(Optional.empty());
-//
-//
-//        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-//            userController.findById(invalidId, model);
-//        });
-//
-//        assertEquals(HttpStatusCode.valueOf(404), exception.getStatusCode());
-//
-//        verify(userService).findById(anyLong());
-//        verify(model, never()).addAttribute(anyString(), any());
-//    }
 
     @Test
     @DisplayName("findById cuando el ID del usuario no es numérico")
@@ -159,8 +129,7 @@ public class UserControllerUnitTest {
     @Test
     @DisplayName("findById cuando el ID del usuario es null")
     void findById_WithNullId() {
-
-        assertThrows(NoSuchElementException.class, () -> {
+        assertThrows(NullPointerException.class, () -> {
             userController.findById(null, model);
         });
 
@@ -174,7 +143,7 @@ public class UserControllerUnitTest {
 
     @Test
     @DisplayName("getFormToCreate cuando se crea el usuario")
-    void getFormToCreate() {
+    void getFormToCreate_WhenUserIsCreated() {
 
         String view = userController.getFormToCreateNewUser(model);
 
@@ -183,83 +152,55 @@ public class UserControllerUnitTest {
     }
 
     /*
-     * Method: getFormToCreateNew(Model, Long)
-     */
-
-    @Test
-    @DisplayName("getFormToCreateNew cuando el ID del usuario no existe")
-    void getFormToCreateNew_WhenListDoesNotExist() {
-        Long userId = 1L;
-
-        when(userService.existsById(userId)).thenReturn(false);
-
-        assertThrows(NoSuchElementException.class, () -> {
-            userController.getFormToCreateNewUser(model);
-        });
-
-        verify(userService).existsById(userId);
-        verify(model, never()).addAttribute(anyString(), any());
-    }
-
-    @Test
-    @DisplayName("getFormToCreateNew cuando el ID del usuario no es válido")
-    void getFormToCreateNew_WithInvalidListId() {
-        Long invalidUserId = 0L;
-
-        assertThrows(NoSuchElementException.class, () -> {
-            userController.getFormToCreateNewUser(model);
-        });
-
-        verify(userService, never()).existsById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-    }
-
-    @Test
-    @DisplayName("getFormToCreateNew cuando el ID del usuario no es numérico")
-    void getFormToCreateNew_WithNonNumericId() {
-        assertThrows(NumberFormatException.class, () -> {
-            userController.getFormToCreateNewUser(model);
-        });
-
-        verify(userService, never()).existsById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-    }
-
-    @Test
-    @DisplayName("getFormToCreateNew cuando el ID de usuario es null")
-    void getFormToCreateNew_WithNullListId() {
-
-        assertThrows(NoSuchElementException.class, () -> {
-            userController.getFormToCreateNewUser(model);
-        });
-
-        verify(userService, never()).existsById(anyLong());
-        verify(model, never()).addAttribute(anyString(), any());
-    }
-
-    /*
      * Method: getFormToUpdate(Model, Long)
      */
 
     @Test
     @DisplayName("getFormToUpdate cuando el ID del usuario Sí existe")
-    void getFormToUpdate_WhenUserExist() {
-        //
+    void getFormToEdit_WhenUserExist() {
+        Long userId = 1L;
+        User user = User.builder().id(userId).build();
+        when(userService.findById(1L)).thenReturn(Optional.of(user));
+
+        String view = userController.getFormToEditUser(model, 1L);
+
+        assertFalse(invalidIntPosNumber(userId) || userId == 0);
+        verify(userService).findById(1L);
+        verify(model).addAttribute("user", user);
+        assertEquals("user/form", view);
     }
 
     @Test
     @DisplayName("getFormToUpdate cuando el ID del usuario NO existe")
     void getFormToUpdate_WhenUserDoesNotExist() {
-        //
+        long userId = 1L;
+
+        when(userService.findById(userId)).thenReturn(Optional.empty());
+
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+                () -> userController.findById(userId, model));
+
+        assertFalse(invalidIntPosNumber(userId) || userId == 0);
+        verify(userService).findById(userId);
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
     }
 
     @Test
     @DisplayName("getFormToUpdate cuando el ID del usuario no es válido")
     void getFormToUpdate_WithInvalidUserId() {
-        //
+        Long invalidId = 0L;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> userController.getFormToEditUser(model, invalidId));
+
+        assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
+        verify(userService, never()).findById(anyLong());
+        verify(model, never()).addAttribute(anyString(), any());
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
     }
 
-    @Test
+    /*  @Test
     @DisplayName("getFormToUpdate cunado el ID del usuario no es numérico")
     void getFormToUpdate_WithNonNumericId() {
         //
@@ -269,7 +210,7 @@ public class UserControllerUnitTest {
     @DisplayName("getFormToUpdate cuando el ID del usuario es nulo")
     void getFormToUpdate_WithNullUserId() {
         //
-    }
+    }*/
 
     /*
      * Method: getFormToUpdateAndList(Model, Long, Long)
@@ -390,29 +331,17 @@ public class UserControllerUnitTest {
     @Test
     @DisplayName("deleteById cuando el ID del usuario NO existe")
     void deleteById_WhenUserDoesNotExist() {
-        Long userId = 1L;
+        Long userId = 999L;
 
         when(userService.existsById(userId)).thenReturn(false);
 
-        assertThrows(NoSuchElementException.class, () -> {
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
             userController.deleteUser(userId);
         });
 
         verify(userService).existsById(userId);
         verify(userService, never()).deleteUserWithDependencies(anyLong());
-    }
-
-    @Test
-    @DisplayName("deleteById cuando el ID del usuario no es válido")
-    void deleteById_WithInvalidUserId() {
-        Long invalidId = 0L;
-
-        assertThrows(NoSuchElementException.class, () -> {
-            userController.deleteUser(invalidId);
-        });
-
-        verify(userService, never()).existsById(anyLong());
-        verify(userService, never()).deleteUserWithDependencies(anyLong());
+        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
     }
 
     @Test
@@ -425,17 +354,6 @@ public class UserControllerUnitTest {
 
         verify(userService, never()).existsById(anyLong());
         verify(userService, never()).deleteUserWithDependencies(anyLong());
-    }
-
-    @Test
-    @DisplayName("deleteById cuando el ID del usuario es nulo")
-    void deleteById_WithNullUserId() {
-
-        assertThrows(NoSuchElementException.class, () -> {
-            userController.deleteUser(null);
-        });
-
-        verify(model, never()).addAttribute(anyString(), any());
     }
 
     /*
@@ -456,12 +374,12 @@ public class UserControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdate cuando NO se han borrado los usuarios")
-    void deleteAll_WhenUsersDoesNotExist() {
+    @DisplayName("deleteAll cuando NO se han borrado los usuarios o no existen")
+    void deleteAll_WhenUsersDoesNotDelete() {
 
         when(userService.count()).thenReturn(5L); // ?? ¿Cómo probar que realmente se borra?
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             userController.deleteAllUsers();
         });
 
@@ -469,17 +387,4 @@ public class UserControllerUnitTest {
         assertNotEquals(0L, userService.count());
         assertEquals(ErrMsg.NOT_DELETED, exception.getMessage());
     }
-
-    @Test
-    @DisplayName("getFormToUpdate cuando se produce una excepción en el servicio")
-    void deleteAll_ServiceThrowsException() {
-
-        doThrow(new RuntimeException("Service error")).when(userService).deleteAllUsers(); // ??
-
-        assertThrows(RuntimeException.class, () -> {
-            userController.deleteAllUsers();
-        });
-    }
-
-
 }

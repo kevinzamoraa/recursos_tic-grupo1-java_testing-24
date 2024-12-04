@@ -5,6 +5,8 @@ import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.model.UserRole;
 import com.grupo1.recursos_tic.service.UserService;
 
+import com.grupo1.recursos_tic.util.ErrMsg;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.grupo1.recursos_tic.util.Utility.invalidIntPosNumber;
 import static com.grupo1.recursos_tic.util.Utility.stringIsEmpty;
 
 @Controller
@@ -44,7 +48,7 @@ public class UserController {
         Optional<User> userOptional = userService.findById(id);
 
         model.addAttribute("user", userOptional.orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+                () -> new NoSuchElementException(ErrMsg.NOT_FOUND)
         ));
         return "user/detail";
     }
@@ -68,15 +72,23 @@ public class UserController {
     // http://localhost:8082/users/create
     @GetMapping("users/create")
     public String getFormToCreateNewUser(Model model) {
-        model.addAttribute("user", new User());
+        try {
+            model.addAttribute("user", new User());
+        } catch (Exception e) {
+            throw new NoSuchElementException(ErrMsg.NOT_FOUND);
+        }
         return "user/form";
     }
 
     // http://localhost:8082/users/update/1
     @GetMapping("users/update/{id}")
     public String getFormToEditUser(Model model, @PathVariable Long id) {
-        userService.findById(id)
-                .ifPresent(user -> model.addAttribute("user", user));
+        if (invalidIntPosNumber(id) || id == 0)
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
+
+        Optional<User> userOptional = userService.findById(id);
+        userOptional.ifPresent(user -> model.addAttribute("user", user));
+        userOptional.orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
         return "user/form";
     }
 
@@ -129,6 +141,8 @@ public class UserController {
         boolean exists = false;
         if (user.getId() != null) {
             exists = userService.existsById(user.getId());
+            if (!exists)
+                new EntityNotFoundException(ErrMsg.NOT_FOUND);
         }
         if (! exists) {
             // Crear un nuevo user
@@ -149,13 +163,20 @@ public class UserController {
     // http://localhost:8082/users/delete/1
     @GetMapping("users/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
+        if (invalidIntPosNumber(id) || id == 0)
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
+
+        if (!userService.existsById(id))
+            throw new NoSuchElementException(ErrMsg.NOT_FOUND);
+
         try {
             userService.deleteUserWithDependencies(id);
-            return "redirect:/users";
         } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            // e.printStackTrace();
+            // return "error";
         }
+        return "redirect:/users";
     }
 
     // http://localhost:8082/users/delete/all
@@ -163,11 +184,15 @@ public class UserController {
     public String deleteAllUsers() {
         try {
             userService.deleteAllUsers();
-            return "redirect:/users";
         } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
+            throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
+            // e.printStackTrace();
+            // return "error";
         }
+        if (userService.count() != 0) {
+            throw new RuntimeException(ErrMsg.NOT_DELETED);
+        }
+        return "redirect:/users";
     }
 
 }
