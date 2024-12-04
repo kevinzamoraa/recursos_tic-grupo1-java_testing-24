@@ -2,8 +2,12 @@ body {
     background: url("/img/bg.webp") center/cover no-repeat fixed;
 }
 
-h1, h2, legend, label, th {
+.accent, h1, h2, h3, legend, label, th {
     color: purple !important;
+}
+
+.inverse-accent {
+    color: salmon !important;
 }
 
 .bg-custom-purple {

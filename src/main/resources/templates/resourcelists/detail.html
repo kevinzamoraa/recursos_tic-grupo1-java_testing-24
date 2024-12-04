@@ -16,7 +16,7 @@
         </header>
 
         <div th:if="${resourcelist.description != null}">
-            <td th:text="${resourcelist.description}"></td>
+            <td th:utext="${resourcelist.description}"></td>
         </div>
 
         <nav id="actions">
@@ -58,38 +58,38 @@
             <table th:if="${resources.size() > 0L}" id="resourcesList" class="table table-striped border shadow-sm">
                 <thead>
                     <tr>
-                        <th class="avatar-col-size"></th>
-                        <th>Recurso</th>
-                        <th>Tipo</th>
-                        <th>Descripción</th>
-                        <th></th>
+                        <th scope="col" class="visually-hidden avatar-col-size">Imagen</th>
+                        <th scope="col">Recurso</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col" class="visually-hidden">Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr th:each="resource : ${resources}">
-                        <td class="align-middle avatar-col-size">
+                        <td class="avatar-col-size">
                             <img th:src="${resource.getImageUrl() != '' ? resource.getImageUrl() : '/img/noImage.jpg'}"
                                  class="avatar ms-1" th:alt="${resource.getTitle()}">
                         </td>
-                        <td class="align-middle">
+                        <td>
                             <a th:href="${resource.url}" target="_blank" th:text="${resource.title}"></a>
                         </td>
-                        <td th:text="${resource.type}" class="align-middle"></td>
-                        <td th:text="${resource.description}" class="align-middle"></td>
-                        <td sec:authorize="isAuthenticated()" class="action-col-size align-middle">
+                        <td th:text="${resource.type}"></td>
+                        <td th:utext="${resource.description}"></td>
+                        <td sec:authorize="isAuthenticated()" class="action-col-size">
                             <div class="float-end">
-                                <a th:href="'/resources/' + ${resource.id}"
+                                <a th:href="'/resources/' + ${resource.id}" title="Ver el recurso"
                                    class="btn btn-sm btn-info btn-mini-size me-1">
-                                    <i class="fa-solid fa-eye"></i></a>
+                                    <i class="fa-solid fa-eye"></i><span class="visually-hidden">Ver</span></a>
                                 <a th:href="'/resources/update/' + ${resource.id} + '/' + ${resourcelist.id}"
-                                   class="btn btn-sm btn-warning btn-mini-size me-1">
-                                    <i class="fa-solid fa-pen-to-square"></i></a>
-                                <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                   class="btn btn-sm btn-warning btn-mini-size me-1" title="Editar el recurso">
+                                    <i class="fa-solid fa-pen-to-square"></i><span class="visually-hidden">Editar</span></a>
+                                <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1" title="Quitar el recurso"
                                         data-bs-toggle="modal" data-bs-target="#confirm"
                                         th:data-bs-url="'/resourcelists/remove/' + ${resourcelist.id} + '/' + ${resource.id}"
                                         th:data-bs-text="'¿Deseas eliminar el recurso «' + ${resource.title} + '» de esta lista?'">
-                                    <i class="fa-solid fa-trash-can"></i>
+                                    <i class="fa-solid fa-trash-can"></i><span class="visually-hidden">Eliminar</span>
                                 </button>
                             </div>
                         </td>

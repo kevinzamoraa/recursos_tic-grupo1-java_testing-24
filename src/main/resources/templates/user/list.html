@@ -26,12 +26,12 @@
         <table id="userList" th:if="${users.size() > 0}" class="table table-striped border shadow-sm">
             <thead>
                 <tr>
-                    <th class="avatar-col-size"></th>
-                    <th>Usuario</th>
-                    <th>Nombre</th>
-                    <th>Correo electrónico</th>
-                    <th>Rol</th>
-                    <th></th>
+                    <th scope="col" class="list-col-size visually-hidden">Avatar</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col" class="visually-hidden">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,15 +46,15 @@
                     <td th:text="${user.role}" class="align-middle"></td>
                     <td class="action-col-size align-middle">
                         <div class="float-end">
-                            <a th:href="'/users/update/' + ${user.id}"
+                            <a th:href="'/users/update/' + ${user.id}" title="Editar el usuario"
                                class="btn btn-sm btn-warning btn-mini-size me-1">
-                                <i class="fa-solid fa-pen-to-square"></i></a>
-                            <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1"
+                                <i class="fa-solid fa-pen-to-square"></i><span class="visually-hidden">Editar</span></a>
+                            <button type="button" class="btn btn-sm btn-danger btn-mini-size me-1" title="Eliminar el usuario"
                                     th:classappend="${user.id != #authentication.principal.id and #authentication.principal.role.isAdmin()} ? '' : 'btn-outline-secondary disabled'"
                                     data-bs-toggle="modal" data-bs-target="#confirm"
                                     th:data-bs-url="'/users/delete/' + ${user.id}"
-                                    th:data-bs-text="'¿Deseas eliminar al usuario «' + ${user.username} + '»?'">
-                                <i class="fa-solid fa-trash-can"></i>
+                                    th:data-bs-text="'¿Deseas eliminar al usuario «' + ${user.username} + '»?<br/><br/><strong>ADVERTENCIA</strong>:<br/>Al eliminar el usuario, se eliminarán sus listas y comentarios.'">
+                                <i class="fa-solid fa-trash-can"></i><span class="visually-hidden">Eliminar</span>
                             </button>
                         </div>
                     </td>

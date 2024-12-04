@@ -50,7 +50,7 @@ public class ResourceController {
     @GetMapping("resources/{id}")
     public String findById(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NumberFormatException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         Resource resource = resourceService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -72,7 +72,7 @@ public class ResourceController {
     @GetMapping("resources/create/{listId}")
     public String getFormToCreateNew(Model model, @PathVariable Long listId) {
         if (invalidIntPosNumber(listId) || listId == 0)
-            throw new NumberFormatException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         if (!resourceListsService.existsById(listId))
             throw new NoSuchElementException(ErrMsg.NOT_FOUND);
@@ -86,7 +86,7 @@ public class ResourceController {
     @GetMapping("resources/update/{id}")
     public String getFormToUpdate(Model model, @PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NumberFormatException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         Resource resource = resourceService.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
@@ -99,7 +99,7 @@ public class ResourceController {
     @GetMapping("resources/update/{id}/{listId}")
     public String getFormToUpdateAndList(Model model, @PathVariable Long id, @PathVariable Long listId) {
         if (invalidIntPosNumber(id) || id == 0 || invalidIntPosNumber(listId) || listId == 0)
-            throw new NumberFormatException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         if (!resourceListsService.existsById(listId))
             throw new NoSuchElementException(ErrMsg.NOT_FOUND);
@@ -116,15 +116,17 @@ public class ResourceController {
     @PostMapping("resources")
     public String save(@ModelAttribute Resource resource,
                        @RequestParam(required = false) Long listId) {
-        if (resource == null) throw new NumberFormatException(ErrMsg.INVALID_INPUT);
+        if (listId != null && listId <= 0)
+                throw new IllegalArgumentException(ErrMsg.INVALID_ID);
+
         String error = formValidation(resource);
-        if (error != null) throw new NoSuchElementException(error);
+        if (error != null) throw new ResponseStatusException(HttpStatus.CONFLICT);
 
         if (resource.getId() == null) { // crear
             Resource savedResource = resourceService.save(resource);
-            if (listId != null && listId != 0L){
+            if (listId != null){
                 ResourceList resourceList = resourceListsService.findById(listId)
-                        .orElseThrow(() -> new EntityNotFoundException("Lista no encontrada"));
+                        .orElseThrow(() -> new EntityNotFoundException(ErrMsg.NOT_FOUND));
                 resourceList.addResource(savedResource);
                 resourceListsService.save(resourceList);
                 return "redirect:/resourcelists/" + listId;
@@ -134,8 +136,7 @@ public class ResourceController {
             return resourceService.findById(resource.getId()).map(optResource -> {
                 BeanUtils.copyProperties(resource, optResource);
                 resourceService.save(optResource);
-                if (listId != null && listId != 0L)
-                    return "redirect:/resourcelists/" + listId;
+                if (listId != null) return "redirect:/resourcelists/" + listId;
                 return "redirect:/resources/" + optResource.getId();
             }).orElseThrow(() -> new NoSuchElementException(ErrMsg.NOT_FOUND));
         }
@@ -144,7 +145,7 @@ public class ResourceController {
     @GetMapping("resources/delete/{id}")
     public String deleteById(@PathVariable Long id) {
         if (invalidIntPosNumber(id) || id == 0)
-            throw new NumberFormatException(ErrMsg.INVALID_ID);
+            throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         if (!resourceService.existsById(id))
             throw new NoSuchElementException(ErrMsg.NOT_FOUND);
@@ -165,7 +166,7 @@ public class ResourceController {
             throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
         }
         if (resourceService.count() != 0)
-            throw new NoSuchElementException(ErrMsg.NOT_DELETED);
+            throw new RuntimeException(ErrMsg.NOT_DELETED);
         return "redirect:/resources";
     }
 }

@@ -1,4 +1,4 @@
-<div th:fragment="modal">
+<div th:fragment="modal" sec:authorize="isAuthenticated()">
 
   <div id="confirm" class="modal fade" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -8,7 +8,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <p id="message">&nbsp;</p>
+          <p id="message" class="text-center">&nbsp;</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -29,7 +29,7 @@
 
       // Rellenar modal
       const button = event.relatedTarget
-      msgTxt.textContent = button.getAttribute('data-bs-text')
+      msgTxt.innerHTML = button.getAttribute('data-bs-text')
       const url = button.getAttribute('data-bs-url');
       sendBtn.addEventListener('click', () => window.location.href = url);
     })
