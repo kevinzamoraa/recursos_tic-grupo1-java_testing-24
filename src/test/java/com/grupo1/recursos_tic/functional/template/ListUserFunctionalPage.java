@@ -39,6 +39,10 @@ public class ListUserFunctionalPage {
     //@FindBy(xpath = "//button[contains(text(), 'Crear un recurso nuevo')]")
     @FindBy(id = "btnCreateUser")
     public WebElement btnCreateUser;
+    @FindBy(id = "userList")
+    public WebElement userList;
+    @FindBy(id = "salir")
+    public WebElement salir;
 
 
     public void loginAsUser(String username, String password) {

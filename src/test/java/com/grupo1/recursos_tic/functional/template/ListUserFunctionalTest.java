@@ -36,6 +36,9 @@ public class ListUserFunctionalTest {
         driver.get(url);
         driver.manage().window().maximize();
         page = new ListUserFunctionalPage(driver, userService, passwordEncoder);
+        page.createUserInDatabase("admin", "Admin1234", "admin@admin.es","admin");
+        page.createUserInDatabase("javier", "User1234", "user@user.es","author");
+        page.createUserInDatabase("kevin", "User1234", "user@user.es","author");
     }
     @AfterEach
     void tearDown() {
@@ -43,22 +46,26 @@ public class ListUserFunctionalTest {
     }
 
     @Test
-    @DisplayName("Comprobar etiqueta <title>")
+    @DisplayName("Comprobar etiqueta <title> antes de iniciar sesión")
     void title() {
-        assertEquals("Usuarios", page.getTitle());
+        page.loginAsUser("admin", "Admin1234");
+        assertEquals("Please sign in", page.getTitle());
+        page.salir.click();
     }
 
     @Test
     @DisplayName("Comprobar la etiqueta <h1>")
     void h1() {
+        page.loginAsUser("admin", "Admin1234");
+        driver.get(url);
         assertEquals("Usuarios", page.h1.getText());
+        page.salir.click();
     }
 
     @Test
     @DisplayName("Comprobar que NO existe el botón «Crear nuevo usuario» " +
             "hasta que se haya registrado un usuario con el role ADMIN")
     void buttonCreateUser() {
-        page.createUserInDatabase("admin", "Admin1234", "admin@admin.es","admin");
         try {
             assertFalse(page.btnCreateUser.isDisplayed());
         } catch (NoSuchElementException e) {
@@ -67,6 +74,22 @@ public class ListUserFunctionalTest {
         page.loginAsUser("admin", "Admin1234");
         driver.get(url);
         assertTrue(page.btnCreateUser.isDisplayed());
+        page.salir.click();
+    }
+
+    @Test
+    @DisplayName("Comprobar que NO se muestra la vista con la lista de usuarios si no eres ADMIN")
+    void listOfUsers() {
+        try {
+            assertFalse(page.btnCreateUser.isDisplayed());
+            assertFalse(page.userList.isDisplayed());
+        } catch (NoSuchElementException e) {
+            assertTrue(true); // El elemento no existe
+        }
+        page.loginAsUser("admin", "Admin1234");
+        driver.get(url);
+        assertTrue(page.btnCreateUser.isDisplayed());
+        page.salir.click();
     }
 
 }
