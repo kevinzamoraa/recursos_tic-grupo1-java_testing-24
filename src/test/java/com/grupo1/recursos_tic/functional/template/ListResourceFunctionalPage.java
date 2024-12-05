@@ -17,7 +17,7 @@ public class ListResourceFunctionalPage {
     private final PasswordEncoder passwordEncoder;
     private final WebDriver driver;
 
-    @Autowired
+    //@Autowired
     public ListResourceFunctionalPage(
             WebDriver driver,
             UserService userService,

@@ -50,7 +50,7 @@ public class ListResourceFunctionalTest {
         options.addArguments("--window-size=1920,1080"); // Tamaño de la ventana
         options.addArguments("--no-sandbox"); // Bypass OS security model, requerido en entornos sin GUI
         options.addArguments("--disable-dev-shm-usage"); // Deshabilita el uso de /dev/shm manejo de memoria compartida
-        driver = new FirefoxDriver();
+        driver = new FirefoxDriver(options);
         // Fin Firefox
 
         driver.get(url);

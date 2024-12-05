@@ -34,7 +34,8 @@ public class Main {
 		var user3 = User.builder().name("Marina").email("c@c.es").role(UserRole.AUTHOR).username("marina")
 				.imageUrl("/img/user/marina.jpeg").password(passwordEncoder.encode("User1234")).build();
 
-		userRepository.saveAll(List.of(admin, user1, user2, user3));
+		if (userRepository.count() == 0)
+			userRepository.saveAll(List.of(admin, user1, user2, user3));
 
 
 		// Resources
@@ -47,7 +48,8 @@ public class Main {
 				.tags(Set.of(EnumTag.HARDWARE, EnumTag.SOFTWARE, EnumTag.NEWS, EnumTag.HISTORY)).imageUrl("")
 				.url("https://www.theregister.com/").description("Información tecnológica de actualidad.").build();
 
-		resourceRepository.saveAll(List.of(resource1, resource2));
+		if (resourceRepository.count() == 0)
+			resourceRepository.saveAll(List.of(resource1, resource2));
 
 
 		// Resource lists
@@ -63,20 +65,23 @@ public class Main {
 				.description("Repositorios de software interesantes")
 				.resources(Set.of(resource1, resource2)).build();
 
-		resourceListsRepository.saveAll(List.of(resourceList1, resourceList2, resourceList3));
+		if (resourceListsRepository.count() == 0)
+			resourceListsRepository.saveAll(List.of(resourceList1, resourceList2, resourceList3));
 
 
 		// Ratings
 		var ratingRepository = context.getBean(RatingRepo.class);
 
-		var rating1 = Rating.builder().user(user1).resource(resource1).title("Imprescindible")
-				.comment("Inigualable a la hora de encontrar soluciones aportadas por la comunidad.")
-				.createdAt(LocalDateTime.now()).score(5).build();
-		var rating2 = Rating.builder().user(user2).resource(resource2).title("Para estar al día")
-				.comment("Uno de los mejores recursos con información actualizada. Está en inglés.")
-				.createdAt(LocalDateTime.now()).score(4).build();
+			var rating1 = Rating.builder().user(user1).resource(resource1).title("Imprescindible")
+					.comment("Inigualable a la hora de encontrar soluciones aportadas por la comunidad.")
+					.createdAt(LocalDateTime.now()).score(5).build();
+			var rating2 = Rating.builder().user(user2).resource(resource2).title("Para estar al día")
+					.comment("Uno de los mejores recursos con información actualizada. Está en inglés.")
+					.createdAt(LocalDateTime.now()).score(4).build();
 
-		ratingRepository.saveAll(List.of(rating1, rating2));
+		if (ratingRepository.count() == 0)
+			ratingRepository.saveAll(List.of(rating1, rating2));
+
 	}
 
 }
