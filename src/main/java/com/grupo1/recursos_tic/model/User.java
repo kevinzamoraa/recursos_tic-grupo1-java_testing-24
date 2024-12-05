@@ -17,6 +17,7 @@ import java.util.Collections;
 @Getter
 @Setter
 @ToString
+@Table(name = "tic_users")
 public class User implements UserDetails {
 
     @Id

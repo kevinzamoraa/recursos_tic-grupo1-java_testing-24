@@ -20,7 +20,7 @@ public class Rating {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private User user;
 
@@ -34,6 +34,7 @@ public class Rating {
 
     private String title;
 
+    @Column(name = "comentario")
     private String comment;
 
     private int score;

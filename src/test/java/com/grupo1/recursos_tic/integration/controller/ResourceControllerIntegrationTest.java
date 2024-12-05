@@ -1,19 +1,24 @@
 package com.grupo1.recursos_tic.integration.controller;
 
 import com.grupo1.recursos_tic.model.Resource;
+import com.grupo1.recursos_tic.model.User;
+import com.grupo1.recursos_tic.model.UserRole;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
 import com.grupo1.recursos_tic.service.UserDetailsServiceImpl;
 import com.grupo1.recursos_tic.util.ErrMsg;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+//@Transactional
 public class ResourceControllerIntegrationTest {
 
     @Autowired
@@ -56,9 +61,47 @@ public class ResourceControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     /*
      * Method: findAll(Model)
      */
+
+    @BeforeEach
+    void setUp() {
+        userRepo.findAll().forEach(System.out::println);
+        userRepo.deleteAll();
+
+        var admin = User.builder().name("Administrador").email("admin@admin.es").role(UserRole.ADMIN).username("admin")
+                .imageUrl("/img/user/noUser.png").password(passwordEncoder.encode("Admin1234")).build();
+        var user1 = User.builder().name("Javier").email("a@a.es").role(UserRole.AUTHOR).username("javier")
+                .imageUrl("/img/user/javier.png").password(passwordEncoder.encode("User1234")).build();
+        var user2 = User.builder().name("Kevin").email("b@b.es").role(UserRole.AUTHOR).username("kevin")
+                .imageUrl("/img/user/kevin.jpeg").password(passwordEncoder.encode("User1234")).build();
+        var user3 = User.builder().name("Marina").email("c@c.es").role(UserRole.AUTHOR).username("marina")
+                .imageUrl("/img/user/marina.jpeg").password(passwordEncoder.encode("User1234")).build();
+
+        userRepo.saveAll(List.of(admin, user1, user2, user3));
+        userRepo.findAll().forEach(System.out::println);
+//        userRepo.deleteAll();
+//        userRepo.save(User.builder()
+//                .username("admin")
+//                .password(passwordEncoder.encode("admin"))
+//                .build());
+
+        var auth = new UsernamePasswordAuthenticationToken(
+                admin,
+                admin.getPassword(),
+                admin.getAuthorities()
+        );
+        var context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
+    }
 
     @Test
     @DisplayName("Buscar todos los recursos")
@@ -100,7 +143,7 @@ public class ResourceControllerIntegrationTest {
     // TODO autenticación
     @Test
     @DisplayName("Buscar recurso con ID válido y usuario autenticado")
-    //@WithUserDetails("admin")
+//    @WithUserDetails("admin")
     void findById_WithAuthenticated() throws Exception {
 
         Resource resource = Resource.builder()
@@ -116,8 +159,8 @@ public class ResourceControllerIntegrationTest {
                 .andExpect(model().attribute("resource",
                         hasProperty("title", is("Recurso1"))
                 ))
-                .andExpect(model().attributeExists("ratings"));
-                //.andExpect(model().attributeExists("lists")); // Sólo con autenticación
+                .andExpect(model().attributeExists("ratings"))
+                .andExpect(model().attributeExists("lists")); // Sólo con autenticación
 
         // TODO revisar .andExpect que faltan
     }
