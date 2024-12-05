@@ -1,14 +1,19 @@
 package com.grupo1.recursos_tic.integration.controller;
 
 import com.grupo1.recursos_tic.model.Resource;
+import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
 import com.grupo1.recursos_tic.service.UserDetailsServiceImpl;
 import com.grupo1.recursos_tic.util.ErrMsg;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +43,10 @@ public class ResourceControllerIntegrationTest {
 
     @Autowired
     private ResourceService resourceService;
+
     @Autowired
     private ResourceListsService resourceListsService;
+
     @Autowired
     private RatingService ratingService;
 
@@ -93,7 +100,7 @@ public class ResourceControllerIntegrationTest {
     // TODO autenticación
     @Test
     @DisplayName("Buscar recurso con ID válido y usuario autenticado")
-    //@WithMockUser()
+    //@WithUserDetails("admin")
     void findById_WithAuthenticated() throws Exception {
 
         Resource resource = Resource.builder()

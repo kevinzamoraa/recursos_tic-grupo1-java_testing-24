@@ -22,8 +22,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent()) return userOpt.get();
-        else throw new UsernameNotFoundException(username + " no encontrado");
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+
+        // Log para depuración
+        System.out.println("Cargando usuario: " + user.getUsername() + ", Rol: " + user.getRole());
+
+        return user;
     }
 }
