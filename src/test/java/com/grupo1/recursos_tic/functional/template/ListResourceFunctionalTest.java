@@ -1,5 +1,6 @@
 package com.grupo1.recursos_tic.functional.template;
 
+import com.grupo1.recursos_tic.service.ResourceService;
 import com.grupo1.recursos_tic.service.UserService;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.NoSuchElementException;
@@ -18,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ListResourceFunctionalTest {
 
     private final String url = "http://localhost:8082/resources";
+
+    @Autowired
+    private ResourceService resourceService;
 
     @Autowired
     private UserService userService;
@@ -44,6 +48,7 @@ public class ListResourceFunctionalTest {
         // Fin Chrome
 
         // Activar para Firefox, desactivar Chrome
+
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless"); // para que no se abra el navegador
         options.addArguments("--disable-gpu"); // Deshabilita la aceleración de hardware
@@ -51,6 +56,7 @@ public class ListResourceFunctionalTest {
         options.addArguments("--no-sandbox"); // Bypass OS security model, requerido en entornos sin GUI
         options.addArguments("--disable-dev-shm-usage"); // Deshabilita el uso de /dev/shm manejo de memoria compartida
         driver = new FirefoxDriver(options);
+        //driver = new FirefoxDriver(); // Sin opciones
         // Fin Firefox
 
         driver.get(url);
