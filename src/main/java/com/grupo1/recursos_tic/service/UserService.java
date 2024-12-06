@@ -70,6 +70,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void saveAll(List<User> users) {
+        userRepository.saveAll(users);
+    }
+
     public User updateUser(User user) {
         User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -88,6 +92,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUserWithDependencies(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {

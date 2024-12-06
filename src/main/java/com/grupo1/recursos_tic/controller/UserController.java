@@ -23,8 +23,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.grupo1.recursos_tic.util.Utility.invalidIntPosNumber;
-import static com.grupo1.recursos_tic.util.Utility.stringIsEmpty;
+import static com.grupo1.recursos_tic.util.Utility.*;
+import static com.grupo1.recursos_tic.util.Utility.userAuth;
 
 @Controller
 @AllArgsConstructor
@@ -38,6 +38,9 @@ public class UserController {
     // http://localhost:8082/users
     @GetMapping("users")
     public String findAll(Model model) {
+        if (isAuth() && userAuth().get().getRole() != UserRole.ADMIN)
+            throw new NoSuchElementException(ErrMsg.NOT_FOUND);
+
         model.addAttribute("users", userService.findAll());
         return "user/list";
     }

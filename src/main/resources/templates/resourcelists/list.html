@@ -33,8 +33,9 @@
             <table th:unless="${resourcelists == null || resourcelists.size() == 0}" id="resourceLists" class="table w-100 table-striped border shadow-sm">
                 <thead>
                 <tr>
-                    <th scope="col" class="list-col-size">Imagen</th>
+                    <th scope="col" class="visually-hidden list-col-size">Imagen</th>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Recursos</th>
                     <th scope="col">Descripción</th>
                     <th scope="col" class="visually-hidden">Acciones</th>
                 </tr>
@@ -45,6 +46,7 @@
                     <td>
                         <span th:text="${resourcelist.name}" class="fw-bold"></span>
                     </td>
+                    <td th:text="${resourcelist.resources.size()}"></td>
                     <td th:utext="${resourcelist.description}"></td>
                     <td class="action-col-size">
                         <div class="float-end">

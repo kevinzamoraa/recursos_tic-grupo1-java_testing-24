@@ -54,6 +54,10 @@ public class RatingService {
         ratingRepository.save(rating);
     }
 
+    public void saveAll(List<Rating> ratings) {
+        ratingRepository.saveAll(ratings);
+    }
+
     @Transactional
     public void deleteRatingById(Long id) {
         try {
@@ -66,6 +70,13 @@ public class RatingService {
     @Transactional
     public void deleteAllByResource_Id(Long id) {
         ratingRepository.deleteAllByResource_Id(id);
+    }
+
+    @Transactional
+    public void deleteAll() {
+        ratingRepository.findAll().forEach(
+                rating -> deleteRatingById(rating.getId())
+        );
     }
 
 }

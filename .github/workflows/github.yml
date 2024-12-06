@@ -49,5 +49,5 @@ jobs:
 
       - name: Análisis con SonarCloud
         env:
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=kevinzamoraa_recursos_tic-grupo1-java_testing-24 -Dsonar.organization=kevinzamora -Dsonar.host.url=https://sonarcloud.io
