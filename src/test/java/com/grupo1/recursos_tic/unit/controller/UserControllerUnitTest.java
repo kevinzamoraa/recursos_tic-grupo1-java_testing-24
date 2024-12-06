@@ -1,7 +1,6 @@
 package com.grupo1.recursos_tic.unit.controller;
 
 import com.grupo1.recursos_tic.controller.UserController;
-import com.grupo1.recursos_tic.integration.controller.UserControllerIntegrationTest;
 import com.grupo1.recursos_tic.model.*;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.UserService;
@@ -12,12 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.ui.Model;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,70 +194,6 @@ public class UserControllerUnitTest {
         verify(model, never()).addAttribute(anyString(), any());
         assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
     }
-
-    /*  @Test
-    @DisplayName("getFormToUpdate cunado el ID del usuario no es numérico")
-    void getFormToUpdate_WithNonNumericId() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdate cuando el ID del usuario es nulo")
-    void getFormToUpdate_WithNullUserId() {
-        //
-    }*/
-
-    /*
-     * Method: getFormToUpdateAndList(Model, Long, Long)
-     */
-
-    /*@Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del usuario Sí existe")
-    void getFormToUpdateAndList_WhenUserExist() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del usuario NO existe")
-    void getFormToUpdateAndList_WhenUserDoesNotExist() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del usuario no es válido")
-    void getFormToUpdateAndList_WithInvalidUserId() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cunado el ID del usuario no es numérico")
-    void getFormToUpdateAndList_WithNonNumericId() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del usuario es nulo")
-    void getFormToUpdateAndList_WithNullUserId() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del usuario Sí existe")
-    void getFormToUpdateAndList_WhenUserListExist() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID del usuario NO existe")
-    void getFormToUpdateAndList_WhenUserListDoesNotExist() {
-        //
-    }
-
-    @Test
-    @DisplayName("getFormToUpdateAndList cunado el ID del usuario no es numérico")
-    void getFormToUpdateAndList_WithNonNumericListId() {
-        //
-    }*/
 
     /*
      * Method: save(User, Long)

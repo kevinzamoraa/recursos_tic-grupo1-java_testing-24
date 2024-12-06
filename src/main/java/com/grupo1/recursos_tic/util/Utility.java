@@ -50,9 +50,6 @@ public class Utility {
     public static Optional<User> userAuth() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//        if (isAuth()) return Optional.ofNullable((User) authentication.getPrincipal());
-//        return Optional.empty();
-
         if (isAuth()) {
             // Obtener el principal de la autenticación
             Object principal = authentication.getPrincipal();

@@ -7,7 +7,6 @@ import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.repository.RatingRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,7 +97,7 @@ public class UserService {
         if (optionalUser.isPresent()) {
             try {
                 // Eliminar 'ratings' asociados al usuario
-                int deletedCount = ratingRepository.deleteRatingByUserId(userId);
+                ratingRepository.deleteRatingByUserId(userId);
                 // System.out.println("Se han eliminado " + deletedCount + " ratings.");
             } catch (Exception e) {
                 throw new RuntimeException("Error al eliminar ratings", e);

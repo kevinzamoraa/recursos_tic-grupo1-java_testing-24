@@ -23,7 +23,6 @@ public class ErrorController {
     public String handleIllegalArgument(
             IllegalArgumentException ex, Model model,
             HttpServletResponse response) {
-        //response.setStatus(HttpServletRequest.SC_BAD_REQUEST);
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         model.addAttribute("message", ex.getMessage());
         return "error";
