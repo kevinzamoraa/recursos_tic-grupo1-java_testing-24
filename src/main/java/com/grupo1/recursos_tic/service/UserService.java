@@ -6,6 +6,7 @@ import com.grupo1.recursos_tic.repository.ResourceListsRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.repository.RatingRepo;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,19 +17,13 @@ import java.util.Optional;
 
 import static com.grupo1.recursos_tic.util.Utility.stringIsEmpty;
 
+@AllArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
     private UserRepo userRepository;
-
-    @Autowired
     private ResourceListsRepo resourceListRepository;
-
-    @Autowired
     private RatingRepo ratingRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
@@ -67,6 +62,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public long count() {
+        return userRepository.count();
+    }
+
     public void save(User user) {
         userRepository.save(user);
     }
@@ -89,7 +88,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void deleteUserWithRatings(Long userId) {
+    public void deleteUserWithDependencies(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             try {

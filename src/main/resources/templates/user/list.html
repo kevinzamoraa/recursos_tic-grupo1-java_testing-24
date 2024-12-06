@@ -15,7 +15,7 @@
         </header>
 
     <nav id="actions">
-        <button class="btn btn-primary shadow-sm btn-sm" onclick="location.href='/users/create'">
+        <button class="btn btn-primary shadow-sm btn-sm" onclick="location.href='/users/create'" id="btnCreateUser" th:id="btnCreateUser">
             <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Crear un usuario nuevo
         </button>
     </nav>
@@ -23,7 +23,7 @@
     <main>
         <p th:if="${users == null || users.size() == 0}" class="mt-3">No hay usuarios</p>
         <div class="table-responsive">
-        <table id="userList" th:if="${users.size() > 0}" class="table table-striped border shadow-sm">
+        <table id="userList" th:id="userList" th:if="${users.size() > 0}" class="table table-striped border shadow-sm">
             <thead>
                 <tr>
                     <th scope="col" class="list-col-size visually-hidden">Avatar</th>
