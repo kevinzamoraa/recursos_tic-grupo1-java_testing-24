@@ -11,13 +11,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static com.grupo1.recursos_tic.util.Utility.*;
@@ -33,8 +31,7 @@ public class ResourceController {
     public String formValidation(Resource resource) {
         if (stringIsEmpty(resource.getTitle())) return "Falta el título";
         if (stringIsEmpty(resource.getUrl())) return "Faltan la URL";
-        if (resource.getType() == null ||
-                !resource.getType().isValidType(resource.getType().ordinal()))
+        if (resource.getType() == null)
             return "Falta el tipo de recurso";
         return null;
     }

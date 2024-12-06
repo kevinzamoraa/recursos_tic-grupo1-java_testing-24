@@ -3,21 +3,22 @@ package com.grupo1.recursos_tic.functional.template;
 import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.model.UserRole;
 import com.grupo1.recursos_tic.service.UserService;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class ListResourceFunctionalPage {
+public class ListUserFunctionalPage {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final WebDriver driver;
 
-    public ListResourceFunctionalPage(
+    @Autowired
+    public ListUserFunctionalPage(
             WebDriver driver,
             UserService userService,
             PasswordEncoder passwordEncoder
@@ -36,8 +37,12 @@ public class ListResourceFunctionalPage {
     public WebElement h1;
 
     //@FindBy(xpath = "//button[contains(text(), 'Crear un recurso nuevo')]")
-    @FindBy(id = "btnCreateResource")
-    public WebElement btnCreateResource;
+    @FindBy(id = "btnCreateUser")
+    public WebElement btnCreateUser;
+    @FindBy(id = "userList")
+    public WebElement userList;
+    @FindBy(id = "salir")
+    public WebElement salir;
 
 
     public void loginAsUser(String username, String password) {

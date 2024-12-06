@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 @Entity
 @Builder
@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Table(name = "tic_users")
 public class User implements UserDetails {
 
     @Id
@@ -40,9 +41,16 @@ public class User implements UserDetails {
 //    private List<Rating> ratings = new ArrayList<>();
 
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return AuthorityUtils.createAuthorityList("ADMIN", "AUTHOR", "READER");
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("READ");
+        return Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + role.name())
+        );
     }
 
     @Override

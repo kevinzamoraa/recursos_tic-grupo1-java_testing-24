@@ -5,6 +5,7 @@ import com.grupo1.recursos_tic.repository.ResourceListsRepo;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,12 +56,21 @@ public class ResourceListsService {
         resourceListsRepository.saveAll(resourcelists);
     }
 
+    @Transactional
     public void deleteById(long id) {
         resourceListsRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteAll(Long Id) {
         resourceListsRepository.deleteAllByOwner_Id(Id);
+    }
+
+    @Transactional
+    public void deleteAll() {
+        resourceListsRepository.findAll().forEach(
+                resource -> deleteById(resource.getId())
+        );
     }
 
 }

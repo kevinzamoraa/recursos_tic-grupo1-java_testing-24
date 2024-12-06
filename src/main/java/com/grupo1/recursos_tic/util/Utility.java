@@ -1,6 +1,7 @@
 package com.grupo1.recursos_tic.util;
 
 import com.grupo1.recursos_tic.model.User;
+import com.grupo1.recursos_tic.service.UserService;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,8 @@ import java.util.Optional;
 
 @UtilityClass
 public class Utility {
+
+    private UserService userService;
 
     /**
      * Comprueba si una cadena está vacía
@@ -46,8 +49,29 @@ public class Utility {
      */
     public static Optional<User> userAuth() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (isAuth()) return Optional.ofNullable((User) authentication.getPrincipal());
+
+//        if (isAuth()) return Optional.ofNullable((User) authentication.getPrincipal());
+//        return Optional.empty();
+
+        if (isAuth()) {
+            // Obtener el principal de la autenticación
+            Object principal = authentication.getPrincipal();
+
+            // Verificar si es tu clase User personalizada
+            if (principal instanceof User) {
+                return Optional.of((User) principal);
+            }
+
+            // Si es un UserDetails de Spring Security, necesitarás recuperar el usuario de tu repositorio
+            if (principal instanceof org.springframework.security.core.userdetails.User) {
+                // Suponiendo que tienes un userRepository para buscar por username
+                String username = ((org.springframework.security.core.userdetails.User) principal).getUsername();
+                return userService.findByUsername(username);
+            }
+        }
+
         return Optional.empty();
+
     }
 
     /**

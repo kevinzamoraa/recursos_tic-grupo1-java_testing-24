@@ -1,10 +1,14 @@
 package com.grupo1.recursos_tic.functional.template;
 
+import com.grupo1.recursos_tic.service.ResourceService;
 import com.grupo1.recursos_tic.service.UserService;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ListResourceFunctionalTest {
 
     private final String url = "http://localhost:8082/resources";
+
+    @Autowired
+    private ResourceService resourceService;
 
     @Autowired
     private UserService userService;
@@ -28,16 +35,43 @@ public class ListResourceFunctionalTest {
     @BeforeEach
     void setUp() {
         //resourceService.deleteAll();
-        //driver = new ChromeDriver(); // Activar para Chrome, desactivar Firefox
-        driver = new FirefoxDriver(); // Activar para Firefox, desactivar Chrome
+
+        // Activar para Chrome, desactivar Firefox
+        // Info: En linux no funciona si no es con la versión 113
+        // ChromeOptions options = new ChromeOptions();
+        // options.addArguments("--headless"); // para que no se abra el navegador
+        // options.addArguments("--disable-gpu"); // Deshabilita la aceleración de hardware
+        // options.addArguments("--window-size=1920,1080"); // Tamaño de la ventana
+        //options.addArguments("--no-sandbox"); // Bypass OS security model, requerido en entornos sin GUI
+        //options.addArguments("--disable-dev-shm-usage"); // Deshabilita el uso de /dev/shm manejo de memoria compartida
+        //driver = new ChromeDriver(options);
+        // Fin Chrome
+
+        // Activar para Firefox, desactivar Chrome
+
+        FirefoxOptions options = new FirefoxOptions();
+        options.addArguments("--headless"); // para que no se abra el navegador
+        options.addArguments("--disable-gpu"); // Deshabilita la aceleración de hardware
+        options.addArguments("--window-size=1920,1080"); // Tamaño de la ventana
+        options.addArguments("--no-sandbox"); // Bypass OS security model, requerido en entornos sin GUI
+        options.addArguments("--disable-dev-shm-usage"); // Deshabilita el uso de /dev/shm manejo de memoria compartida
+        driver = new FirefoxDriver(options);
+        //driver = new FirefoxDriver(); // Sin opciones
+        // Fin Firefox
+
         driver.get(url);
         driver.manage().window().maximize();
         page = new ListResourceFunctionalPage(driver, userService, passwordEncoder);
     }
+
     @AfterEach
     void tearDown() {
         //driver.quit(); // TODO: Quitar el comentario cuando se complete el test
     }
+
+    /*
+     * Tests Selenium
+     */
 
     @Test
     @DisplayName("Comprobar etiqueta <title>")
@@ -66,6 +100,6 @@ public class ListResourceFunctionalTest {
         assertTrue(page.btnCreateResource.isDisplayed());
     }
 
-
+    // Otros tests
 
 }

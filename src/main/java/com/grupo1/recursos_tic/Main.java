@@ -5,6 +5,10 @@ import com.grupo1.recursos_tic.repository.RatingRepo;
 import com.grupo1.recursos_tic.repository.ResourceListsRepo;
 import com.grupo1.recursos_tic.repository.ResourceRepo;
 import com.grupo1.recursos_tic.repository.UserRepo;
+import com.grupo1.recursos_tic.service.RatingService;
+import com.grupo1.recursos_tic.service.ResourceListsService;
+import com.grupo1.recursos_tic.service.ResourceService;
+import com.grupo1.recursos_tic.service.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +26,7 @@ public class Main {
 
 
 		// Users
-		UserRepo userRepository = context.getBean(UserRepo.class);
+		UserService userService = context.getBean(UserService.class);
 		var passwordEncoder = context.getBean(PasswordEncoder.class);
 
 		var admin = User.builder().name("Administrador").email("admin@admin.es").role(UserRole.ADMIN).username("admin")
@@ -34,11 +38,12 @@ public class Main {
 		var user3 = User.builder().name("Marina").email("c@c.es").role(UserRole.AUTHOR).username("marina")
 				.imageUrl("/img/user/marina.jpeg").password(passwordEncoder.encode("User1234")).build();
 
-		userRepository.saveAll(List.of(admin, user1, user2, user3));
+		userService.deleteAllUsers();
+		userService.saveAll(List.of(admin, user1, user2, user3));
 
 
 		// Resources
-		ResourceRepo resourceRepository = context.getBean(ResourceRepo.class);
+		ResourceService resourceService = context.getBean(ResourceService.class);
 
 		var resource1 = Resource.builder().title("Stack Overflow").type(ResourceType.COMMUNITY).author("Varios")
 				.tags(Set.of(EnumTag.SOFTWARE, EnumTag.PROGRAMMING)).url("https://stackoverflow.com/").imageUrl("")
@@ -47,11 +52,12 @@ public class Main {
 				.tags(Set.of(EnumTag.HARDWARE, EnumTag.SOFTWARE, EnumTag.NEWS, EnumTag.HISTORY)).imageUrl("")
 				.url("https://www.theregister.com/").description("Información tecnológica de actualidad.").build();
 
-		resourceRepository.saveAll(List.of(resource1, resource2));
+		resourceService.deleteAll();
+		resourceService.saveAll(List.of(resource1, resource2));
 
 
 		// Resource lists
-		ResourceListsRepo resourceListsRepository = context.getBean(ResourceListsRepo.class);
+		ResourceListsService resourceListsService = context.getBean(ResourceListsService.class);
 
 		var resourceList1 = ResourceList.builder().owner(user1).name("Tecnología")
 				.description("Mis favoritos tech")
@@ -63,20 +69,23 @@ public class Main {
 				.description("Repositorios de software interesantes")
 				.resources(Set.of(resource1, resource2)).build();
 
-		resourceListsRepository.saveAll(List.of(resourceList1, resourceList2, resourceList3));
+		resourceListsService.deleteAll();
+		resourceListsService.saveAll(List.of(resourceList1, resourceList2, resourceList3));
 
 
 		// Ratings
-		var ratingRepository = context.getBean(RatingRepo.class);
+		RatingService ratingService = context.getBean(RatingService.class);
 
-		var rating1 = Rating.builder().user(user1).resource(resource1).title("Imprescindible")
-				.comment("Inigualable a la hora de encontrar soluciones aportadas por la comunidad.")
-				.createdAt(LocalDateTime.now()).score(5).build();
-		var rating2 = Rating.builder().user(user2).resource(resource2).title("Para estar al día")
-				.comment("Uno de los mejores recursos con información actualizada. Está en inglés.")
-				.createdAt(LocalDateTime.now()).score(4).build();
+			var rating1 = Rating.builder().user(user1).resource(resource1).title("Imprescindible")
+					.comment("Inigualable a la hora de encontrar soluciones aportadas por la comunidad.")
+					.createdAt(LocalDateTime.now()).score(5).build();
+			var rating2 = Rating.builder().user(user2).resource(resource2).title("Para estar al día")
+					.comment("Uno de los mejores recursos con información actualizada. Está en inglés.")
+					.createdAt(LocalDateTime.now()).score(4).build();
 
-		ratingRepository.saveAll(List.of(rating1, rating2));
+		ratingService.deleteAll();
+		ratingService.saveAll(List.of(rating1, rating2));
+
 	}
 
 }
