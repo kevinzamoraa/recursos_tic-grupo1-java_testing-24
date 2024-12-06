@@ -64,7 +64,6 @@ public class UserController {
                     model.addAttribute("user", user);
                     return "user/detail";
                 })
-//                .orElse("error")
                 .orElseGet(() -> {
                     // TODO Lanzar una excepción
                     model.addAttribute("message", "User no encontrado");
@@ -176,8 +175,6 @@ public class UserController {
             userService.deleteUserWithDependencies(id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
-            // e.printStackTrace();
-            // return "error";
         }
         return "redirect:/users";
     }
@@ -189,8 +186,6 @@ public class UserController {
             userService.deleteAllUsers();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT); // 409 status().isConflict()
-            // e.printStackTrace();
-            // return "error";
         }
         if (userService.count() != 0) {
             throw new RuntimeException(ErrMsg.NOT_DELETED);

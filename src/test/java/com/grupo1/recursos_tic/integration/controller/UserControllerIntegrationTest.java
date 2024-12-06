@@ -1,12 +1,16 @@
 package com.grupo1.recursos_tic.integration.controller;
 
 import com.grupo1.recursos_tic.config.WithMockUserSecurityContextFactory;
+import com.grupo1.recursos_tic.model.Resource;
+import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.model.User;
 import com.grupo1.recursos_tic.model.UserRole;
 import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.UserService;
 import com.grupo1.recursos_tic.service.UserService;
+import com.grupo1.recursos_tic.util.ErrMsg;
+import org.hamcrest.Matchers;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,11 +27,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.List;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -48,16 +52,6 @@ public class UserControllerIntegrationTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private MockMvc mockMvc;
-
-//    @BeforeEach
-//    @WithMockUser(username = "admin", roles = "ADMIN")
-//    public void setUp() {
-//        // Configurar el contexto de seguridad antes de cada prueba
-//        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-//                "admin", "Admin1234", Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//    }
 
     @BeforeEach
     void setUp() {
@@ -86,16 +80,6 @@ public class UserControllerIntegrationTest {
     @Test
     //@WithMockUser(username = "admin", roles = "ADMIN")
     void test() throws Exception {
-//        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-//                "admin", "Admin1234", Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
-//        User user = userRepo.save(User.builder().username("admin").password("Admin1234").role(UserRole.ADMIN).build());
-
-//        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//        userRepo.save(User.builder().username("user").password("User1234").role(UserRole.READER).build());
-
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("users", hasSize(1)))
@@ -103,15 +87,56 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Buscar todos los usuarios")
     void findAll() throws Exception {
-        /* TODO: Enable login config to allow access to user's list. It is redirecting to login view */
+        userService.saveAll(List.of(
+                User.builder().username("usuario1").build(),
+                User.builder().username("usuario2").build()
+        ));
+
         mockMvc.perform(get("/users"))
-                .andExpect(status().isOk());
-    //            .andExpect(jsonPath("$[0].role").value(is(UserRole.ADMIN)));
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/list"))
+                .andExpect(model().attributeExists("users"))
+                .andExpect(model().attribute("users", hasSize(3)))
+                .andExpect(model().attribute("users",
+                        allOf(
+                                hasItem(hasProperty("username", Matchers.is("usuario1"))),
+                                hasItem(hasProperty("username", Matchers.is("usuario2")))
+                        )
+                ));
     }
 
     @Test
-    void findById() {
+    @DisplayName("Buscar todos los usuarios y no obtener usuarios")
+    void findAll_NoUsers() throws Exception {
+        userService.saveAll(List.of());
+
+        mockMvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/list"))
+                .andExpect(model().attributeExists("users"))
+                // Admin user is always initialized by default. Without this it's impossible being able to run user entity tests
+                .andExpect(model().attribute("users", hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("Buscar recurso con ID válido y usuario autenticado")
+    void findById_WithAuthenticated() throws Exception {
+
+        User user = User.builder()
+                .username("usuario1")
+                .name("Usuario1")
+                .build();
+        userService.save(user);
+
+        mockMvc.perform(get("/users/" + user.getId()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/detail"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attribute("user",
+                        hasProperty("name", Matchers.is("Usuario1"))
+                ));
     }
 
     @Test
@@ -124,10 +149,6 @@ public class UserControllerIntegrationTest {
 
     @Test
     void save() {
-    }
-
-    @Test
-    void saveUser() {
     }
 
     @Test
