@@ -52,17 +52,11 @@ public class ListUserFunctionalTest {
     }
 
     @Test
-    @DisplayName("Comprobar etiqueta <title> después de iniciar sesión")
-    void title_withAuthenticate() {
-        page.loginAsUser("admin", "Admin1234");
-        assertEquals("Usuarios", page.getTitle());
-        page.salir.click();
-    }
-
-    @Test
     @DisplayName("Comprobar etiqueta <title> antes de iniciar sesión")
-    void title_withoutAuthenticate() {
+    void title() {
+        page.loginAsUser("admin", "Admin1234");
         assertEquals("Please sign in", page.getTitle());
+        page.salir.click();
     }
 
     @Test
