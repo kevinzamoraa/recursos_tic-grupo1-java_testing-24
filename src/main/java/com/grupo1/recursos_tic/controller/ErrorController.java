@@ -1,13 +1,14 @@
 package com.grupo1.recursos_tic.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class ErrorController {
@@ -29,6 +30,27 @@ public class ErrorController {
         return "error";
     }
 
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleResponseStatus(
+            NoSuchElementException ex, Model model,
+            HttpServletResponse response) {
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        model.addAttribute("message", ex.getMessage());
+        return "error";
+    }
+
+
+    @ExceptionHandler(RuntimeException.class)
+    public String handleRuntimeException(
+            RuntimeException ex, Model model,
+            HttpServletResponse response) {
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        model.addAttribute("message", ex.getMessage());
+        return "error";
+    }
+
+    // Nuevos métodos por cada error aquí, si se desea.
+
     // Capturar el estátus que se devuelve en la excepción
     @ExceptionHandler(ResponseStatusException.class)
     public String handleResponseStatus(
@@ -38,8 +60,5 @@ public class ErrorController {
         model.addAttribute("message", ex.getMessage());
         return "error";
     }
-
-
-    // Nuevos métodos por cada error aquí, si se desea.
 
 }
