@@ -26,8 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Este test se encarga de verificar que el controlador ResourceController
- * funciona correctamente.
+ * Este test unitario se encarga de verificar que el controlador
+ * ResourceController funciona correctamente.
  *
  * @author Javier Guerra
  * @version 1.1.0
@@ -393,7 +393,7 @@ public class ResourceControllerUnitTest {
         assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     @Test
@@ -407,7 +407,7 @@ public class ResourceControllerUnitTest {
         assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*

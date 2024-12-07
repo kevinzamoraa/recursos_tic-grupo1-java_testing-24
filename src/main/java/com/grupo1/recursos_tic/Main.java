@@ -1,10 +1,6 @@
 package com.grupo1.recursos_tic;
 
 import com.grupo1.recursos_tic.model.*;
-import com.grupo1.recursos_tic.repository.RatingRepo;
-import com.grupo1.recursos_tic.repository.ResourceListsRepo;
-import com.grupo1.recursos_tic.repository.ResourceRepo;
-import com.grupo1.recursos_tic.repository.UserRepo;
 import com.grupo1.recursos_tic.service.RatingService;
 import com.grupo1.recursos_tic.service.ResourceListsService;
 import com.grupo1.recursos_tic.service.ResourceService;
