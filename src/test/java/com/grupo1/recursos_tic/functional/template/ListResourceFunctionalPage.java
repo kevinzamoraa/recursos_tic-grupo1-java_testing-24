@@ -8,7 +8,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.By;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class ListResourceFunctionalPage {
@@ -52,19 +51,27 @@ public class ListResourceFunctionalPage {
         driver.findElement(By.xpath("//button[contains(text(), 'Sign in')]")).click();
     }
 
-    public void createUserInDatabase(String username, String password, String email, String role) {
+    public void saveUser(String username, String password, String email, String role) {
+
         UserRole userRole = (role.trim().equalsIgnoreCase("admin"))
                 ? UserRole.ADMIN
                 : UserRole.AUTHOR;
 
-        User user = User.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .email(email)
-                .role(userRole)
-                .build();
+        if (userService.findByUsername(username).isEmpty()) {
+            User user = User.builder()
+                    .username(username)
+                    .password(passwordEncoder.encode(password))
+                    .email(email)
+                    .role(userRole)
+                    .build();
+            userService.save(user);
 
-        userService.save(user);
+        } else {
+            User user = userService.findByUsername(username).get();
+            user.setPassword(passwordEncoder.encode(password));
+            user.setEmail(email);
+            user.setRole(userRole);
+            userService.save(user);
+        }
     }
-
 }
