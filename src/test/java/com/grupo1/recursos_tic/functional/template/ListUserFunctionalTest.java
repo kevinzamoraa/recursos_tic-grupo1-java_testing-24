@@ -54,9 +54,7 @@ public class ListUserFunctionalTest {
     @Test
     @DisplayName("Comprobar etiqueta <title> antes de iniciar sesión")
     void title() {
-        page.loginAsUser("admin", "Admin1234");
         assertEquals("Please sign in", page.getTitle());
-        page.salir.click();
     }
 
     @Test
