@@ -33,7 +33,9 @@ public class ListUserFunctionalPage {
         return driver.getTitle();
     }
 
-    @FindBy(tagName = "h1")
+    /* @FindBy(tagName = "h1")
+    public WebElement h1;*/
+    @FindBy(id = "h1")
     public WebElement h1;
 
     //@FindBy(xpath = "//button[contains(text(), 'Crear un recurso nuevo')]")
