@@ -44,6 +44,10 @@ public class ResourceListsService {
         return resourceListsRepository.countByOwner_Id(Id);
     }
 
+    public boolean existsByIdAndOwnerId(Long listId, Long ownerId) {
+        return resourceListsRepository.existsByIdAndOwner_Id(listId, ownerId);
+    }
+
     public List<ResourceList> findByOwnerIdAndResourcesId(Long userId, Long resourceId) {
         return resourceListsRepository.findByOwner_IdAndResources_Id(userId, resourceId);
     }

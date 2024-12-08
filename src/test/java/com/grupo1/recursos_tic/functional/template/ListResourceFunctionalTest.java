@@ -5,8 +5,6 @@ import com.grupo1.recursos_tic.service.UserService;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,7 @@ public class ListResourceFunctionalTest {
     private PasswordEncoder passwordEncoder;
 
     private ListResourceFunctionalPage page;
+
     private WebDriver driver;
 
     @BeforeEach
@@ -48,25 +47,29 @@ public class ListResourceFunctionalTest {
         // Fin Chrome
 
         // Activar para Firefox, desactivar Chrome
-
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless"); // para que no se abra el navegador
         options.addArguments("--disable-gpu"); // Deshabilita la aceleración de hardware
         options.addArguments("--window-size=1920,1080"); // Tamaño de la ventana
         options.addArguments("--no-sandbox"); // Bypass OS security model, requerido en entornos sin GUI
         options.addArguments("--disable-dev-shm-usage"); // Deshabilita el uso de /dev/shm manejo de memoria compartida
+        options.addPreference("dom.disable_beforeunload", true);
         driver = new FirefoxDriver(options);
         //driver = new FirefoxDriver(); // Sin opciones
         // Fin Firefox
 
         driver.get(url);
         driver.manage().window().maximize();
-        page = new ListResourceFunctionalPage(driver, userService, passwordEncoder);
+        if (page == null) {
+            page = new ListResourceFunctionalPage(driver, userService, passwordEncoder);
+        }
     }
 
     @AfterEach
     void tearDown() {
-        //driver.quit(); // TODO: Quitar el comentario cuando se complete el test
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     /*
@@ -89,7 +92,7 @@ public class ListResourceFunctionalTest {
     @DisplayName("Comprobar que NO existe el botón «Crear nuevo recurso» " +
             "hasta que se haya registrado un usuario")
     void buttonCreateResource() {
-        page.createUserInDatabase("admin", "Admin1234", "admin@admin.es","admin");
+        page.saveUser("admin", "Admin1234", "admin@admin.es","admin");
         try {
             assertFalse(page.btnCreateResource.isDisplayed());
         } catch (NoSuchElementException e) {

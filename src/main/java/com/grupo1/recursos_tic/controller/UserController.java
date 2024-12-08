@@ -50,9 +50,11 @@ public class UserController {
     public String findById(@PathVariable Long id, Model model) {
         Optional<User> userOptional = userService.findById(id);
 
-        model.addAttribute("user", userOptional.orElseThrow(
+        User user = userOptional.orElseThrow(
                 () -> new NoSuchElementException(ErrMsg.NOT_FOUND)
-        ));
+        );
+
+        model.addAttribute("user", user);
         return "user/detail";
     }
 

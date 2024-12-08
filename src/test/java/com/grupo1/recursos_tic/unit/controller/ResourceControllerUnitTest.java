@@ -26,8 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Este test se encarga de verificar que el controlador ResourceController
- * funciona correctamente.
+ * Este test unitario se encarga de verificar que el controlador
+ * ResourceController funciona correctamente.
  *
  * @author Javier Guerra
  * @version 1.1.0
@@ -79,7 +79,7 @@ public class ResourceControllerUnitTest {
 
         String result = resourceController.formValidation(resource);
 
-        assertEquals("Faltan la URL", result);
+        assertEquals("Falta la URL", result);
     }
 
     @Test
@@ -393,7 +393,7 @@ public class ResourceControllerUnitTest {
         assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     @Test
@@ -407,7 +407,7 @@ public class ResourceControllerUnitTest {
         assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
         verify(resourceService, never()).findById(anyLong());
         verify(model, never()).addAttribute(anyString(), any());
-        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());//
+        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
     }
 
     /*
@@ -601,7 +601,7 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("save cuando el recurso NO existe y la list SÍ existe")
+    @DisplayName("save cuando el recurso NO existe y la lista SÍ existe")
     void save_WhenResourceDoesNotExist() {
         long resourceId = 1L;
         Long listId = 1L;
@@ -655,7 +655,7 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser 0")
+    @DisplayName("save cuando el ID de la lista no es válido por ser 0")
     void save_WithInvalidListId_zero() {
         long resourceId = 1L;
         Long invalidListId = 0L;
@@ -676,7 +676,7 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser negativo")
+    @DisplayName("save cuando el ID de la lista no es válido por ser negativo")
     void save_WithInvalidListId_negative() {
         long resourceId = 1L;
         Long invalidListId = -1L;
@@ -798,7 +798,7 @@ public class ResourceControllerUnitTest {
      */
 
     @Test
-    @DisplayName("getFormToUpdate cuando SÍ se han borrado los recursos o si hay 0 (cero) recursos")
+    @DisplayName("deleteAll cuando SÍ se han borrado los recursos o si hay 0 (cero) recursos")
     void deleteAll_WhenResourcesExists() {
 
         when(resourceService.count()).thenReturn(0L);
@@ -811,7 +811,7 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdate cuando se produce una excepción al borrar")
+    @DisplayName("deleteAll cuando se produce una excepción al borrar")
     void deleteAll_WhenDeleteException() {
 
         doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService).deleteAll();
@@ -823,7 +823,7 @@ public class ResourceControllerUnitTest {
     }
 
     @Test
-    @DisplayName("getFormToUpdate cuando quedan recursos por borrar")
+    @DisplayName("deleteAll cuando quedan recursos por borrar")
     void deleteAll_WhenDoesNotDelete() {
 
         when(resourceService.count()).thenReturn(5L);

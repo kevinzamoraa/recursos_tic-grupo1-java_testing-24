@@ -27,6 +27,7 @@ public class ListUserFunctionalTest {
     private PasswordEncoder passwordEncoder;
 
     private ListUserFunctionalPage page;
+
     private WebDriver driver;
 
     @BeforeEach
@@ -35,22 +36,25 @@ public class ListUserFunctionalTest {
         driver = new FirefoxDriver(); // Activar para Firefox, desactivar Chrome
         driver.get(url);
         driver.manage().window().maximize();
-        page = new ListUserFunctionalPage(driver, userService, passwordEncoder);
-        page.createUserInDatabase("admin", "Admin1234", "admin@admin.es","admin");
-        page.createUserInDatabase("javier", "User1234", "user@user.es","author");
-        page.createUserInDatabase("kevin", "User1234", "user@user.es","author");
+        if (page == null) {
+            page = new ListUserFunctionalPage(driver, userService, passwordEncoder);
+        }
+        page.saveUser("admin", "Admin1234", "admin@admin.es","admin");
+        page.saveUser("javier", "User1234", "user@user.es","author");
+        page.saveUser("kevin", "User1234", "user@user.es","author");
     }
+
     @AfterEach
     void tearDown() {
-        //driver.quit(); // TODO: Quitar el comentario cuando se complete el test
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @Test
     @DisplayName("Comprobar etiqueta <title> antes de iniciar sesión")
     void title() {
-        page.loginAsUser("admin", "Admin1234");
         assertEquals("Please sign in", page.getTitle());
-        page.salir.click();
     }
 
     @Test

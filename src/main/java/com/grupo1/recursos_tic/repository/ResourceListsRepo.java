@@ -28,6 +28,8 @@ public interface ResourceListsRepo extends JpaRepository<ResourceList, Long> {
     //@Query("SELECT rl FROM ResourceList rl WHERE rl.owner.id = ?1")
     List<ResourceList> findAllByOwner_Id(Long id);
 
+    boolean existsByIdAndOwner_Id(Long listId, Long ownerId);
+
     List<ResourceList> findByOwner_IdAndResources_Id(Long ownerId, Long resourceId);
 
     @Transactional
