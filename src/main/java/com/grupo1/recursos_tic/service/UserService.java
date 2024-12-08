@@ -73,6 +73,29 @@ public class UserService {
         userRepository.saveAll(users);
     }
 
+    public User save2(User user) {
+        if (user.getId() != null && userRepository.existsById(user.getId())) {
+            throw new IllegalArgumentException("User already exists");
+        }
+        return userRepository.save(user);
+    }
+
+    public String saveWithId(Long id, User user) {
+        if (!isValidId(id)) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+        if (userRepository.existsById(id)) {
+            throw new IllegalArgumentException("User already exists");
+        }
+        userRepository.save(user);
+        return "redirect:/users";
+    }
+
+    private boolean isValidId(Long id) {
+        return id != null && id > 0;
+    }
+
+
     public User updateUser(User user) {
         User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
