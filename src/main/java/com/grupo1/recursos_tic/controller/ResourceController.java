@@ -30,7 +30,7 @@ public class ResourceController {
 
     public String formValidation(Resource resource) {
         if (stringIsEmpty(resource.getTitle())) return "Falta el título";
-        if (stringIsEmpty(resource.getUrl())) return "Faltan la URL";
+        if (stringIsEmpty(resource.getUrl())) return "Falta la URL";
         if (resource.getType() == null)
             return "Falta el tipo de recurso";
         return null;
@@ -117,7 +117,8 @@ public class ResourceController {
                 throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
         String error = formValidation(resource);
-        if (error != null) throw new ResponseStatusException(HttpStatus.CONFLICT);
+        if (error != null)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, error);
 
         if (resource.getId() == null) { // crear
             Resource savedResource = resourceService.save(resource);

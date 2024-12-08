@@ -5,6 +5,7 @@ import com.grupo1.recursos_tic.model.*;
 import com.grupo1.recursos_tic.service.*;
 import com.grupo1.recursos_tic.util.ErrMsg;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -599,158 +601,237 @@ public class ResourceControllerIntegrationTest {
         Long resourceId = resource.getId();
         Long listId = resourceList.getId();
 
-        mockMvc.perform(post("/resources/update/" + resourceId + "/" + listId)
-                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .param("title", "Recurso Modificado")
-                    .param("url", "#")
-                    .param("type", ResourceType.DOCUMENT.name())
-                    .param("description", "Nueva descripción")
-                );
-                //.andExpect(status().is3xxRedirection())
-                //.andExpect(redirectedUrl("redirect:/resourcelists/" + listId)); // TODO
+        mockMvc.perform(post("/resources")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", resourceId.toString())
+                        .param("title", "Recurso")
+                        .param("Author", "Varios")
+                        .param("url", "#")
+                        .param("imageUrl", "#")
+                        .param("type", ResourceType.DOCUMENT.name())
+                        .param("description", "Nueva descripción")
+                        .param("tags", EnumTag.SOFTWARE.name())
+                        .param("listId", listId.toString()) // Cambia "lists" por "listId"
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/resourcelists/" + listId));
     }
 
     @Test
     @DisplayName("save cuando el recurso Sí existe y la lista NO existe")
     void save_WhenResourceListDoesNotExist() throws Exception {
+        setUserAuth("javier");
 
-//        long resourceId = 1L;
-//        Long listId = null;
-//        Resource resource = Resource.builder()
-//                .id(resourceId)
-//                .title("Recurso")
-//                .url("#")
-//                .type(ResourceType.DOCUMENT)
-//                .build();
-//
-//        when(resourceService.findById(resourceId)).thenReturn(Optional.of(resource));
-//
-//        String view = resourceController.save(resource, null);
-//
-//        assertFalse(listId != null && listId <= 0);
-//        assertNull(resourceController.formValidation(resource));
-//        verify(resourceListsService, never()).findById(resourceId);
-//        verify(resourceListsService, never()).save(any());
-//        verify(resourceService).findById(resourceId);
-//        verify(resourceService).save(resource);
-//        assertEquals("redirect:/resources/1", view);
+        Resource resource = Resource.builder()
+                .title("Recurso")
+                .url("#")
+                .type(ResourceType.DOCUMENT)
+                .build();
+        resourceService.save(resource);
+
+        Long resourceId = resource.getId();
+
+        mockMvc.perform(post("/resources")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", resourceId.toString())
+                .param("title", "Recurso")
+                .param("Author", "Varios")
+                .param("url", "#")
+                .param("imageUrl", "#")
+                .param("type", ResourceType.DOCUMENT.name())
+                .param("description", "Nueva descripción")
+                .param("tags", EnumTag.SOFTWARE.name())
+        )
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/resources/" + resourceId));
     }
 
     @Test
-    @DisplayName("save cuando el recurso NO existe y la list SÍ existe")
+    @DisplayName("save cuando el recurso NO existe y la lista SÍ existe")
     void save_WhenResourceDoesNotExist() throws Exception {
+        setUserAuth("javier");
 
-//        long resourceId = 1L;
-//        Long listId = 1L;
-//        Resource resource = Resource.builder()
-//                .title("Recurso")
-//                .url("#")
-//                .type(ResourceType.DOCUMENT)
-//                .build();
-//        ResourceList resourceList = ResourceList.builder().id(listId).build();
-//
-//        when(resourceListsService.findById(listId)).thenReturn(Optional.of(resourceList));
-//
-//        String view = resourceController.save(resource, listId);
-//
-//        assertFalse(listId != null && listId <= 0);
-//        assertNull(resourceController.formValidation(resource));
-//        verify(resourceListsService).findById(resourceId);
-//        verify(resourceListsService).save(resourceList);
-//        verify(resourceService, never()).findById(resourceId);
-//        verify(resourceService).save(resource);
-//        assertEquals("redirect:/resourcelists/1", view);
+        ResourceList resourceList = ResourceList.builder()
+                .owner(userService.findByUsername("javier").get())
+                .name("Tecnología")
+                .description("Mis favoritos tech")
+                .resources(Set.of())
+                .build();
+        resourceListsService.save(resourceList);
+
+        Long listId = resourceList.getId();
+
+        mockMvc.perform(post("/resources")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("title", "Recurso")
+                .param("Author", "Varios")
+                .param("url", "#")
+                .param("imageUrl", "#")
+                .param("type", ResourceType.DOCUMENT.name())
+                .param("description", "Nueva descripción")
+                .param("tags", EnumTag.SOFTWARE.name())
+                .param("listId", listId.toString()) // Cambia "lists" por "listId"
+        )
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/resourcelists/" + listId));
     }
 
     @Test
     @DisplayName("save cuando el recurso NO existe y la lista NO existe")
     void save_WhenResourceAndListDoesNotExist() throws Exception {
+        setUserAuth("javier");
 
-//        long resourceId = 1L;
-//        Long listId = null;
-//        Resource resource = Resource.builder()
-//                .title("Recurso")
-//                .url("#")
-//                .type(ResourceType.DOCUMENT)
-//                .build();
-//
-//        // simular thenAnswer
-//        doAnswer(invocation -> {
-//            Resource resourceArg = invocation.getArgument(0);
-//            resourceArg.setId(resourceId);
-//            return resourceArg;
-//        }).when(resourceService).save(resource);
-//
-//        String view = resourceController.save(resource, null);
-//
-//        assertFalse(listId != null && listId <= 0);
-//        assertNull(resourceController.formValidation(resource));
-//        verify(resourceService).save(resource);
-//        verify(resourceListsService, never()).findById(resourceId);
-//        verify(resourceListsService, never()).save(any());
-//        verify(resourceService, never()).findById(resourceId);
-//        assertEquals("redirect:/resources/1", view);
+        Long resourceId = 1L;
+
+        mockMvc.perform(post("/resources")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("title", "Recurso")
+                .param("Author", "Varios")
+                .param("url", "#")
+                .param("imageUrl", "#")
+                .param("type", ResourceType.DOCUMENT.name())
+                .param("description", "Nueva descripción")
+                .param("tags", EnumTag.SOFTWARE.name())
+        )
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/resources/" + resourceId));
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser 0")
+    @DisplayName("save cuando el ID de la lista no es válido por ser 0")
     void save_WithInvalidListId_zero() throws Exception {
+        setUserAuth("javier");
 
-//        long resourceId = 1L;
-//        Long invalidListId = 0L;
-//        Resource resource = new Resource();
-//        ResourceList invalidResourceList = new ResourceList();
-//        ResourceController spyResourceController = Mockito.spy(resourceController);
-//
-//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-//                () -> spyResourceController.save(resource, invalidListId));
-//
-//        assertTrue(invalidListId != null && invalidListId <= 0);
-//        Mockito.verify(spyResourceController, Mockito.never()).formValidation(resource);
-//        verify(resourceListsService, never()).findById(resourceId);
-//        verify(resourceListsService, never()).save(invalidResourceList);
-//        verify(resourceService, never()).findById(resourceId);
-//        verify(resourceService, never()).save(resource);
-//        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+        Long resourceId = 1L;
+        Long invalidListId = 0L;
+
+        mockMvc.perform(post("/resources")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", resourceId.toString())
+                .param("title", "Recurso")
+                .param("Author", "Varios")
+                .param("url", "#")
+                .param("imageUrl", "#")
+                .param("type", ResourceType.DOCUMENT.name())
+                .param("description", "Nueva descripción")
+                .param("tags", EnumTag.SOFTWARE.name())
+                .param("listId", invalidListId.toString())
+        )
+        .andExpect(status().is4xxClientError())
+        .andExpect(result -> {
+            assertThat(result.getResolvedException())
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage(ErrMsg.INVALID_ID);
+        });
     }
 
     @Test
-    @DisplayName("getFormToUpdateAndList cuando el ID de la lista no es válido por ser negativo")
+    @DisplayName("save cuando el ID de la lista no es válido por ser negativo")
     void save_WithInvalidListId_negative() throws Exception {
+        setUserAuth("javier");
 
-//        long resourceId = 1L;
-//        Long invalidListId = -1L;
-//        Resource resource = new Resource();
-//        ResourceList invalidResourceList = new ResourceList();
-//        ResourceController spyResourceController = Mockito.spy(resourceController);
-//
-//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-//                () -> spyResourceController.save(resource, invalidListId));
-//
-//        assertTrue(invalidListId != null && invalidListId <= 0);
-//        Mockito.verify(spyResourceController, Mockito.never()).formValidation(resource);
-//        verify(resourceListsService, never()).findById(resourceId);
-//        verify(resourceListsService, never()).save(invalidResourceList);
-//        verify(resourceService, never()).findById(resourceId);
-//        verify(resourceService, never()).save(resource);
-//        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+        Long resourceId = 1L;
+        Long invalidListId = -1L;
+
+        mockMvc.perform(post("/resources")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", resourceId.toString())
+                .param("title", "Recurso")
+                .param("Author", "Varios")
+                .param("url", "#")
+                .param("imageUrl", "#")
+                .param("type", ResourceType.DOCUMENT.name())
+                .param("description", "Nueva descripción")
+                .param("tags", EnumTag.SOFTWARE.name())
+                .param("listId", invalidListId.toString())
+        )
+        .andExpect(status().is4xxClientError())
+        .andExpect(result -> {
+            assertThat(result.getResolvedException())
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage(ErrMsg.INVALID_ID);
+        });
     }
 
     @Test
-    @DisplayName("save cuando la validación falla")
-    void save_WhenValidationFail() throws Exception {
+    @DisplayName("save cuando la validación falla porque falta el título")
+    void save_WhenValidationFail_title() throws Exception {
+        setUserAuth("javier");
 
-//        Resource resource = new Resource();
-//
-//        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-//                () -> resourceController.save(resource, null));
-//
-//        assertNotNull(resourceController.formValidation(resource));
-//        verify(resourceListsService, never()).findById(anyLong());
-//        verify(resourceListsService, never()).save(any(ResourceList.class));
-//        verify(resourceService, never()).findById(anyLong());
-//        verify(resourceService, never()).save(resource);
-//        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+        long resourceId = 1L;
+
+        mockMvc.perform(post("/resources")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", Long.toString(resourceId))
+                        .param("title", "")
+                        .param("Author", "Varios")
+                        .param("url", "")
+                        .param("imageUrl", "#")
+                        .param("type", "")
+                        .param("description", "Nueva descripción")
+                        .param("tags", EnumTag.SOFTWARE.name())
+                )
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> {
+                    assertThat(result.getResolvedException())
+                            .isInstanceOf(ResponseStatusException.class)
+                            .hasFieldOrPropertyWithValue("status", HttpStatus.CONFLICT)
+                            .hasMessageContaining("Falta el título");
+                });
+    }
+
+    @Test
+    @DisplayName("save cuando la validación falla porque falta la url")
+    void save_WhenValidationFail_url() throws Exception {
+        setUserAuth("javier");
+
+        long resourceId = 1L;
+
+        mockMvc.perform(post("/resources")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", Long.toString(resourceId))
+                        .param("title", "Recurso")
+                        .param("Author", "Varios")
+                        .param("url", "")
+                        .param("imageUrl", "#")
+                        .param("type", "")
+                        .param("description", "Nueva descripción")
+                        .param("tags", EnumTag.SOFTWARE.name())
+                )
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> {
+                    assertThat(result.getResolvedException())
+                            .isInstanceOf(ResponseStatusException.class)
+                            .hasFieldOrPropertyWithValue("status", HttpStatus.CONFLICT)
+                            .hasMessageContaining("Falta la URL");
+                });
+    }
+
+    @Test
+    @DisplayName("save cuando la validación falla porque falta el tipo de recurso")
+    void save_WhenValidationFail_type() throws Exception {
+        setUserAuth("javier");
+
+        long resourceId = 1L;
+
+        mockMvc.perform(post("/resources")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", Long.toString(resourceId))
+                        .param("title", "Recurso")
+                        .param("Author", "Varios")
+                        .param("url", "#")
+                        .param("imageUrl", "#")
+                        .param("type", "")
+                        .param("description", "Nueva descripción")
+                        .param("tags", EnumTag.SOFTWARE.name())
+                )
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> {
+                    assertThat(result.getResolvedException())
+                            .isInstanceOf(ResponseStatusException.class)
+                            .hasFieldOrPropertyWithValue("status", HttpStatus.CONFLICT)
+                            .hasMessageContaining("Falta el tipo de recurso");
+                });
     }
 
     /*
@@ -760,83 +841,76 @@ public class ResourceControllerIntegrationTest {
     @Test
     @DisplayName("deleteById cuando el ID del recurso Sí existe")
     void deleteById_WhenResourceExist() throws Exception {
+        setUserAuth("admin");
 
-//        Long resourceId = 1L;
-//
-//        when(resourceService.existsById(resourceId)).thenReturn(true);
-//
-//        String view = resourceController.deleteById(resourceId);
-//
-//        assertFalse(invalidIntPosNumber(resourceId) || resourceId == 0);
-//        verify(resourceService).existsById(resourceId);
-//        verify(resourceService).removeResourceWithDependencies(resourceId);
-//        assertEquals("redirect:/resources", view);
+        long resourceId = 1L;
+
+        Resource resource = Resource.builder()
+                .id(1L)
+                .title("Recurso")
+                .url("#")
+                .type(ResourceType.DOCUMENT)
+                .build();
+        resourceService.save(resource);
+
+        mockMvc.perform(get("/resources/delete/" + resourceId))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/resources"));
     }
 
     @Test
     @DisplayName("deleteById cuando el ID del recurso NO existe")
     void deleteById_WhenResourceDoesNotExist() throws Exception {
+        setUserAuth("admin");
 
-//        Long resourceId = 1L;
-//
-//        when(resourceService.existsById(resourceId)).thenReturn(false);
-//
-//        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
-//                () -> resourceController.deleteById(resourceId));
-//
-//        assertFalse(invalidIntPosNumber(resourceId) || resourceId == 0);
-//        verify(resourceService).existsById(resourceId);
-//        verify(resourceService, never()).removeResourceWithDependencies(anyLong());
-//        assertEquals(ErrMsg.NOT_FOUND, exception.getMessage());
+        long invalidResourceId = 1L;
+
+        mockMvc.perform(get("/resources/delete/" + invalidResourceId))
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> {
+                    assertThat(result.getResolvedException())
+                            .isInstanceOf(NoSuchElementException.class)
+                            .hasMessage(ErrMsg.NOT_FOUND);
+                });
     }
 
     @Test
     @DisplayName("deleteById cuando el ID del recurso no es válido por ser 0")
     void deleteById_WithInvalidResourceId_zero() throws Exception {
+        setUserAuth("admin");
 
-//        Long invalidId = 0L;
-//
-//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-//                () -> resourceController.deleteById(invalidId));
-//
-//        assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
-//        verify(resourceService, never()).existsById(anyLong());
-//        verify(resourceService, never()).removeResourceWithDependencies(anyLong());
-//        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+        long invalidId = 0L;
+
+        mockMvc.perform(get("/resources/delete/" + invalidId))
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> {
+                    assertThat(result.getResolvedException())
+                            .isInstanceOf(IllegalArgumentException.class)
+                            .hasMessage(ErrMsg.INVALID_ID);
+                });
     }
 
     @Test
     @DisplayName("deleteById cuando el ID del recurso no es válido por ser negativo")
     void deleteById_WithInvalidResourceId_negative() throws Exception {
+        setUserAuth("admin");
 
-//        Long invalidId = -1L;
-//
-//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-//                () -> resourceController.deleteById(invalidId));
-//
-//        assertTrue(invalidIntPosNumber(invalidId) || invalidId == 0);
-//        verify(resourceService, never()).existsById(anyLong());
-//        verify(resourceService, never()).removeResourceWithDependencies(anyLong());
-//        assertEquals(ErrMsg.INVALID_ID, exception.getMessage());
+        long invalidId = -1L;
+
+        mockMvc.perform(get("/resources/delete/" + invalidId))
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> {
+                    assertThat(result.getResolvedException())
+                            .isInstanceOf(IllegalArgumentException.class)
+                            .hasMessage(ErrMsg.INVALID_ID);
+                });
     }
 
     @Test
     @DisplayName("deleteById cuando se produce una excepción en el servicio")
     void deleteById_ServiceThrowsException() throws Exception {
+        setUserAuth("admin");
 
-//        long resourceId = 1L;
-//
-//        when(resourceService.existsById(resourceId)).thenReturn(true);
-//
-//        doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService)
-//                .removeResourceWithDependencies(resourceId);
-//
-//        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-//                () -> resourceController.deleteById(resourceId));
-//
-//
-//        assertFalse(invalidIntPosNumber(resourceId) || resourceId == 0);
-//        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
     /*
@@ -846,38 +920,22 @@ public class ResourceControllerIntegrationTest {
     @Test
     @DisplayName("getFormToUpdate cuando SÍ se han borrado los recursos o si hay 0 (cero) recursos")
     void deleteAll_WhenResourcesExists() throws Exception {
+        setUserAuth("admin");
 
-//        when(resourceService.count()).thenReturn(0L);
-//
-//        String view = resourceController.deleteAll();
-//
-//        verify(resourceService).deleteAll();
-//        assertEquals(0L, resourceService.count());
-//        assertEquals("redirect:/resources", view);
     }
 
     @Test
     @DisplayName("getFormToUpdate cuando se produce una excepción al borrar")
     void deleteAll_WhenDeleteException() throws Exception {
+        setUserAuth("admin");
 
-//        doThrow(new ResponseStatusException(HttpStatus.CONFLICT)).when(resourceService).deleteAll();
-//
-//        ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-//                () -> resourceController.deleteAll());
-//
-//        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
     @Test
     @DisplayName("getFormToUpdate cuando quedan recursos por borrar")
     void deleteAll_WhenDoesNotDelete() throws Exception {
+        setUserAuth("admin");
 
-//        when(resourceService.count()).thenReturn(5L);
-//
-//        RuntimeException exception = assertThrows(RuntimeException.class,
-//                () -> resourceController.deleteAll());
-//
-//        assertEquals(ErrMsg.NOT_DELETED, exception.getMessage());
     }
 
 }
