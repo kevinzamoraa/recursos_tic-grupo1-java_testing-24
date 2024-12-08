@@ -79,7 +79,7 @@ public class ResourceControllerUnitTest {
 
         String result = resourceController.formValidation(resource);
 
-        assertEquals("Faltan la URL", result);
+        assertEquals("Falta la URL", result);
     }
 
     @Test
