@@ -600,14 +600,14 @@ public class ResourceControllerIntegrationTest {
         Long listId = resourceList.getId();
 
         mockMvc.perform(post("/resources/update/" + resourceId + "/" + listId)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("title", "Recurso Modificado")
-                .param("url", "#")
-                .param("type", ResourceType.DOCUMENT.name())
-                .param("description", "Nueva descripción")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("title", "Recurso Modificado")
+                    .param("url", "#")
+                    .param("type", ResourceType.DOCUMENT.name())
+                    .param("description", "Nueva descripción")
                 );
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl("/resourcelists/" + listId)); // TODO
+                //.andExpect(status().is3xxRedirection())
+                //.andExpect(redirectedUrl("redirect:/resourcelists/" + listId)); // TODO
     }
 
     @Test

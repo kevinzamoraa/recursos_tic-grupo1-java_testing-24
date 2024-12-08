@@ -116,10 +116,6 @@ public class ResourceController {
         if (listId != null && listId <= 0)
                 throw new IllegalArgumentException(ErrMsg.INVALID_ID);
 
-        // TODO la lista debe existir y pertenecer al usuario autenticado
-        //if (listId != null && !resourceListsService.existsByIdAndOwnerId(listId, userAuth().get().getId()))
-        //    throw new NoSuchElementException(ErrMsg.NOT_FOUND);
-
         String error = formValidation(resource);
         if (error != null) throw new ResponseStatusException(HttpStatus.CONFLICT);
 
