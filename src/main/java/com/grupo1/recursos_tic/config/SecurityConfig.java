@@ -45,9 +45,9 @@ public class  SecurityConfig {
                     .requestMatchers("/api/**").permitAll()
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                    .requestMatchers(HttpMethod.GET,"/", "/login", "/error", "/auth/**",
-                            "/css/**", "/js/**", "/img/**", "/webjars/**", "/doc/**",
-                            "/info/**", "/favicon.ico").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/", "/error", "/auth/**",
+                            "/login", "/css/**", "/js/**", "/img/**", "/webjars/**",
+                            "/doc/**", "/info/**", "/favicon.ico").permitAll()
 
                     .requestMatchers(HttpMethod.GET,"/resources/create").authenticated()
                     .requestMatchers(HttpMethod.POST,"/resources/update/{id}").authenticated()
@@ -62,6 +62,7 @@ public class  SecurityConfig {
             )
 
             .formLogin(formLogin -> formLogin
+                    .loginPage("/login")
                     .defaultSuccessUrl("/")
                     .failureUrl("/login?error=true")
                     .permitAll()

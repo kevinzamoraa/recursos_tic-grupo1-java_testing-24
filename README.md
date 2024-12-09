@@ -17,7 +17,7 @@ La planificación y codificación se han llevado a cabo usando Trello y GitHub.
 
 Además de los requisitos del MVP, se han incluido las siguientes funcionalidades:
 
-- Diseño responsive, "movile first"
+- Diseño responsive, "mobile first"
 - Web accesible AA. Testada con WAVE
 - Seguridad por diseño
 - Confirmaciones de borrado
