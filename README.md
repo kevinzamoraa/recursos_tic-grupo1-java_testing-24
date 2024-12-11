@@ -3,6 +3,9 @@
 ## Proyecto transversal del Curso de Testing con Java
 Adecco, diciembre 2024
 
+[[Ver el PDF de la presentación](src/main/resources/static/doc/presentacion-recursos_tic.pdf)] · [[Ver el vídeo de la presentación](https://youtu.be/d_SeaUuKrMg)] · [[Ir al sitio web](https://recursos-tic.up.railway.app/)]
+
+
 ## La práctica
 
 Empleando Java y el framework Spring Boot, se ha realizado la planificación e implementación de una aplicación web que permite gestionar recursos TIC y listas de recursos, para realizar los tests correspondientes, aplicando los conocimientos aprendidos durante la formación.
@@ -17,7 +20,7 @@ La planificación y codificación se han llevado a cabo usando Trello y GitHub.
 
 Además de los requisitos del MVP, se han incluido las siguientes funcionalidades:
 
-- Diseño responsive, "movile first"
+- Diseño responsive, "mobile first"
 - Web accesible AA. Testada con WAVE
 - Seguridad por diseño
 - Confirmaciones de borrado
