@@ -3,7 +3,8 @@
 ## Proyecto transversal del Curso de Testing con Java
 Adecco, diciembre 2024
 
-[[Ver el PDF de la presentación](src/main/resources/static/doc/presentacion-recursos_tic.pdf)] · [[Ver el vídeo de la presentación](https://youtu.be/d_SeaUuKrMg)]
+[[Ver el PDF de la presentación](src/main/resources/static/doc/presentacion-recursos_tic.pdf)] · [[Ver el vídeo de la presentación](https://youtu.be/d_SeaUuKrMg)] · [[Ir al sitio web](https://recursos-tic.up.railway.app/)]
+
 
 ## La práctica
 
