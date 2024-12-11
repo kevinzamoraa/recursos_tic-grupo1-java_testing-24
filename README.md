@@ -3,6 +3,8 @@
 ## Proyecto transversal del Curso de Testing con Java
 Adecco, diciembre 2024
 
+[[Ver el PDF de la presentación](src/main/resources/static/doc/presentacion-recursos_tic.pdf)] · [[Ver el vídeo de la presentación](https://youtu.be/d_SeaUuKrMg)]
+
 ## La práctica
 
 Empleando Java y el framework Spring Boot, se ha realizado la planificación e implementación de una aplicación web que permite gestionar recursos TIC y listas de recursos, para realizar los tests correspondientes, aplicando los conocimientos aprendidos durante la formación.
