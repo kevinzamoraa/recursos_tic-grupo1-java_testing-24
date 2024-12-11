@@ -32,6 +32,7 @@ Además de los requisitos del MVP, se han incluido las siguientes funcionalidade
 - Usa el protocolo OpenGraph para RR.SS.
 - Manifest para móviles (PWA)
 - Desarrollada con Linux + Docker LAMP
+- Despliegue
 
 # Indicaciones de uso
 
